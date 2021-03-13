@@ -2,7 +2,7 @@
 
 The library in `lib` provides auto-generated-from-OpenAPI [http-client](https://www.stackage.org/lts-10.0/package/http-client-0.5.7.1) bindings to the The Plaid API API.
 
-OpenApi Version: 3.0.0
+OpenApi Version: 3.0.0, Based on [Official Plaid Spec](https://github.com/plaid/plaid-openapi/blob/master/2020-09-14.yml)
 
 ## TL;DR
 Run sh command to generate the codebase again:
