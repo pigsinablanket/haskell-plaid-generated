@@ -3328,7 +3328,7 @@ data CreditCardLiability = CreditCardLiability
   , creditCardLiabilityAprs :: !([APR]) -- ^ /Required/ "aprs" - The various interest rates that apply to the account.
   , creditCardLiabilityIsOverdue :: !(Maybe Bool) -- ^ "is_overdue" - true if a payment is currently overdue. Availability for this field is limited.
   , creditCardLiabilityLastPaymentAmount :: !(Double) -- ^ /Required/ "last_payment_amount" - The amount of the last payment.
-  , creditCardLiabilityLastPaymentDate :: !(Text) -- ^ /Required/ "last_payment_date" - The date of the last payment. Dates are returned in an ISO 8601 format (YYYY-MM-DD). Availability for this field is limited.
+  , creditCardLiabilityLastPaymentDate :: !(Maybe Text) -- ^ /Required/ "last_payment_date" - The date of the last payment. Dates are returned in an ISO 8601 format (YYYY-MM-DD). Availability for this field is limited.
   , creditCardLiabilityLastStatementBalance :: !(Double) -- ^ /Required/ "last_statement_balance" - The outstanding balance on the last statement. Availability for this field is limited.
   , creditCardLiabilityLastStatementIssueDate :: !(Text) -- ^ /Required/ "last_statement_issue_date" - The date of the last statement. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
   , creditCardLiabilityMinimumPaymentAmount :: !(Double) -- ^ /Required/ "minimum_payment_amount" - The minimum payment due for the next billing cycle.
@@ -3343,7 +3343,7 @@ instance A.FromJSON CreditCardLiability where
       <*> (o .:  "aprs")
       <*> (o .:? "is_overdue")
       <*> (o .:  "last_payment_amount")
-      <*> (o .:  "last_payment_date")
+      <*> (o .:?  "last_payment_date")
       <*> (o .:  "last_statement_balance")
       <*> (o .:  "last_statement_issue_date")
       <*> (o .:  "minimum_payment_amount")
@@ -3369,7 +3369,7 @@ instance A.ToJSON CreditCardLiability where
 mkCreditCardLiability
   :: [APR] -- ^ 'creditCardLiabilityAprs': The various interest rates that apply to the account.
   -> Double -- ^ 'creditCardLiabilityLastPaymentAmount': The amount of the last payment.
-  -> Text -- ^ 'creditCardLiabilityLastPaymentDate': The date of the last payment. Dates are returned in an ISO 8601 format (YYYY-MM-DD). Availability for this field is limited.
+  -> Maybe Text -- ^ 'creditCardLiabilityLastPaymentDate': The date of the last payment. Dates are returned in an ISO 8601 format (YYYY-MM-DD). Availability for this field is limited.
   -> Double -- ^ 'creditCardLiabilityLastStatementBalance': The outstanding balance on the last statement. Availability for this field is limited.
   -> Text -- ^ 'creditCardLiabilityLastStatementIssueDate': The date of the last statement. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
   -> Double -- ^ 'creditCardLiabilityMinimumPaymentAmount': The minimum payment due for the next billing cycle.
