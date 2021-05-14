@@ -3332,7 +3332,7 @@ data CreditCardLiability = CreditCardLiability
   , creditCardLiabilityLastStatementBalance :: !(Double) -- ^ /Required/ "last_statement_balance" - The outstanding balance on the last statement. Availability for this field is limited.
   , creditCardLiabilityLastStatementIssueDate :: !(Text) -- ^ /Required/ "last_statement_issue_date" - The date of the last statement. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
   , creditCardLiabilityMinimumPaymentAmount :: !(Double) -- ^ /Required/ "minimum_payment_amount" - The minimum payment due for the next billing cycle.
-  , creditCardLiabilityNextPaymentDueDate :: !(Text) -- ^ /Required/ "next_payment_due_date" - The due date for the next payment. The due date is &#x60;null&#x60; if a payment is not expected. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
+  , creditCardLiabilityNextPaymentDueDate :: !(Maybe Text) -- ^ /Required/ "next_payment_due_date" - The due date for the next payment. The due date is &#x60;null&#x60; if a payment is not expected. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON CreditCardLiability
@@ -3347,7 +3347,7 @@ instance A.FromJSON CreditCardLiability where
       <*> (o .:  "last_statement_balance")
       <*> (o .:  "last_statement_issue_date")
       <*> (o .:  "minimum_payment_amount")
-      <*> (o .:  "next_payment_due_date")
+      <*> (o .:?  "next_payment_due_date")
 
 -- | ToJSON CreditCardLiability
 instance A.ToJSON CreditCardLiability where
@@ -3373,7 +3373,7 @@ mkCreditCardLiability
   -> Double -- ^ 'creditCardLiabilityLastStatementBalance': The outstanding balance on the last statement. Availability for this field is limited.
   -> Text -- ^ 'creditCardLiabilityLastStatementIssueDate': The date of the last statement. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
   -> Double -- ^ 'creditCardLiabilityMinimumPaymentAmount': The minimum payment due for the next billing cycle.
-  -> Text -- ^ 'creditCardLiabilityNextPaymentDueDate': The due date for the next payment. The due date is `null` if a payment is not expected. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
+  -> Maybe Text -- ^ 'creditCardLiabilityNextPaymentDueDate': The due date for the next payment. The due date is `null` if a payment is not expected. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
   -> CreditCardLiability
 mkCreditCardLiability creditCardLiabilityAprs creditCardLiabilityLastPaymentAmount creditCardLiabilityLastPaymentDate creditCardLiabilityLastStatementBalance creditCardLiabilityLastStatementIssueDate creditCardLiabilityMinimumPaymentAmount creditCardLiabilityNextPaymentDueDate =
   CreditCardLiability

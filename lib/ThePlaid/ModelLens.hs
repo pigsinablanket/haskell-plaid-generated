@@ -1939,7 +1939,7 @@ creditCardLiabilityMinimumPaymentAmountL f CreditCardLiability{..} = (\creditCar
 {-# INLINE creditCardLiabilityMinimumPaymentAmountL #-}
 
 -- | 'creditCardLiabilityNextPaymentDueDate' Lens
-creditCardLiabilityNextPaymentDueDateL :: Lens_' CreditCardLiability (Text)
+creditCardLiabilityNextPaymentDueDateL :: Lens_' CreditCardLiability (Maybe Text)
 creditCardLiabilityNextPaymentDueDateL f CreditCardLiability{..} = (\creditCardLiabilityNextPaymentDueDate -> CreditCardLiability { creditCardLiabilityNextPaymentDueDate, ..} ) <$> f creditCardLiabilityNextPaymentDueDate
 {-# INLINE creditCardLiabilityNextPaymentDueDateL #-}
 
