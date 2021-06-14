@@ -1914,7 +1914,7 @@ creditCardLiabilityIsOverdueL f CreditCardLiability{..} = (\creditCardLiabilityI
 {-# INLINE creditCardLiabilityIsOverdueL #-}
 
 -- | 'creditCardLiabilityLastPaymentAmount' Lens
-creditCardLiabilityLastPaymentAmountL :: Lens_' CreditCardLiability (Double)
+creditCardLiabilityLastPaymentAmountL :: Lens_' CreditCardLiability (Maybe Double)
 creditCardLiabilityLastPaymentAmountL f CreditCardLiability{..} = (\creditCardLiabilityLastPaymentAmount -> CreditCardLiability { creditCardLiabilityLastPaymentAmount, ..} ) <$> f creditCardLiabilityLastPaymentAmount
 {-# INLINE creditCardLiabilityLastPaymentAmountL #-}
 
@@ -1924,7 +1924,7 @@ creditCardLiabilityLastPaymentDateL f CreditCardLiability{..} = (\creditCardLiab
 {-# INLINE creditCardLiabilityLastPaymentDateL #-}
 
 -- | 'creditCardLiabilityLastStatementBalance' Lens
-creditCardLiabilityLastStatementBalanceL :: Lens_' CreditCardLiability (Double)
+creditCardLiabilityLastStatementBalanceL :: Lens_' CreditCardLiability (Maybe Double)
 creditCardLiabilityLastStatementBalanceL f CreditCardLiability{..} = (\creditCardLiabilityLastStatementBalance -> CreditCardLiability { creditCardLiabilityLastStatementBalance, ..} ) <$> f creditCardLiabilityLastStatementBalance
 {-# INLINE creditCardLiabilityLastStatementBalanceL #-}
 

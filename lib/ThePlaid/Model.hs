@@ -3327,9 +3327,9 @@ data CreditCardLiability = CreditCardLiability
   { creditCardLiabilityAccountId :: !(Maybe Text) -- ^ "account_id" - The ID of the account that this liability belongs to.
   , creditCardLiabilityAprs :: !([APR]) -- ^ /Required/ "aprs" - The various interest rates that apply to the account.
   , creditCardLiabilityIsOverdue :: !(Maybe Bool) -- ^ "is_overdue" - true if a payment is currently overdue. Availability for this field is limited.
-  , creditCardLiabilityLastPaymentAmount :: !(Double) -- ^ /Required/ "last_payment_amount" - The amount of the last payment.
+  , creditCardLiabilityLastPaymentAmount :: !(Maybe Double) -- ^ /Required/ "last_payment_amount" - The amount of the last payment.
   , creditCardLiabilityLastPaymentDate :: !(Maybe Text) -- ^ /Required/ "last_payment_date" - The date of the last payment. Dates are returned in an ISO 8601 format (YYYY-MM-DD). Availability for this field is limited.
-  , creditCardLiabilityLastStatementBalance :: !(Double) -- ^ /Required/ "last_statement_balance" - The outstanding balance on the last statement. Availability for this field is limited.
+  , creditCardLiabilityLastStatementBalance :: !(Maybe Double) -- ^ /Required/ "last_statement_balance" - The outstanding balance on the last statement. Availability for this field is limited.
   , creditCardLiabilityLastStatementIssueDate :: !(Maybe Text) -- ^ /Required/ "last_statement_issue_date" - The date of the last statement. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
   , creditCardLiabilityMinimumPaymentAmount :: !(Double) -- ^ /Required/ "minimum_payment_amount" - The minimum payment due for the next billing cycle.
   , creditCardLiabilityNextPaymentDueDate :: !(Maybe Text) -- ^ /Required/ "next_payment_due_date" - The due date for the next payment. The due date is &#x60;null&#x60; if a payment is not expected. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
@@ -3342,9 +3342,9 @@ instance A.FromJSON CreditCardLiability where
       <$> (o .:? "account_id")
       <*> (o .:  "aprs")
       <*> (o .:? "is_overdue")
-      <*> (o .:  "last_payment_amount")
+      <*> (o .:?  "last_payment_amount")
       <*> (o .:?  "last_payment_date")
-      <*> (o .:  "last_statement_balance")
+      <*> (o .:?  "last_statement_balance")
       <*> (o .:? "last_statement_issue_date")
       <*> (o .:  "minimum_payment_amount")
       <*> (o .:?  "next_payment_due_date")
@@ -3368,9 +3368,9 @@ instance A.ToJSON CreditCardLiability where
 -- | Construct a value of type 'CreditCardLiability' (by applying it's required fields, if any)
 mkCreditCardLiability
   :: [APR] -- ^ 'creditCardLiabilityAprs': The various interest rates that apply to the account.
-  -> Double -- ^ 'creditCardLiabilityLastPaymentAmount': The amount of the last payment.
+  -> Maybe Double -- ^ 'creditCardLiabilityLastPaymentAmount': The amount of the last payment.
   -> Maybe Text -- ^ 'creditCardLiabilityLastPaymentDate': The date of the last payment. Dates are returned in an ISO 8601 format (YYYY-MM-DD). Availability for this field is limited.
-  -> Double -- ^ 'creditCardLiabilityLastStatementBalance': The outstanding balance on the last statement. Availability for this field is limited.
+  -> Maybe Double -- ^ 'creditCardLiabilityLastStatementBalance': The outstanding balance on the last statement. Availability for this field is limited.
   -> Maybe Text -- ^ 'creditCardLiabilityLastStatementIssueDate': The date of the last statement. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
   -> Double -- ^ 'creditCardLiabilityMinimumPaymentAmount': The minimum payment due for the next billing cycle.
   -> Maybe Text -- ^ 'creditCardLiabilityNextPaymentDueDate': The due date for the next payment. The due date is `null` if a payment is not expected. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
