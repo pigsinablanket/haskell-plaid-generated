@@ -3658,7 +3658,7 @@ itemBilledProductsL f Item{..} = (\itemBilledProducts -> Item { itemBilledProduc
 {-# INLINE itemBilledProductsL #-}
 
 -- | 'itemConsentExpirationTime' Lens
-itemConsentExpirationTimeL :: Lens_' Item (Maybe Text)
+itemConsentExpirationTimeL :: Lens_' Item (Maybe TI.UTCTime)
 itemConsentExpirationTimeL f Item{..} = (\itemConsentExpirationTime -> Item { itemConsentExpirationTime, ..} ) <$> f itemConsentExpirationTime
 {-# INLINE itemConsentExpirationTimeL #-}
 
@@ -5901,7 +5901,7 @@ pendingExpirationWebhookItemIdL f PendingExpirationWebhook{..} = (\pendingExpira
 {-# INLINE pendingExpirationWebhookItemIdL #-}
 
 -- | 'pendingExpirationWebhookConsentExpirationTime' Lens
-pendingExpirationWebhookConsentExpirationTimeL :: Lens_' PendingExpirationWebhook (Text)
+pendingExpirationWebhookConsentExpirationTimeL :: Lens_' PendingExpirationWebhook (Maybe (TI.UTCTime))
 pendingExpirationWebhookConsentExpirationTimeL f PendingExpirationWebhook{..} = (\pendingExpirationWebhookConsentExpirationTime -> PendingExpirationWebhook { pendingExpirationWebhookConsentExpirationTime, ..} ) <$> f pendingExpirationWebhookConsentExpirationTime
 {-# INLINE pendingExpirationWebhookConsentExpirationTimeL #-}
 
