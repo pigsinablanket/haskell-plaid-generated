@@ -1934,7 +1934,7 @@ creditCardLiabilityLastStatementIssueDateL f CreditCardLiability{..} = (\creditC
 {-# INLINE creditCardLiabilityLastStatementIssueDateL #-}
 
 -- | 'creditCardLiabilityMinimumPaymentAmount' Lens
-creditCardLiabilityMinimumPaymentAmountL :: Lens_' CreditCardLiability (Double)
+creditCardLiabilityMinimumPaymentAmountL :: Lens_' CreditCardLiability (Maybe Double)
 creditCardLiabilityMinimumPaymentAmountL f CreditCardLiability{..} = (\creditCardLiabilityMinimumPaymentAmount -> CreditCardLiability { creditCardLiabilityMinimumPaymentAmount, ..} ) <$> f creditCardLiabilityMinimumPaymentAmount
 {-# INLINE creditCardLiabilityMinimumPaymentAmountL #-}
 
