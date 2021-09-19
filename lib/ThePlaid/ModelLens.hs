@@ -318,7 +318,7 @@ accountIdentityAllOfOwnersL f AccountIdentityAllOf{..} = (\accountIdentityAllOfO
 -- * AccountsBalanceGetRequest
 
 -- | 'accountsBalanceGetRequestAccessToken' Lens
-accountsBalanceGetRequestAccessTokenL :: Lens_' AccountsBalanceGetRequest (Text)
+accountsBalanceGetRequestAccessTokenL :: Lens_' AccountsBalanceGetRequest (AccessToken)
 accountsBalanceGetRequestAccessTokenL f AccountsBalanceGetRequest{..} = (\accountsBalanceGetRequestAccessToken -> AccountsBalanceGetRequest { accountsBalanceGetRequestAccessToken, ..} ) <$> f accountsBalanceGetRequestAccessToken
 {-# INLINE accountsBalanceGetRequestAccessTokenL #-}
 
@@ -361,7 +361,7 @@ accountsGetRequestSecretL f AccountsGetRequest{..} = (\accountsGetRequestSecret 
 {-# INLINE accountsGetRequestSecretL #-}
 
 -- | 'accountsGetRequestAccessToken' Lens
-accountsGetRequestAccessTokenL :: Lens_' AccountsGetRequest (Text)
+accountsGetRequestAccessTokenL :: Lens_' AccountsGetRequest (AccessToken)
 accountsGetRequestAccessTokenL f AccountsGetRequest{..} = (\accountsGetRequestAccessToken -> AccountsGetRequest { accountsGetRequestAccessToken, ..} ) <$> f accountsGetRequestAccessToken
 {-# INLINE accountsGetRequestAccessTokenL #-}
 
@@ -594,7 +594,7 @@ assetReportCreateRequestSecretL f AssetReportCreateRequest{..} = (\assetReportCr
 {-# INLINE assetReportCreateRequestSecretL #-}
 
 -- | 'assetReportCreateRequestAccessTokens' Lens
-assetReportCreateRequestAccessTokensL :: Lens_' AssetReportCreateRequest ([Text])
+assetReportCreateRequestAccessTokensL :: Lens_' AssetReportCreateRequest ([AccessToken])
 assetReportCreateRequestAccessTokensL f AssetReportCreateRequest{..} = (\assetReportCreateRequestAccessTokens -> AssetReportCreateRequest { assetReportCreateRequestAccessTokens, ..} ) <$> f assetReportCreateRequestAccessTokens
 {-# INLINE assetReportCreateRequestAccessTokensL #-}
 
@@ -737,7 +737,7 @@ assetReportGetResponseRequestIdL f AssetReportGetResponse{..} = (\assetReportGet
 -- * AssetReportItem
 
 -- | 'assetReportItemItemId' Lens
-assetReportItemItemIdL :: Lens_' AssetReportItem (Text)
+assetReportItemItemIdL :: Lens_' AssetReportItem (ItemId)
 assetReportItemItemIdL f AssetReportItem{..} = (\assetReportItemItemId -> AssetReportItem { assetReportItemItemId, ..} ) <$> f assetReportItemItemId
 {-# INLINE assetReportItemItemIdL #-}
 
@@ -1134,7 +1134,7 @@ authGetRequestSecretL f AuthGetRequest{..} = (\authGetRequestSecret -> AuthGetRe
 {-# INLINE authGetRequestSecretL #-}
 
 -- | 'authGetRequestAccessToken' Lens
-authGetRequestAccessTokenL :: Lens_' AuthGetRequest (Text)
+authGetRequestAccessTokenL :: Lens_' AuthGetRequest (AccessToken)
 authGetRequestAccessTokenL f AuthGetRequest{..} = (\authGetRequestAccessToken -> AuthGetRequest { authGetRequestAccessToken, ..} ) <$> f authGetRequestAccessToken
 {-# INLINE authGetRequestAccessTokenL #-}
 
@@ -1196,7 +1196,7 @@ automaticallyVerifiedWebhookAccountIdL f AutomaticallyVerifiedWebhook{..} = (\au
 {-# INLINE automaticallyVerifiedWebhookAccountIdL #-}
 
 -- | 'automaticallyVerifiedWebhookItemId' Lens
-automaticallyVerifiedWebhookItemIdL :: Lens_' AutomaticallyVerifiedWebhook (Text)
+automaticallyVerifiedWebhookItemIdL :: Lens_' AutomaticallyVerifiedWebhook (ItemId)
 automaticallyVerifiedWebhookItemIdL f AutomaticallyVerifiedWebhook{..} = (\automaticallyVerifiedWebhookItemId -> AutomaticallyVerifiedWebhook { automaticallyVerifiedWebhookItemId, ..} ) <$> f automaticallyVerifiedWebhookItemId
 {-# INLINE automaticallyVerifiedWebhookItemIdL #-}
 
@@ -1389,7 +1389,7 @@ bankTransferCreateRequestIdempotencyKeyL f BankTransferCreateRequest{..} = (\ban
 {-# INLINE bankTransferCreateRequestIdempotencyKeyL #-}
 
 -- | 'bankTransferCreateRequestAccessToken' Lens
-bankTransferCreateRequestAccessTokenL :: Lens_' BankTransferCreateRequest (Text)
+bankTransferCreateRequestAccessTokenL :: Lens_' BankTransferCreateRequest (AccessToken)
 bankTransferCreateRequestAccessTokenL f BankTransferCreateRequest{..} = (\bankTransferCreateRequestAccessToken -> BankTransferCreateRequest { bankTransferCreateRequestAccessToken, ..} ) <$> f bankTransferCreateRequestAccessToken
 {-# INLINE bankTransferCreateRequestAccessTokenL #-}
 
@@ -1789,7 +1789,7 @@ bankTransferMigrateAccountRequestAccountTypeL f BankTransferMigrateAccountReques
 -- * BankTransferMigrateAccountResponse
 
 -- | 'bankTransferMigrateAccountResponseAccessToken' Lens
-bankTransferMigrateAccountResponseAccessTokenL :: Lens_' BankTransferMigrateAccountResponse (Text)
+bankTransferMigrateAccountResponseAccessTokenL :: Lens_' BankTransferMigrateAccountResponse (AccessToken)
 bankTransferMigrateAccountResponseAccessTokenL f BankTransferMigrateAccountResponse{..} = (\bankTransferMigrateAccountResponseAccessToken -> BankTransferMigrateAccountResponse { bankTransferMigrateAccountResponseAccessToken, ..} ) <$> f bankTransferMigrateAccountResponseAccessToken
 {-# INLINE bankTransferMigrateAccountResponseAccessTokenL #-}
 
@@ -1881,7 +1881,7 @@ categoryHierarchyL f Category{..} = (\categoryHierarchy -> Category { categoryHi
 -- * Cause
 
 -- | 'causeItemId' Lens
-causeItemIdL :: Lens_' Cause (Text)
+causeItemIdL :: Lens_' Cause (ItemId)
 causeItemIdL f Cause{..} = (\causeItemId -> Cause { causeItemId, ..} ) <$> f causeItemId
 {-# INLINE causeItemIdL #-}
 
@@ -1977,7 +1977,7 @@ defaultUpdateWebhookNewTransactionsL f DefaultUpdateWebhook{..} = (\defaultUpdat
 {-# INLINE defaultUpdateWebhookNewTransactionsL #-}
 
 -- | 'defaultUpdateWebhookItemId' Lens
-defaultUpdateWebhookItemIdL :: Lens_' DefaultUpdateWebhook (Text)
+defaultUpdateWebhookItemIdL :: Lens_' DefaultUpdateWebhook (ItemId)
 defaultUpdateWebhookItemIdL f DefaultUpdateWebhook{..} = (\defaultUpdateWebhookItemId -> DefaultUpdateWebhook { defaultUpdateWebhookItemId, ..} ) <$> f defaultUpdateWebhookItemId
 {-# INLINE defaultUpdateWebhookItemIdL #-}
 
@@ -2063,7 +2063,7 @@ depositSwitchCreateRequestSecretL f DepositSwitchCreateRequest{..} = (\depositSw
 {-# INLINE depositSwitchCreateRequestSecretL #-}
 
 -- | 'depositSwitchCreateRequestTargetAccessToken' Lens
-depositSwitchCreateRequestTargetAccessTokenL :: Lens_' DepositSwitchCreateRequest (Text)
+depositSwitchCreateRequestTargetAccessTokenL :: Lens_' DepositSwitchCreateRequest (AccessToken)
 depositSwitchCreateRequestTargetAccessTokenL f DepositSwitchCreateRequest{..} = (\depositSwitchCreateRequestTargetAccessToken -> DepositSwitchCreateRequest { depositSwitchCreateRequestTargetAccessToken, ..} ) <$> f depositSwitchCreateRequestTargetAccessToken
 {-# INLINE depositSwitchCreateRequestTargetAccessTokenL #-}
 
@@ -2120,7 +2120,7 @@ depositSwitchGetResponseTargetAccountIdL f DepositSwitchGetResponse{..} = (\depo
 {-# INLINE depositSwitchGetResponseTargetAccountIdL #-}
 
 -- | 'depositSwitchGetResponseTargetItemId' Lens
-depositSwitchGetResponseTargetItemIdL :: Lens_' DepositSwitchGetResponse (Text)
+depositSwitchGetResponseTargetItemIdL :: Lens_' DepositSwitchGetResponse (ItemId)
 depositSwitchGetResponseTargetItemIdL f DepositSwitchGetResponse{..} = (\depositSwitchGetResponseTargetItemId -> DepositSwitchGetResponse { depositSwitchGetResponseTargetItemId, ..} ) <$> f depositSwitchGetResponseTargetItemId
 {-# INLINE depositSwitchGetResponseTargetItemIdL #-}
 
@@ -2572,7 +2572,7 @@ historicalUpdateWebhookNewTransactionsL f HistoricalUpdateWebhook{..} = (\histor
 {-# INLINE historicalUpdateWebhookNewTransactionsL #-}
 
 -- | 'historicalUpdateWebhookItemId' Lens
-historicalUpdateWebhookItemIdL :: Lens_' HistoricalUpdateWebhook (Text)
+historicalUpdateWebhookItemIdL :: Lens_' HistoricalUpdateWebhook (ItemId)
 historicalUpdateWebhookItemIdL f HistoricalUpdateWebhook{..} = (\historicalUpdateWebhookItemId -> HistoricalUpdateWebhook { historicalUpdateWebhookItemId, ..} ) <$> f historicalUpdateWebhookItemId
 {-# INLINE historicalUpdateWebhookItemIdL #-}
 
@@ -2640,7 +2640,7 @@ holdingsDefaultUpdateWebhookWebhookCodeL f HoldingsDefaultUpdateWebhook{..} = (\
 {-# INLINE holdingsDefaultUpdateWebhookWebhookCodeL #-}
 
 -- | 'holdingsDefaultUpdateWebhookItemId' Lens
-holdingsDefaultUpdateWebhookItemIdL :: Lens_' HoldingsDefaultUpdateWebhook (Text)
+holdingsDefaultUpdateWebhookItemIdL :: Lens_' HoldingsDefaultUpdateWebhook (ItemId)
 holdingsDefaultUpdateWebhookItemIdL f HoldingsDefaultUpdateWebhook{..} = (\holdingsDefaultUpdateWebhookItemId -> HoldingsDefaultUpdateWebhook { holdingsDefaultUpdateWebhookItemId, ..} ) <$> f holdingsDefaultUpdateWebhookItemId
 {-# INLINE holdingsDefaultUpdateWebhookItemIdL #-}
 
@@ -2674,7 +2674,7 @@ identityGetRequestSecretL f IdentityGetRequest{..} = (\identityGetRequestSecret 
 {-# INLINE identityGetRequestSecretL #-}
 
 -- | 'identityGetRequestAccessToken' Lens
-identityGetRequestAccessTokenL :: Lens_' IdentityGetRequest (Text)
+identityGetRequestAccessTokenL :: Lens_' IdentityGetRequest (AccessToken)
 identityGetRequestAccessTokenL f IdentityGetRequest{..} = (\identityGetRequestAccessToken -> IdentityGetRequest { identityGetRequestAccessToken, ..} ) <$> f identityGetRequestAccessToken
 {-# INLINE identityGetRequestAccessTokenL #-}
 
@@ -3035,7 +3035,7 @@ initialUpdateWebhookNewTransactionsL f InitialUpdateWebhook{..} = (\initialUpdat
 {-# INLINE initialUpdateWebhookNewTransactionsL #-}
 
 -- | 'initialUpdateWebhookItemId' Lens
-initialUpdateWebhookItemIdL :: Lens_' InitialUpdateWebhook (Text)
+initialUpdateWebhookItemIdL :: Lens_' InitialUpdateWebhook (ItemId)
 initialUpdateWebhookItemIdL f InitialUpdateWebhook{..} = (\initialUpdateWebhookItemId -> InitialUpdateWebhook { initialUpdateWebhookItemId, ..} ) <$> f initialUpdateWebhookItemId
 {-# INLINE initialUpdateWebhookItemIdL #-}
 
@@ -3464,7 +3464,7 @@ investmentsDefaultUpdateWebhookWebhookCodeL f InvestmentsDefaultUpdateWebhook{..
 {-# INLINE investmentsDefaultUpdateWebhookWebhookCodeL #-}
 
 -- | 'investmentsDefaultUpdateWebhookItemId' Lens
-investmentsDefaultUpdateWebhookItemIdL :: Lens_' InvestmentsDefaultUpdateWebhook (Text)
+investmentsDefaultUpdateWebhookItemIdL :: Lens_' InvestmentsDefaultUpdateWebhook (ItemId)
 investmentsDefaultUpdateWebhookItemIdL f InvestmentsDefaultUpdateWebhook{..} = (\investmentsDefaultUpdateWebhookItemId -> InvestmentsDefaultUpdateWebhook { investmentsDefaultUpdateWebhookItemId, ..} ) <$> f investmentsDefaultUpdateWebhookItemId
 {-# INLINE investmentsDefaultUpdateWebhookItemIdL #-}
 
@@ -3498,7 +3498,7 @@ investmentsHoldingsGetRequestSecretL f InvestmentsHoldingsGetRequest{..} = (\inv
 {-# INLINE investmentsHoldingsGetRequestSecretL #-}
 
 -- | 'investmentsHoldingsGetRequestAccessToken' Lens
-investmentsHoldingsGetRequestAccessTokenL :: Lens_' InvestmentsHoldingsGetRequest (Text)
+investmentsHoldingsGetRequestAccessTokenL :: Lens_' InvestmentsHoldingsGetRequest (AccessToken)
 investmentsHoldingsGetRequestAccessTokenL f InvestmentsHoldingsGetRequest{..} = (\investmentsHoldingsGetRequestAccessToken -> InvestmentsHoldingsGetRequest { investmentsHoldingsGetRequestAccessToken, ..} ) <$> f investmentsHoldingsGetRequestAccessToken
 {-# INLINE investmentsHoldingsGetRequestAccessTokenL #-}
 
@@ -3551,7 +3551,7 @@ investmentsTransactionsGetRequestSecretL f InvestmentsTransactionsGetRequest{..}
 {-# INLINE investmentsTransactionsGetRequestSecretL #-}
 
 -- | 'investmentsTransactionsGetRequestAccessToken' Lens
-investmentsTransactionsGetRequestAccessTokenL :: Lens_' InvestmentsTransactionsGetRequest (Text)
+investmentsTransactionsGetRequestAccessTokenL :: Lens_' InvestmentsTransactionsGetRequest (AccessToken)
 investmentsTransactionsGetRequestAccessTokenL f InvestmentsTransactionsGetRequest{..} = (\investmentsTransactionsGetRequestAccessToken -> InvestmentsTransactionsGetRequest { investmentsTransactionsGetRequestAccessToken, ..} ) <$> f investmentsTransactionsGetRequestAccessToken
 {-# INLINE investmentsTransactionsGetRequestAccessTokenL #-}
 
@@ -3628,7 +3628,7 @@ investmentsTransactionsGetResponseRequestIdL f InvestmentsTransactionsGetRespons
 -- * Item
 
 -- | 'itemItemId' Lens
-itemItemIdL :: Lens_' Item (Text)
+itemItemIdL :: Lens_' Item (ItemId)
 itemItemIdL f Item{..} = (\itemItemId -> Item { itemItemId, ..} ) <$> f itemItemId
 {-# INLINE itemItemIdL #-}
 
@@ -3682,7 +3682,7 @@ itemAccessTokenInvalidateRequestSecretL f ItemAccessTokenInvalidateRequest{..} =
 {-# INLINE itemAccessTokenInvalidateRequestSecretL #-}
 
 -- | 'itemAccessTokenInvalidateRequestAccessToken' Lens
-itemAccessTokenInvalidateRequestAccessTokenL :: Lens_' ItemAccessTokenInvalidateRequest (Text)
+itemAccessTokenInvalidateRequestAccessTokenL :: Lens_' ItemAccessTokenInvalidateRequest (AccessToken)
 itemAccessTokenInvalidateRequestAccessTokenL f ItemAccessTokenInvalidateRequest{..} = (\itemAccessTokenInvalidateRequestAccessToken -> ItemAccessTokenInvalidateRequest { itemAccessTokenInvalidateRequestAccessToken, ..} ) <$> f itemAccessTokenInvalidateRequestAccessToken
 {-# INLINE itemAccessTokenInvalidateRequestAccessTokenL #-}
 
@@ -3691,7 +3691,7 @@ itemAccessTokenInvalidateRequestAccessTokenL f ItemAccessTokenInvalidateRequest{
 -- * ItemAccessTokenInvalidateResponse
 
 -- | 'itemAccessTokenInvalidateResponseNewAccessToken' Lens
-itemAccessTokenInvalidateResponseNewAccessTokenL :: Lens_' ItemAccessTokenInvalidateResponse (Text)
+itemAccessTokenInvalidateResponseNewAccessTokenL :: Lens_' ItemAccessTokenInvalidateResponse (AccessToken)
 itemAccessTokenInvalidateResponseNewAccessTokenL f ItemAccessTokenInvalidateResponse{..} = (\itemAccessTokenInvalidateResponseNewAccessToken -> ItemAccessTokenInvalidateResponse { itemAccessTokenInvalidateResponseNewAccessToken, ..} ) <$> f itemAccessTokenInvalidateResponseNewAccessToken
 {-# INLINE itemAccessTokenInvalidateResponseNewAccessTokenL #-}
 
@@ -3715,7 +3715,7 @@ itemErrorWebhookWebhookCodeL f ItemErrorWebhook{..} = (\itemErrorWebhookWebhookC
 {-# INLINE itemErrorWebhookWebhookCodeL #-}
 
 -- | 'itemErrorWebhookItemId' Lens
-itemErrorWebhookItemIdL :: Lens_' ItemErrorWebhook (Text)
+itemErrorWebhookItemIdL :: Lens_' ItemErrorWebhook (ItemId)
 itemErrorWebhookItemIdL f ItemErrorWebhook{..} = (\itemErrorWebhookItemId -> ItemErrorWebhook { itemErrorWebhookItemId, ..} ) <$> f itemErrorWebhookItemId
 {-# INLINE itemErrorWebhookItemIdL #-}
 
@@ -3739,7 +3739,7 @@ itemGetRequestSecretL f ItemGetRequest{..} = (\itemGetRequestSecret -> ItemGetRe
 {-# INLINE itemGetRequestSecretL #-}
 
 -- | 'itemGetRequestAccessToken' Lens
-itemGetRequestAccessTokenL :: Lens_' ItemGetRequest (Text)
+itemGetRequestAccessTokenL :: Lens_' ItemGetRequest (AccessToken)
 itemGetRequestAccessTokenL f ItemGetRequest{..} = (\itemGetRequestAccessToken -> ItemGetRequest { itemGetRequestAccessToken, ..} ) <$> f itemGetRequestAccessToken
 {-# INLINE itemGetRequestAccessTokenL #-}
 
@@ -3824,7 +3824,7 @@ itemImportRequestUserAuthAuthTokenL f ItemImportRequestUserAuth{..} = (\itemImpo
 -- * ItemImportResponse
 
 -- | 'itemImportResponseAccessToken' Lens
-itemImportResponseAccessTokenL :: Lens_' ItemImportResponse (Text)
+itemImportResponseAccessTokenL :: Lens_' ItemImportResponse (AccessToken)
 itemImportResponseAccessTokenL f ItemImportResponse{..} = (\itemImportResponseAccessToken -> ItemImportResponse { itemImportResponseAccessToken, ..} ) <$> f itemImportResponseAccessToken
 {-# INLINE itemImportResponseAccessTokenL #-}
 
@@ -3848,7 +3848,7 @@ itemProductReadyWebhookWebhookCodeL f ItemProductReadyWebhook{..} = (\itemProduc
 {-# INLINE itemProductReadyWebhookWebhookCodeL #-}
 
 -- | 'itemProductReadyWebhookItemId' Lens
-itemProductReadyWebhookItemIdL :: Lens_' ItemProductReadyWebhook (Text)
+itemProductReadyWebhookItemIdL :: Lens_' ItemProductReadyWebhook (ItemId)
 itemProductReadyWebhookItemIdL f ItemProductReadyWebhook{..} = (\itemProductReadyWebhookItemId -> ItemProductReadyWebhook { itemProductReadyWebhookItemId, ..} ) <$> f itemProductReadyWebhookItemId
 {-# INLINE itemProductReadyWebhookItemIdL #-}
 
@@ -3872,7 +3872,7 @@ itemPublicTokenCreateRequestSecretL f ItemPublicTokenCreateRequest{..} = (\itemP
 {-# INLINE itemPublicTokenCreateRequestSecretL #-}
 
 -- | 'itemPublicTokenCreateRequestAccessToken' Lens
-itemPublicTokenCreateRequestAccessTokenL :: Lens_' ItemPublicTokenCreateRequest (Text)
+itemPublicTokenCreateRequestAccessTokenL :: Lens_' ItemPublicTokenCreateRequest (AccessToken)
 itemPublicTokenCreateRequestAccessTokenL f ItemPublicTokenCreateRequest{..} = (\itemPublicTokenCreateRequestAccessToken -> ItemPublicTokenCreateRequest { itemPublicTokenCreateRequestAccessToken, ..} ) <$> f itemPublicTokenCreateRequestAccessToken
 {-# INLINE itemPublicTokenCreateRequestAccessTokenL #-}
 
@@ -3919,12 +3919,12 @@ itemPublicTokenExchangeRequestPublicTokenL f ItemPublicTokenExchangeRequest{..} 
 -- * ItemPublicTokenExchangeResponse
 
 -- | 'itemPublicTokenExchangeResponseAccessToken' Lens
-itemPublicTokenExchangeResponseAccessTokenL :: Lens_' ItemPublicTokenExchangeResponse (Text)
+itemPublicTokenExchangeResponseAccessTokenL :: Lens_' ItemPublicTokenExchangeResponse (AccessToken)
 itemPublicTokenExchangeResponseAccessTokenL f ItemPublicTokenExchangeResponse{..} = (\itemPublicTokenExchangeResponseAccessToken -> ItemPublicTokenExchangeResponse { itemPublicTokenExchangeResponseAccessToken, ..} ) <$> f itemPublicTokenExchangeResponseAccessToken
 {-# INLINE itemPublicTokenExchangeResponseAccessTokenL #-}
 
 -- | 'itemPublicTokenExchangeResponseItemId' Lens
-itemPublicTokenExchangeResponseItemIdL :: Lens_' ItemPublicTokenExchangeResponse (Text)
+itemPublicTokenExchangeResponseItemIdL :: Lens_' ItemPublicTokenExchangeResponse (ItemId)
 itemPublicTokenExchangeResponseItemIdL f ItemPublicTokenExchangeResponse{..} = (\itemPublicTokenExchangeResponseItemId -> ItemPublicTokenExchangeResponse { itemPublicTokenExchangeResponseItemId, ..} ) <$> f itemPublicTokenExchangeResponseItemId
 {-# INLINE itemPublicTokenExchangeResponseItemIdL #-}
 
@@ -3948,7 +3948,7 @@ itemRemoveRequestSecretL f ItemRemoveRequest{..} = (\itemRemoveRequestSecret -> 
 {-# INLINE itemRemoveRequestSecretL #-}
 
 -- | 'itemRemoveRequestAccessToken' Lens
-itemRemoveRequestAccessTokenL :: Lens_' ItemRemoveRequest (Text)
+itemRemoveRequestAccessTokenL :: Lens_' ItemRemoveRequest (AccessToken)
 itemRemoveRequestAccessTokenL f ItemRemoveRequest{..} = (\itemRemoveRequestAccessToken -> ItemRemoveRequest { itemRemoveRequestAccessToken, ..} ) <$> f itemRemoveRequestAccessToken
 {-# INLINE itemRemoveRequestAccessTokenL #-}
 
@@ -3995,7 +3995,7 @@ itemWebhookUpdateRequestSecretL f ItemWebhookUpdateRequest{..} = (\itemWebhookUp
 {-# INLINE itemWebhookUpdateRequestSecretL #-}
 
 -- | 'itemWebhookUpdateRequestAccessToken' Lens
-itemWebhookUpdateRequestAccessTokenL :: Lens_' ItemWebhookUpdateRequest (Text)
+itemWebhookUpdateRequestAccessTokenL :: Lens_' ItemWebhookUpdateRequest (AccessToken)
 itemWebhookUpdateRequestAccessTokenL f ItemWebhookUpdateRequest{..} = (\itemWebhookUpdateRequestAccessToken -> ItemWebhookUpdateRequest { itemWebhookUpdateRequestAccessToken, ..} ) <$> f itemWebhookUpdateRequestAccessToken
 {-# INLINE itemWebhookUpdateRequestAccessTokenL #-}
 
@@ -4091,7 +4091,7 @@ liabilitiesGetRequestSecretL f LiabilitiesGetRequest{..} = (\liabilitiesGetReque
 {-# INLINE liabilitiesGetRequestSecretL #-}
 
 -- | 'liabilitiesGetRequestAccessToken' Lens
-liabilitiesGetRequestAccessTokenL :: Lens_' LiabilitiesGetRequest (Text)
+liabilitiesGetRequestAccessTokenL :: Lens_' LiabilitiesGetRequest (AccessToken)
 liabilitiesGetRequestAccessTokenL f LiabilitiesGetRequest{..} = (\liabilitiesGetRequestAccessToken -> LiabilitiesGetRequest { liabilitiesGetRequestAccessToken, ..} ) <$> f liabilitiesGetRequestAccessToken
 {-# INLINE liabilitiesGetRequestAccessTokenL #-}
 
@@ -4350,7 +4350,7 @@ linkTokenCreateRequestWebhookL f LinkTokenCreateRequest{..} = (\linkTokenCreateR
 {-# INLINE linkTokenCreateRequestWebhookL #-}
 
 -- | 'linkTokenCreateRequestAccessToken' Lens
-linkTokenCreateRequestAccessTokenL :: Lens_' LinkTokenCreateRequest (Maybe Text)
+linkTokenCreateRequestAccessTokenL :: Lens_' LinkTokenCreateRequest (Maybe AccessToken)
 linkTokenCreateRequestAccessTokenL f LinkTokenCreateRequest{..} = (\linkTokenCreateRequestAccessToken -> LinkTokenCreateRequest { linkTokenCreateRequestAccessToken, ..} ) <$> f linkTokenCreateRequestAccessToken
 {-# INLINE linkTokenCreateRequestAccessTokenL #-}
 
@@ -5896,7 +5896,7 @@ pendingExpirationWebhookWebhookCodeL f PendingExpirationWebhook{..} = (\pendingE
 {-# INLINE pendingExpirationWebhookWebhookCodeL #-}
 
 -- | 'pendingExpirationWebhookItemId' Lens
-pendingExpirationWebhookItemIdL :: Lens_' PendingExpirationWebhook (Text)
+pendingExpirationWebhookItemIdL :: Lens_' PendingExpirationWebhook (ItemId)
 pendingExpirationWebhookItemIdL f PendingExpirationWebhook{..} = (\pendingExpirationWebhookItemId -> PendingExpirationWebhook { pendingExpirationWebhookItemId, ..} ) <$> f pendingExpirationWebhookItemId
 {-# INLINE pendingExpirationWebhookItemIdL #-}
 
@@ -5939,7 +5939,7 @@ processorApexProcessorTokenCreateRequestSecretL f ProcessorApexProcessorTokenCre
 {-# INLINE processorApexProcessorTokenCreateRequestSecretL #-}
 
 -- | 'processorApexProcessorTokenCreateRequestAccessToken' Lens
-processorApexProcessorTokenCreateRequestAccessTokenL :: Lens_' ProcessorApexProcessorTokenCreateRequest (Text)
+processorApexProcessorTokenCreateRequestAccessTokenL :: Lens_' ProcessorApexProcessorTokenCreateRequest (AccessToken)
 processorApexProcessorTokenCreateRequestAccessTokenL f ProcessorApexProcessorTokenCreateRequest{..} = (\processorApexProcessorTokenCreateRequestAccessToken -> ProcessorApexProcessorTokenCreateRequest { processorApexProcessorTokenCreateRequestAccessToken, ..} ) <$> f processorApexProcessorTokenCreateRequestAccessToken
 {-# INLINE processorApexProcessorTokenCreateRequestAccessTokenL #-}
 
@@ -6091,7 +6091,7 @@ processorStripeBankAccountTokenCreateRequestSecretL f ProcessorStripeBankAccount
 {-# INLINE processorStripeBankAccountTokenCreateRequestSecretL #-}
 
 -- | 'processorStripeBankAccountTokenCreateRequestAccessToken' Lens
-processorStripeBankAccountTokenCreateRequestAccessTokenL :: Lens_' ProcessorStripeBankAccountTokenCreateRequest (Text)
+processorStripeBankAccountTokenCreateRequestAccessTokenL :: Lens_' ProcessorStripeBankAccountTokenCreateRequest (AccessToken)
 processorStripeBankAccountTokenCreateRequestAccessTokenL f ProcessorStripeBankAccountTokenCreateRequest{..} = (\processorStripeBankAccountTokenCreateRequestAccessToken -> ProcessorStripeBankAccountTokenCreateRequest { processorStripeBankAccountTokenCreateRequestAccessToken, ..} ) <$> f processorStripeBankAccountTokenCreateRequestAccessToken
 {-# INLINE processorStripeBankAccountTokenCreateRequestAccessTokenL #-}
 
@@ -6129,7 +6129,7 @@ processorTokenCreateRequestSecretL f ProcessorTokenCreateRequest{..} = (\process
 {-# INLINE processorTokenCreateRequestSecretL #-}
 
 -- | 'processorTokenCreateRequestAccessToken' Lens
-processorTokenCreateRequestAccessTokenL :: Lens_' ProcessorTokenCreateRequest (Text)
+processorTokenCreateRequestAccessTokenL :: Lens_' ProcessorTokenCreateRequest (AccessToken)
 processorTokenCreateRequestAccessTokenL f ProcessorTokenCreateRequest{..} = (\processorTokenCreateRequestAccessToken -> ProcessorTokenCreateRequest { processorTokenCreateRequestAccessToken, ..} ) <$> f processorTokenCreateRequestAccessToken
 {-# INLINE processorTokenCreateRequestAccessTokenL #-}
 
@@ -6324,7 +6324,7 @@ sandboxItemFireWebhookRequestSecretL f SandboxItemFireWebhookRequest{..} = (\san
 {-# INLINE sandboxItemFireWebhookRequestSecretL #-}
 
 -- | 'sandboxItemFireWebhookRequestAccessToken' Lens
-sandboxItemFireWebhookRequestAccessTokenL :: Lens_' SandboxItemFireWebhookRequest (Text)
+sandboxItemFireWebhookRequestAccessTokenL :: Lens_' SandboxItemFireWebhookRequest (AccessToken)
 sandboxItemFireWebhookRequestAccessTokenL f SandboxItemFireWebhookRequest{..} = (\sandboxItemFireWebhookRequestAccessToken -> SandboxItemFireWebhookRequest { sandboxItemFireWebhookRequestAccessToken, ..} ) <$> f sandboxItemFireWebhookRequestAccessToken
 {-# INLINE sandboxItemFireWebhookRequestAccessTokenL #-}
 
@@ -6362,7 +6362,7 @@ sandboxItemResetLoginRequestSecretL f SandboxItemResetLoginRequest{..} = (\sandb
 {-# INLINE sandboxItemResetLoginRequestSecretL #-}
 
 -- | 'sandboxItemResetLoginRequestAccessToken' Lens
-sandboxItemResetLoginRequestAccessTokenL :: Lens_' SandboxItemResetLoginRequest (Text)
+sandboxItemResetLoginRequestAccessTokenL :: Lens_' SandboxItemResetLoginRequest (AccessToken)
 sandboxItemResetLoginRequestAccessTokenL f SandboxItemResetLoginRequest{..} = (\sandboxItemResetLoginRequestAccessToken -> SandboxItemResetLoginRequest { sandboxItemResetLoginRequestAccessToken, ..} ) <$> f sandboxItemResetLoginRequestAccessToken
 {-# INLINE sandboxItemResetLoginRequestAccessTokenL #-}
 
@@ -6395,7 +6395,7 @@ sandboxItemSetVerificationStatusRequestSecretL f SandboxItemSetVerificationStatu
 {-# INLINE sandboxItemSetVerificationStatusRequestSecretL #-}
 
 -- | 'sandboxItemSetVerificationStatusRequestAccessToken' Lens
-sandboxItemSetVerificationStatusRequestAccessTokenL :: Lens_' SandboxItemSetVerificationStatusRequest (Text)
+sandboxItemSetVerificationStatusRequestAccessTokenL :: Lens_' SandboxItemSetVerificationStatusRequest (AccessToken)
 sandboxItemSetVerificationStatusRequestAccessTokenL f SandboxItemSetVerificationStatusRequest{..} = (\sandboxItemSetVerificationStatusRequestAccessToken -> SandboxItemSetVerificationStatusRequest { sandboxItemSetVerificationStatusRequestAccessToken, ..} ) <$> f sandboxItemSetVerificationStatusRequestAccessToken
 {-# INLINE sandboxItemSetVerificationStatusRequestAccessTokenL #-}
 
@@ -7322,7 +7322,7 @@ transactionsGetRequestOptionsL f TransactionsGetRequest{..} = (\transactionsGetR
 {-# INLINE transactionsGetRequestOptionsL #-}
 
 -- | 'transactionsGetRequestAccessToken' Lens
-transactionsGetRequestAccessTokenL :: Lens_' TransactionsGetRequest (Text)
+transactionsGetRequestAccessTokenL :: Lens_' TransactionsGetRequest (AccessToken)
 transactionsGetRequestAccessTokenL f TransactionsGetRequest{..} = (\transactionsGetRequestAccessToken -> TransactionsGetRequest { transactionsGetRequestAccessToken, ..} ) <$> f transactionsGetRequestAccessToken
 {-# INLINE transactionsGetRequestAccessTokenL #-}
 
@@ -7399,7 +7399,7 @@ transactionsRefreshRequestClientIdL f TransactionsRefreshRequest{..} = (\transac
 {-# INLINE transactionsRefreshRequestClientIdL #-}
 
 -- | 'transactionsRefreshRequestAccessToken' Lens
-transactionsRefreshRequestAccessTokenL :: Lens_' TransactionsRefreshRequest (Text)
+transactionsRefreshRequestAccessTokenL :: Lens_' TransactionsRefreshRequest (AccessToken)
 transactionsRefreshRequestAccessTokenL f TransactionsRefreshRequest{..} = (\transactionsRefreshRequestAccessToken -> TransactionsRefreshRequest { transactionsRefreshRequestAccessToken, ..} ) <$> f transactionsRefreshRequestAccessToken
 {-# INLINE transactionsRefreshRequestAccessTokenL #-}
 
@@ -7442,7 +7442,7 @@ transactionsRemovedWebhookRemovedTransactionsL f TransactionsRemovedWebhook{..} 
 {-# INLINE transactionsRemovedWebhookRemovedTransactionsL #-}
 
 -- | 'transactionsRemovedWebhookItemId' Lens
-transactionsRemovedWebhookItemIdL :: Lens_' TransactionsRemovedWebhook (Text)
+transactionsRemovedWebhookItemIdL :: Lens_' TransactionsRemovedWebhook (ItemId)
 transactionsRemovedWebhookItemIdL f TransactionsRemovedWebhook{..} = (\transactionsRemovedWebhookItemId -> TransactionsRemovedWebhook { transactionsRemovedWebhookItemId, ..} ) <$> f transactionsRemovedWebhookItemId
 {-# INLINE transactionsRemovedWebhookItemIdL #-}
 
@@ -7495,7 +7495,7 @@ userPermissionRevokedWebhookWebhookCodeL f UserPermissionRevokedWebhook{..} = (\
 {-# INLINE userPermissionRevokedWebhookWebhookCodeL #-}
 
 -- | 'userPermissionRevokedWebhookItemId' Lens
-userPermissionRevokedWebhookItemIdL :: Lens_' UserPermissionRevokedWebhook (Text)
+userPermissionRevokedWebhookItemIdL :: Lens_' UserPermissionRevokedWebhook (ItemId)
 userPermissionRevokedWebhookItemIdL f UserPermissionRevokedWebhook{..} = (\userPermissionRevokedWebhookItemId -> UserPermissionRevokedWebhook { userPermissionRevokedWebhookItemId, ..} ) <$> f userPermissionRevokedWebhookItemId
 {-# INLINE userPermissionRevokedWebhookItemIdL #-}
 
@@ -7519,7 +7519,7 @@ verificationExpiredWebhookWebhookCodeL f VerificationExpiredWebhook{..} = (\veri
 {-# INLINE verificationExpiredWebhookWebhookCodeL #-}
 
 -- | 'verificationExpiredWebhookItemId' Lens
-verificationExpiredWebhookItemIdL :: Lens_' VerificationExpiredWebhook (Text)
+verificationExpiredWebhookItemIdL :: Lens_' VerificationExpiredWebhook (ItemId)
 verificationExpiredWebhookItemIdL f VerificationExpiredWebhook{..} = (\verificationExpiredWebhookItemId -> VerificationExpiredWebhook { verificationExpiredWebhookItemId, ..} ) <$> f verificationExpiredWebhookItemId
 {-# INLINE verificationExpiredWebhookItemIdL #-}
 
@@ -7566,7 +7566,7 @@ webhookUpdateAcknowledgedWebhookWebhookCodeL f WebhookUpdateAcknowledgedWebhook{
 {-# INLINE webhookUpdateAcknowledgedWebhookWebhookCodeL #-}
 
 -- | 'webhookUpdateAcknowledgedWebhookItemId' Lens
-webhookUpdateAcknowledgedWebhookItemIdL :: Lens_' WebhookUpdateAcknowledgedWebhook (Text)
+webhookUpdateAcknowledgedWebhookItemIdL :: Lens_' WebhookUpdateAcknowledgedWebhook (ItemId)
 webhookUpdateAcknowledgedWebhookItemIdL f WebhookUpdateAcknowledgedWebhook{..} = (\webhookUpdateAcknowledgedWebhookItemId -> WebhookUpdateAcknowledgedWebhook { webhookUpdateAcknowledgedWebhookItemId, ..} ) <$> f webhookUpdateAcknowledgedWebhookItemId
 {-# INLINE webhookUpdateAcknowledgedWebhookItemIdL #-}
 

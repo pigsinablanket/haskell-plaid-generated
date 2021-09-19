@@ -70,6 +70,23 @@ newtype Body = Body { unBody :: A.Value } deriving (P.Eq, P.Show, A.ToJSON)
 
 -- * Models
 
+newtype ItemId = ItemId {getItemId :: T.Text}
+  deriving (P.Eq, P.Show, P.Ord)
+
+instance A.FromJSON ItemId where
+  parseJSON = fmap ItemId . A.parseJSON
+
+instance A.ToJSON ItemId where
+  toJSON = A.toJSON . getItemId
+
+newtype AccessToken = AccessToken {getAccessToken :: T.Text}
+  deriving (P.Eq, P.Show, P.Ord)
+
+instance A.FromJSON AccessToken where
+  parseJSON = fmap AccessToken . A.parseJSON
+
+instance A.ToJSON AccessToken where
+  toJSON = A.toJSON . getAccessToken
 
 -- ** APR
 -- | APR
@@ -493,7 +510,7 @@ mkAccountIdentityAllOf accountIdentityAllOfOwners =
 -- | AccountsBalanceGetRequest
 -- AccountsBalanceGetRequest defines the request schema for `/accounts/balance/get`
 data AccountsBalanceGetRequest = AccountsBalanceGetRequest
-  { accountsBalanceGetRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  { accountsBalanceGetRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , accountsBalanceGetRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
   , accountsBalanceGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , accountsBalanceGetRequestOptions :: !(Maybe AccountsBalanceGetRequestOptions) -- ^ "options"
@@ -521,7 +538,7 @@ instance A.ToJSON AccountsBalanceGetRequest where
 
 -- | Construct a value of type 'AccountsBalanceGetRequest' (by applying it's required fields, if any)
 mkAccountsBalanceGetRequest
-  :: Text -- ^ 'accountsBalanceGetRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'accountsBalanceGetRequestAccessToken': The access token associated with the Item data is being requested for.
   -> AccountsBalanceGetRequest
 mkAccountsBalanceGetRequest accountsBalanceGetRequestAccessToken =
   AccountsBalanceGetRequest
@@ -566,7 +583,7 @@ mkAccountsBalanceGetRequestOptions =
 data AccountsGetRequest = AccountsGetRequest
   { accountsGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , accountsGetRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , accountsGetRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , accountsGetRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , accountsGetRequestOptions :: !(Maybe AccountsGetRequestOptions) -- ^ "options"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -592,7 +609,7 @@ instance A.ToJSON AccountsGetRequest where
 
 -- | Construct a value of type 'AccountsGetRequest' (by applying it's required fields, if any)
 mkAccountsGetRequest
-  :: Text -- ^ 'accountsGetRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'accountsGetRequestAccessToken': The access token associated with the Item data is being requested for.
   -> AccountsGetRequest
 mkAccountsGetRequest accountsGetRequestAccessToken =
   AccountsGetRequest
@@ -1048,7 +1065,7 @@ mkAssetReportAuditCopyRemoveResponse assetReportAuditCopyRemoveResponseRemoved a
 data AssetReportCreateRequest = AssetReportCreateRequest
   { assetReportCreateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , assetReportCreateRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , assetReportCreateRequestAccessTokens :: !([Text]) -- ^ /Required/ "access_tokens" - An array of access tokens corresponding to the Items that will be included in the report. The &#x60;assets&#x60; product must have been initialized for the Items during link; the Assets product cannot be added after initialization.
+  , assetReportCreateRequestAccessTokens :: !([AccessToken]) -- ^ /Required/ "access_tokens" - An array of access tokens corresponding to the Items that will be included in the report. The &#x60;assets&#x60; product must have been initialized for the Items during link; the Assets product cannot be added after initialization.
   , assetReportCreateRequestDaysRequested :: !(Int) -- ^ /Required/ "days_requested" - The maximum integer number of days of history to include in the Asset Report. If using Fannie Mae Day 1 Certainty, &#x60;days_requested&#x60; must be at least 61 for new originations or at least 31 for refinancings.
   , assetReportCreateRequestOptions :: !(Maybe AssetReportCreateRequestOptions) -- ^ "options"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -1077,7 +1094,7 @@ instance A.ToJSON AssetReportCreateRequest where
 
 -- | Construct a value of type 'AssetReportCreateRequest' (by applying it's required fields, if any)
 mkAssetReportCreateRequest
-  :: [Text] -- ^ 'assetReportCreateRequestAccessTokens': An array of access tokens corresponding to the Items that will be included in the report. The `assets` product must have been initialized for the Items during link; the Assets product cannot be added after initialization.
+  :: [AccessToken] -- ^ 'assetReportCreateRequestAccessTokens': An array of access tokens corresponding to the Items that will be included in the report. The `assets` product must have been initialized for the Items during link; the Assets product cannot be added after initialization.
   -> Int -- ^ 'assetReportCreateRequestDaysRequested': The maximum integer number of days of history to include in the Asset Report. If using Fannie Mae Day 1 Certainty, `days_requested` must be at least 61 for new originations or at least 31 for refinancings.
   -> AssetReportCreateRequest
 mkAssetReportCreateRequest assetReportCreateRequestAccessTokens assetReportCreateRequestDaysRequested =
@@ -1337,7 +1354,7 @@ mkAssetReportGetResponse assetReportGetResponseReport assetReportGetResponseWarn
 --
 -- A representation of an Item within an Asset Report.
 data AssetReportItem = AssetReportItem
-  { assetReportItemItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  { assetReportItemItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   , assetReportItemInstitutionName :: !(Text) -- ^ /Required/ "institution_name" - The full financial institution name associated with the Item.
   , assetReportItemInstitutionId :: !(Text) -- ^ /Required/ "institution_id" - The id of the financial institution associated with the Item.
   , assetReportItemDateLastUpdated :: !(Text) -- ^ /Required/ "date_last_updated" - The date and time when this Item’s data was last retrieved from the financial institution, in ISO 8601 format.
@@ -1368,7 +1385,7 @@ instance A.ToJSON AssetReportItem where
 
 -- | Construct a value of type 'AssetReportItem' (by applying it's required fields, if any)
 mkAssetReportItem
-  :: Text -- ^ 'assetReportItemItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  :: ItemId -- ^ 'assetReportItemItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> Text -- ^ 'assetReportItemInstitutionName': The full financial institution name associated with the Item.
   -> Text -- ^ 'assetReportItemInstitutionId': The id of the financial institution associated with the Item.
   -> Text -- ^ 'assetReportItemDateLastUpdated': The date and time when this Item’s data was last retrieved from the financial institution, in ISO 8601 format.
@@ -1965,7 +1982,7 @@ mkAuthGetNumbers =
 data AuthGetRequest = AuthGetRequest
   { authGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , authGetRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , authGetRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , authGetRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , authGetRequestOptions :: !(Maybe AuthGetRequestOptions) -- ^ "options"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -1991,7 +2008,7 @@ instance A.ToJSON AuthGetRequest where
 
 -- | Construct a value of type 'AuthGetRequest' (by applying it's required fields, if any)
 mkAuthGetRequest
-  :: Text -- ^ 'authGetRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'authGetRequestAccessToken': The access token associated with the Item data is being requested for.
   -> AuthGetRequest
 mkAuthGetRequest authGetRequestAccessToken =
   AuthGetRequest
@@ -2084,7 +2101,7 @@ data AutomaticallyVerifiedWebhook = AutomaticallyVerifiedWebhook
   { automaticallyVerifiedWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;AUTH&#x60;
   , automaticallyVerifiedWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;AUTOMATICALLY_VERIFIED&#x60;
   , automaticallyVerifiedWebhookAccountId :: !(Text) -- ^ /Required/ "account_id" - The &#x60;account_id&#x60; of the account associated with the webhook
-  , automaticallyVerifiedWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , automaticallyVerifiedWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON AutomaticallyVerifiedWebhook
@@ -2112,7 +2129,7 @@ mkAutomaticallyVerifiedWebhook
   :: Text -- ^ 'automaticallyVerifiedWebhookWebhookType': `AUTH`
   -> Text -- ^ 'automaticallyVerifiedWebhookWebhookCode': `AUTOMATICALLY_VERIFIED`
   -> Text -- ^ 'automaticallyVerifiedWebhookAccountId': The `account_id` of the account associated with the webhook
-  -> Text -- ^ 'automaticallyVerifiedWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'automaticallyVerifiedWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> AutomaticallyVerifiedWebhook
 mkAutomaticallyVerifiedWebhook automaticallyVerifiedWebhookWebhookType automaticallyVerifiedWebhookWebhookCode automaticallyVerifiedWebhookAccountId automaticallyVerifiedWebhookItemId =
   AutomaticallyVerifiedWebhook
@@ -2430,7 +2447,7 @@ data BankTransferCreateRequest = BankTransferCreateRequest
   { bankTransferCreateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , bankTransferCreateRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
   , bankTransferCreateRequestIdempotencyKey :: !(Text) -- ^ /Required/ "idempotency_key" - A random key provided by the client, per unique bank transfer. Maximum of 50 characters.  The API supports idempotency for safely retrying requests without accidentally performing the same operation twice. For example, if a request to create a bank transfer fails due to a network connection error, you can retry the request with the same idempotency key to guarantee that only a single bank transfer is created.
-  , bankTransferCreateRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The Plaid &#x60;access_token&#x60; for the account that will be debited or credited.
+  , bankTransferCreateRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The Plaid &#x60;access_token&#x60; for the account that will be debited or credited.
   , bankTransferCreateRequestAccountId :: !(Text) -- ^ /Required/ "account_id" - The Plaid &#x60;account_id&#x60; for the account that will be debited or credited.
   , bankTransferCreateRequestType :: !(BankTransferType) -- ^ /Required/ "type"
   , bankTransferCreateRequestNetwork :: !(BankTransferNetwork) -- ^ /Required/ "network"
@@ -2489,7 +2506,7 @@ instance A.ToJSON BankTransferCreateRequest where
 -- | Construct a value of type 'BankTransferCreateRequest' (by applying it's required fields, if any)
 mkBankTransferCreateRequest
   :: Text -- ^ 'bankTransferCreateRequestIdempotencyKey': A random key provided by the client, per unique bank transfer. Maximum of 50 characters.  The API supports idempotency for safely retrying requests without accidentally performing the same operation twice. For example, if a request to create a bank transfer fails due to a network connection error, you can retry the request with the same idempotency key to guarantee that only a single bank transfer is created.
-  -> Text -- ^ 'bankTransferCreateRequestAccessToken': The Plaid `access_token` for the account that will be debited or credited.
+  -> AccessToken -- ^ 'bankTransferCreateRequestAccessToken': The Plaid `access_token` for the account that will be debited or credited.
   -> Text -- ^ 'bankTransferCreateRequestAccountId': The Plaid `account_id` for the account that will be debited or credited.
   -> BankTransferType -- ^ 'bankTransferCreateRequestType'
   -> BankTransferNetwork -- ^ 'bankTransferCreateRequestNetwork'
@@ -3097,7 +3114,7 @@ mkBankTransferMigrateAccountRequest bankTransferMigrateAccountRequestAccountNumb
 --
 -- BankTransferMigrateAccountResponse defines the response schema for `/bank_transfer/migrate_account`
 data BankTransferMigrateAccountResponse = BankTransferMigrateAccountResponse
-  { bankTransferMigrateAccountResponseAccessToken :: !(Text) -- ^ /Required/ "access_token" - The Plaid &#x60;access_token&#x60; for the newly created Item.
+  { bankTransferMigrateAccountResponseAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The Plaid &#x60;access_token&#x60; for the newly created Item.
   , bankTransferMigrateAccountResponseAccountId :: !(Text) -- ^ /Required/ "account_id" - The Plaid &#x60;account_id&#x60; for the newly created Item.
   , bankTransferMigrateAccountResponseRequestId :: !(Text) -- ^ /Required/ "request_id" - A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -3122,7 +3139,7 @@ instance A.ToJSON BankTransferMigrateAccountResponse where
 
 -- | Construct a value of type 'BankTransferMigrateAccountResponse' (by applying it's required fields, if any)
 mkBankTransferMigrateAccountResponse
-  :: Text -- ^ 'bankTransferMigrateAccountResponseAccessToken': The Plaid `access_token` for the newly created Item.
+  :: AccessToken -- ^ 'bankTransferMigrateAccountResponseAccessToken': The Plaid `access_token` for the newly created Item.
   -> Text -- ^ 'bankTransferMigrateAccountResponseAccountId': The Plaid `account_id` for the newly created Item.
   -> Text -- ^ 'bankTransferMigrateAccountResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> BankTransferMigrateAccountResponse
@@ -3287,7 +3304,7 @@ mkCategory categoryCategoryId categoryGroup categoryHierarchy =
 --
 -- An error object and associated `item_id` used to identify a specific Item and error when a batch operation operating on multiple Items has encountered an error in one of the Items.
 data Cause = Cause
-  { causeItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  { causeItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   , causeError :: !(Error) -- ^ /Required/ "error"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -3309,7 +3326,7 @@ instance A.ToJSON Cause where
 
 -- | Construct a value of type 'Cause' (by applying it's required fields, if any)
 mkCause
-  :: Text -- ^ 'causeItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  :: ItemId -- ^ 'causeItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> Error -- ^ 'causeError'
   -> Cause
 mkCause causeItemId causeError =
@@ -3428,7 +3445,7 @@ data DefaultUpdateWebhook = DefaultUpdateWebhook
   , defaultUpdateWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;DEFAULT_UPDATE&#x60;
   , defaultUpdateWebhookError :: !(Maybe Error) -- ^ "error"
   , defaultUpdateWebhookNewTransactions :: !(Double) -- ^ /Required/ "new_transactions" - The number of new transactions detected since the last time this webhook was fired.
-  , defaultUpdateWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item the webhook relates to.
+  , defaultUpdateWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item the webhook relates to.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON DefaultUpdateWebhook
@@ -3458,7 +3475,7 @@ mkDefaultUpdateWebhook
   :: Text -- ^ 'defaultUpdateWebhookWebhookType': `TRANSACTIONS`
   -> Text -- ^ 'defaultUpdateWebhookWebhookCode': `DEFAULT_UPDATE`
   -> Double -- ^ 'defaultUpdateWebhookNewTransactions': The number of new transactions detected since the last time this webhook was fired.
-  -> Text -- ^ 'defaultUpdateWebhookItemId': The `item_id` of the Item the webhook relates to.
+  -> ItemId -- ^ 'defaultUpdateWebhookItemId': The `item_id` of the Item the webhook relates to.
   -> DefaultUpdateWebhook
 mkDefaultUpdateWebhook defaultUpdateWebhookWebhookType defaultUpdateWebhookWebhookCode defaultUpdateWebhookNewTransactions defaultUpdateWebhookItemId =
   DefaultUpdateWebhook
@@ -3609,7 +3626,7 @@ mkDepositSwitchAltCreateResponse depositSwitchAltCreateResponseDepositSwitchId d
 data DepositSwitchCreateRequest = DepositSwitchCreateRequest
   { depositSwitchCreateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , depositSwitchCreateRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , depositSwitchCreateRequestTargetAccessToken :: !(Text) -- ^ /Required/ "target_access_token" - Access token for the target Item, typically provided in the Import Item response.
+  , depositSwitchCreateRequestTargetAccessToken :: !(AccessToken) -- ^ /Required/ "target_access_token" - Access token for the target Item, typically provided in the Import Item response.
   , depositSwitchCreateRequestTargetAccountId :: !(Text) -- ^ /Required/ "target_account_id" - Plaid Account ID that specifies the target bank account. This account will become the recipient for a user&#39;s direct deposit.
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -3635,7 +3652,7 @@ instance A.ToJSON DepositSwitchCreateRequest where
 
 -- | Construct a value of type 'DepositSwitchCreateRequest' (by applying it's required fields, if any)
 mkDepositSwitchCreateRequest
-  :: Text -- ^ 'depositSwitchCreateRequestTargetAccessToken': Access token for the target Item, typically provided in the Import Item response.
+  :: AccessToken -- ^ 'depositSwitchCreateRequestTargetAccessToken': Access token for the target Item, typically provided in the Import Item response.
   -> Text -- ^ 'depositSwitchCreateRequestTargetAccountId': Plaid Account ID that specifies the target bank account. This account will become the recipient for a user's direct deposit.
   -> DepositSwitchCreateRequest
 mkDepositSwitchCreateRequest depositSwitchCreateRequestTargetAccessToken depositSwitchCreateRequestTargetAccountId =
@@ -3729,7 +3746,7 @@ mkDepositSwitchGetRequest depositSwitchGetRequestDepositSwitchId =
 data DepositSwitchGetResponse = DepositSwitchGetResponse
   { depositSwitchGetResponseDepositSwitchId :: !(Text) -- ^ /Required/ "deposit_switch_id" - The ID of the deposit switch
   , depositSwitchGetResponseTargetAccountId :: !(Text) -- ^ /Required/ "target_account_id" - The ID of the bank account the direct deposit was switched to
-  , depositSwitchGetResponseTargetItemId :: !(Text) -- ^ /Required/ "target_item_id" - The ID of the Item the direct deposit was switched to.
+  , depositSwitchGetResponseTargetItemId :: !(ItemId) -- ^ /Required/ "target_item_id" - The ID of the Item the direct deposit was switched to.
   , depositSwitchGetResponseState :: !(E'State) -- ^ /Required/ "state" - The state of the deposit switch.
   , depositSwitchGetResponseAccountHasMultipleAllocations :: !(Bool) -- ^ /Required/ "account_has_multiple_allocations" - When &#x60;true&#x60;, user’s direct deposit goes to multiple banks. When false, user’s direct deposit only goes to the target account. Always &#x60;null&#x60; if the deposit switch has not been completed.
   , depositSwitchGetResponseIsAllocatedRemainder :: !(Bool) -- ^ /Required/ "is_allocated_remainder" - When &#x60;true&#x60;, the target account is allocated the remainder of direct deposit after all other allocations have been deducted. When &#x60;false&#x60;, user’s direct deposit is allocated as a percent or amount. Always &#x60;null&#x60; if the deposit switch has not been completed.
@@ -3778,7 +3795,7 @@ instance A.ToJSON DepositSwitchGetResponse where
 mkDepositSwitchGetResponse
   :: Text -- ^ 'depositSwitchGetResponseDepositSwitchId': The ID of the deposit switch
   -> Text -- ^ 'depositSwitchGetResponseTargetAccountId': The ID of the bank account the direct deposit was switched to
-  -> Text -- ^ 'depositSwitchGetResponseTargetItemId': The ID of the Item the direct deposit was switched to.
+  -> ItemId -- ^ 'depositSwitchGetResponseTargetItemId': The ID of the Item the direct deposit was switched to.
   -> E'State -- ^ 'depositSwitchGetResponseState': The state of the deposit switch.
   -> Bool -- ^ 'depositSwitchGetResponseAccountHasMultipleAllocations': When `true`, user’s direct deposit goes to multiple banks. When false, user’s direct deposit only goes to the target account. Always `null` if the deposit switch has not been completed.
   -> Bool -- ^ 'depositSwitchGetResponseIsAllocatedRemainder': When `true`, the target account is allocated the remainder of direct deposit after all other allocations have been deducted. When `false`, user’s direct deposit is allocated as a percent or amount. Always `null` if the deposit switch has not been completed.
@@ -4549,7 +4566,7 @@ data HistoricalUpdateWebhook = HistoricalUpdateWebhook
   , historicalUpdateWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;HISTORICAL_UPDATE&#x60;
   , historicalUpdateWebhookError :: !(Maybe Error) -- ^ "error"
   , historicalUpdateWebhookNewTransactions :: !(Double) -- ^ /Required/ "new_transactions" - The number of new, unfetched transactions available
-  , historicalUpdateWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , historicalUpdateWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON HistoricalUpdateWebhook
@@ -4579,7 +4596,7 @@ mkHistoricalUpdateWebhook
   :: Text -- ^ 'historicalUpdateWebhookWebhookType': `TRANSACTIONS`
   -> Text -- ^ 'historicalUpdateWebhookWebhookCode': `HISTORICAL_UPDATE`
   -> Double -- ^ 'historicalUpdateWebhookNewTransactions': The number of new, unfetched transactions available
-  -> Text -- ^ 'historicalUpdateWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'historicalUpdateWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> HistoricalUpdateWebhook
 mkHistoricalUpdateWebhook historicalUpdateWebhookWebhookType historicalUpdateWebhookWebhookCode historicalUpdateWebhookNewTransactions historicalUpdateWebhookItemId =
   HistoricalUpdateWebhook
@@ -4666,7 +4683,7 @@ mkHolding holdingAccountId holdingSecurityId holdingInstitutionPrice holdingInst
 data HoldingsDefaultUpdateWebhook = HoldingsDefaultUpdateWebhook
   { holdingsDefaultUpdateWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;HOLDINGS&#x60;
   , holdingsDefaultUpdateWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;DEFAULT_UPDATE&#x60;
-  , holdingsDefaultUpdateWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , holdingsDefaultUpdateWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   , holdingsDefaultUpdateWebhookError :: !(Maybe Error) -- ^ "error"
   , holdingsDefaultUpdateWebhookNewHoldings :: !(Double) -- ^ /Required/ "new_holdings" - The number of new holdings reported since the last time this webhook was fired.
   , holdingsDefaultUpdateWebhookUpdatedHoldings :: !(Double) -- ^ /Required/ "updated_holdings" - The number of updated holdings reported since the last time this webhook was fired.
@@ -4700,7 +4717,7 @@ instance A.ToJSON HoldingsDefaultUpdateWebhook where
 mkHoldingsDefaultUpdateWebhook
   :: Text -- ^ 'holdingsDefaultUpdateWebhookWebhookType': `HOLDINGS`
   -> Text -- ^ 'holdingsDefaultUpdateWebhookWebhookCode': `DEFAULT_UPDATE`
-  -> Text -- ^ 'holdingsDefaultUpdateWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'holdingsDefaultUpdateWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> Double -- ^ 'holdingsDefaultUpdateWebhookNewHoldings': The number of new holdings reported since the last time this webhook was fired.
   -> Double -- ^ 'holdingsDefaultUpdateWebhookUpdatedHoldings': The number of updated holdings reported since the last time this webhook was fired.
   -> HoldingsDefaultUpdateWebhook
@@ -4720,7 +4737,7 @@ mkHoldingsDefaultUpdateWebhook holdingsDefaultUpdateWebhookWebhookType holdingsD
 data IdentityGetRequest = IdentityGetRequest
   { identityGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , identityGetRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , identityGetRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , identityGetRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , identityGetRequestOptions :: !(Maybe IdentityGetRequestOptions) -- ^ "options"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -4746,7 +4763,7 @@ instance A.ToJSON IdentityGetRequest where
 
 -- | Construct a value of type 'IdentityGetRequest' (by applying it's required fields, if any)
 mkIdentityGetRequest
-  :: Text -- ^ 'identityGetRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'identityGetRequestAccessToken': The access token associated with the Item data is being requested for.
   -> IdentityGetRequest
 mkIdentityGetRequest identityGetRequestAccessToken =
   IdentityGetRequest
@@ -5473,7 +5490,7 @@ data InitialUpdateWebhook = InitialUpdateWebhook
   , initialUpdateWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;INITIAL_UPDATE&#x60;
   , initialUpdateWebhookError :: !(Maybe Text) -- ^ "error" - The error code associated with the webhook.
   , initialUpdateWebhookNewTransactions :: !(Double) -- ^ /Required/ "new_transactions" - The number of new, unfetched transactions available.
-  , initialUpdateWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , initialUpdateWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON InitialUpdateWebhook
@@ -5503,7 +5520,7 @@ mkInitialUpdateWebhook
   :: Text -- ^ 'initialUpdateWebhookWebhookType': `TRANSACTIONS`
   -> Text -- ^ 'initialUpdateWebhookWebhookCode': `INITIAL_UPDATE`
   -> Double -- ^ 'initialUpdateWebhookNewTransactions': The number of new, unfetched transactions available.
-  -> Text -- ^ 'initialUpdateWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'initialUpdateWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> InitialUpdateWebhook
 mkInitialUpdateWebhook initialUpdateWebhookWebhookType initialUpdateWebhookWebhookCode initialUpdateWebhookNewTransactions initialUpdateWebhookItemId =
   InitialUpdateWebhook
@@ -6222,7 +6239,7 @@ mkInvestmentTransaction investmentTransactionInvestmentTransactionId investmentT
 data InvestmentsDefaultUpdateWebhook = InvestmentsDefaultUpdateWebhook
   { investmentsDefaultUpdateWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;INVESTMENTS_TRANSACTIONS&#x60;
   , investmentsDefaultUpdateWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;DEFAULT_UPDATE&#x60;
-  , investmentsDefaultUpdateWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , investmentsDefaultUpdateWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   , investmentsDefaultUpdateWebhookError :: !(Maybe Error) -- ^ "error"
   , investmentsDefaultUpdateWebhookNewInvestmentsTransactions :: !(Double) -- ^ /Required/ "new_investments_transactions" - The number of new transactions reported since the last time this webhook was fired.
   , investmentsDefaultUpdateWebhookCanceledInvestmentsTransactions :: !(Double) -- ^ /Required/ "canceled_investments_transactions" - The number of canceled transactions reported since the last time this webhook was fired.
@@ -6256,7 +6273,7 @@ instance A.ToJSON InvestmentsDefaultUpdateWebhook where
 mkInvestmentsDefaultUpdateWebhook
   :: Text -- ^ 'investmentsDefaultUpdateWebhookWebhookType': `INVESTMENTS_TRANSACTIONS`
   -> Text -- ^ 'investmentsDefaultUpdateWebhookWebhookCode': `DEFAULT_UPDATE`
-  -> Text -- ^ 'investmentsDefaultUpdateWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'investmentsDefaultUpdateWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> Double -- ^ 'investmentsDefaultUpdateWebhookNewInvestmentsTransactions': The number of new transactions reported since the last time this webhook was fired.
   -> Double -- ^ 'investmentsDefaultUpdateWebhookCanceledInvestmentsTransactions': The number of canceled transactions reported since the last time this webhook was fired.
   -> InvestmentsDefaultUpdateWebhook
@@ -6276,7 +6293,7 @@ mkInvestmentsDefaultUpdateWebhook investmentsDefaultUpdateWebhookWebhookType inv
 data InvestmentsHoldingsGetRequest = InvestmentsHoldingsGetRequest
   { investmentsHoldingsGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , investmentsHoldingsGetRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , investmentsHoldingsGetRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , investmentsHoldingsGetRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , investmentsHoldingsGetRequestOptions :: !(Maybe InvestmentHoldingsGetRequestOptions) -- ^ "options"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -6302,7 +6319,7 @@ instance A.ToJSON InvestmentsHoldingsGetRequest where
 
 -- | Construct a value of type 'InvestmentsHoldingsGetRequest' (by applying it's required fields, if any)
 mkInvestmentsHoldingsGetRequest
-  :: Text -- ^ 'investmentsHoldingsGetRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'investmentsHoldingsGetRequestAccessToken': The access token associated with the Item data is being requested for.
   -> InvestmentsHoldingsGetRequest
 mkInvestmentsHoldingsGetRequest investmentsHoldingsGetRequestAccessToken =
   InvestmentsHoldingsGetRequest
@@ -6368,7 +6385,7 @@ mkInvestmentsHoldingsGetResponse investmentsHoldingsGetResponseAccounts investme
 data InvestmentsTransactionsGetRequest = InvestmentsTransactionsGetRequest
   { investmentsTransactionsGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , investmentsTransactionsGetRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , investmentsTransactionsGetRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , investmentsTransactionsGetRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , investmentsTransactionsGetRequestStartDate :: !(Date) -- ^ /Required/ "start_date" - The earliest date for which to fetch transaction history. Dates should be formatted as YYYY-MM-DD.
   , investmentsTransactionsGetRequestEndDate :: !(Date) -- ^ /Required/ "end_date" - The most recent date for which to fetch transaction history. Dates should be formatted as YYYY-MM-DD.
   , investmentsTransactionsGetRequestOptions :: !(Maybe InvestmentsTransactionsGetRequestOptions) -- ^ "options"
@@ -6400,7 +6417,7 @@ instance A.ToJSON InvestmentsTransactionsGetRequest where
 
 -- | Construct a value of type 'InvestmentsTransactionsGetRequest' (by applying it's required fields, if any)
 mkInvestmentsTransactionsGetRequest
-  :: Text -- ^ 'investmentsTransactionsGetRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'investmentsTransactionsGetRequestAccessToken': The access token associated with the Item data is being requested for.
   -> Date -- ^ 'investmentsTransactionsGetRequestStartDate': The earliest date for which to fetch transaction history. Dates should be formatted as YYYY-MM-DD.
   -> Date -- ^ 'investmentsTransactionsGetRequestEndDate': The most recent date for which to fetch transaction history. Dates should be formatted as YYYY-MM-DD.
   -> InvestmentsTransactionsGetRequest
@@ -6510,7 +6527,7 @@ mkInvestmentsTransactionsGetResponse investmentsTransactionsGetResponseItem inve
 -- | Item
 -- Metadata about the Item.
 data Item = Item
-  { itemItemId :: !(Text) -- ^ /Required/ "item_id" - The Plaid Item ID. The &#x60;item_id&#x60; is always unique; linking the same account at the same institution twice will result in two Items with different &#x60;item_id&#x60; values. Like all Plaid identifiers, the &#x60;item_id&#x60; is case-sensitive.
+  { itemItemId :: !(ItemId) -- ^ /Required/ "item_id" - The Plaid Item ID. The &#x60;item_id&#x60; is always unique; linking the same account at the same institution twice will result in two Items with different &#x60;item_id&#x60; values. Like all Plaid identifiers, the &#x60;item_id&#x60; is case-sensitive.
   , itemInstitutionId :: !(Maybe Text) -- ^ "institution_id" - The Plaid Institution ID associated with the Item. Field is &#x60;null&#x60; for Items created via Same Day Micro-deposits.
   , itemWebhook :: !(Maybe Text) -- ^ "webhook" - The URL registered to receive webhooks for the Item.
   , itemError :: !(Maybe Error) -- ^ "error"
@@ -6550,7 +6567,7 @@ instance A.ToJSON Item where
 
 -- | Construct a value of type 'Item' (by applying it's required fields, if any)
 mkItem
-  :: Text -- ^ 'itemItemId': The Plaid Item ID. The `item_id` is always unique; linking the same account at the same institution twice will result in two Items with different `item_id` values. Like all Plaid identifiers, the `item_id` is case-sensitive.
+  :: ItemId -- ^ 'itemItemId': The Plaid Item ID. The `item_id` is always unique; linking the same account at the same institution twice will result in two Items with different `item_id` values. Like all Plaid identifiers, the `item_id` is case-sensitive.
   -> [Products] -- ^ 'itemAvailableProducts': A list of products available for the Item that have not yet been accessed.
   -> [Products] -- ^ 'itemBilledProducts': A list of products that have been billed for the Item. Note - `billed_products` is populated in all environments but only requests in Production are billed.
   -> E'UpdateType -- ^ 'itemUpdateType': Indicates whether an Item requires user interaction to be updated, which can be the case for Items with some forms of two-factor authentication.  `background` - Item can be updated in the background  `requires_user_authentication` - Item requires user interaction to be updated
@@ -6573,7 +6590,7 @@ mkItem itemItemId itemAvailableProducts itemBilledProducts itemUpdateType =
 data ItemAccessTokenInvalidateRequest = ItemAccessTokenInvalidateRequest
   { itemAccessTokenInvalidateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , itemAccessTokenInvalidateRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , itemAccessTokenInvalidateRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , itemAccessTokenInvalidateRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ItemAccessTokenInvalidateRequest
@@ -6596,7 +6613,7 @@ instance A.ToJSON ItemAccessTokenInvalidateRequest where
 
 -- | Construct a value of type 'ItemAccessTokenInvalidateRequest' (by applying it's required fields, if any)
 mkItemAccessTokenInvalidateRequest
-  :: Text -- ^ 'itemAccessTokenInvalidateRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'itemAccessTokenInvalidateRequestAccessToken': The access token associated with the Item data is being requested for.
   -> ItemAccessTokenInvalidateRequest
 mkItemAccessTokenInvalidateRequest itemAccessTokenInvalidateRequestAccessToken =
   ItemAccessTokenInvalidateRequest
@@ -6609,7 +6626,7 @@ mkItemAccessTokenInvalidateRequest itemAccessTokenInvalidateRequestAccessToken =
 -- | ItemAccessTokenInvalidateResponse
 -- ItemAccessTokenInvalidateResponse defines the response schema for `/item/access_token/invalidate`
 data ItemAccessTokenInvalidateResponse = ItemAccessTokenInvalidateResponse
-  { itemAccessTokenInvalidateResponseNewAccessToken :: !(Text) -- ^ /Required/ "new_access_token" - The access token associated with the Item data is being requested for.
+  { itemAccessTokenInvalidateResponseNewAccessToken :: !(AccessToken) -- ^ /Required/ "new_access_token" - The access token associated with the Item data is being requested for.
   , itemAccessTokenInvalidateResponseRequestId :: !(Text) -- ^ /Required/ "request_id" - A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -6631,7 +6648,7 @@ instance A.ToJSON ItemAccessTokenInvalidateResponse where
 
 -- | Construct a value of type 'ItemAccessTokenInvalidateResponse' (by applying it's required fields, if any)
 mkItemAccessTokenInvalidateResponse
-  :: Text -- ^ 'itemAccessTokenInvalidateResponseNewAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'itemAccessTokenInvalidateResponseNewAccessToken': The access token associated with the Item data is being requested for.
   -> Text -- ^ 'itemAccessTokenInvalidateResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> ItemAccessTokenInvalidateResponse
 mkItemAccessTokenInvalidateResponse itemAccessTokenInvalidateResponseNewAccessToken itemAccessTokenInvalidateResponseRequestId =
@@ -6648,7 +6665,7 @@ mkItemAccessTokenInvalidateResponse itemAccessTokenInvalidateResponseNewAccessTo
 data ItemErrorWebhook = ItemErrorWebhook
   { itemErrorWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;ITEM&#x60;
   , itemErrorWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;ERROR&#x60;
-  , itemErrorWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , itemErrorWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   , itemErrorWebhookError :: !(Error) -- ^ /Required/ "error"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -6676,7 +6693,7 @@ instance A.ToJSON ItemErrorWebhook where
 mkItemErrorWebhook
   :: Text -- ^ 'itemErrorWebhookWebhookType': `ITEM`
   -> Text -- ^ 'itemErrorWebhookWebhookCode': `ERROR`
-  -> Text -- ^ 'itemErrorWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'itemErrorWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> Error -- ^ 'itemErrorWebhookError'
   -> ItemErrorWebhook
 mkItemErrorWebhook itemErrorWebhookWebhookType itemErrorWebhookWebhookCode itemErrorWebhookItemId itemErrorWebhookError =
@@ -6693,7 +6710,7 @@ mkItemErrorWebhook itemErrorWebhookWebhookType itemErrorWebhookWebhookCode itemE
 data ItemGetRequest = ItemGetRequest
   { itemGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , itemGetRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , itemGetRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , itemGetRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ItemGetRequest
@@ -6716,7 +6733,7 @@ instance A.ToJSON ItemGetRequest where
 
 -- | Construct a value of type 'ItemGetRequest' (by applying it's required fields, if any)
 mkItemGetRequest
-  :: Text -- ^ 'itemGetRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'itemGetRequestAccessToken': The access token associated with the Item data is being requested for.
   -> ItemGetRequest
 mkItemGetRequest itemGetRequestAccessToken =
   ItemGetRequest
@@ -6883,7 +6900,7 @@ mkItemImportRequestUserAuth itemImportRequestUserAuthUserId itemImportRequestUse
 -- | ItemImportResponse
 -- ItemImportResponse defines the response schema for `/item/import`
 data ItemImportResponse = ItemImportResponse
-  { itemImportResponseAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  { itemImportResponseAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , itemImportResponseRequestId :: !(Text) -- ^ /Required/ "request_id" - A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -6905,7 +6922,7 @@ instance A.ToJSON ItemImportResponse where
 
 -- | Construct a value of type 'ItemImportResponse' (by applying it's required fields, if any)
 mkItemImportResponse
-  :: Text -- ^ 'itemImportResponseAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'itemImportResponseAccessToken': The access token associated with the Item data is being requested for.
   -> Text -- ^ 'itemImportResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> ItemImportResponse
 mkItemImportResponse itemImportResponseAccessToken itemImportResponseRequestId =
@@ -6922,7 +6939,7 @@ mkItemImportResponse itemImportResponseAccessToken itemImportResponseRequestId =
 data ItemProductReadyWebhook = ItemProductReadyWebhook
   { itemProductReadyWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;INCOME&#x60;
   , itemProductReadyWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;PRODUCT_READY&#x60;
-  , itemProductReadyWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , itemProductReadyWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   , itemProductReadyWebhookError :: !(Maybe Error) -- ^ "error"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -6950,7 +6967,7 @@ instance A.ToJSON ItemProductReadyWebhook where
 mkItemProductReadyWebhook
   :: Text -- ^ 'itemProductReadyWebhookWebhookType': `INCOME`
   -> Text -- ^ 'itemProductReadyWebhookWebhookCode': `PRODUCT_READY`
-  -> Text -- ^ 'itemProductReadyWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'itemProductReadyWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> ItemProductReadyWebhook
 mkItemProductReadyWebhook itemProductReadyWebhookWebhookType itemProductReadyWebhookWebhookCode itemProductReadyWebhookItemId =
   ItemProductReadyWebhook
@@ -6966,7 +6983,7 @@ mkItemProductReadyWebhook itemProductReadyWebhookWebhookType itemProductReadyWeb
 data ItemPublicTokenCreateRequest = ItemPublicTokenCreateRequest
   { itemPublicTokenCreateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , itemPublicTokenCreateRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , itemPublicTokenCreateRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , itemPublicTokenCreateRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ItemPublicTokenCreateRequest
@@ -6989,7 +7006,7 @@ instance A.ToJSON ItemPublicTokenCreateRequest where
 
 -- | Construct a value of type 'ItemPublicTokenCreateRequest' (by applying it's required fields, if any)
 mkItemPublicTokenCreateRequest
-  :: Text -- ^ 'itemPublicTokenCreateRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'itemPublicTokenCreateRequestAccessToken': The access token associated with the Item data is being requested for.
   -> ItemPublicTokenCreateRequest
 mkItemPublicTokenCreateRequest itemPublicTokenCreateRequestAccessToken =
   ItemPublicTokenCreateRequest
@@ -7079,8 +7096,8 @@ mkItemPublicTokenExchangeRequest itemPublicTokenExchangeRequestPublicToken =
 -- | ItemPublicTokenExchangeResponse
 -- ItemPublicTokenExchangeResponse defines the response schema for `/item/public_token/exchange`
 data ItemPublicTokenExchangeResponse = ItemPublicTokenExchangeResponse
-  { itemPublicTokenExchangeResponseAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
-  , itemPublicTokenExchangeResponseItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; value of the Item associated with the returned &#x60;access_token&#x60;
+  { itemPublicTokenExchangeResponseAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , itemPublicTokenExchangeResponseItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; value of the Item associated with the returned &#x60;access_token&#x60;
   , itemPublicTokenExchangeResponseRequestId :: !(Text) -- ^ /Required/ "request_id" - A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -7104,8 +7121,8 @@ instance A.ToJSON ItemPublicTokenExchangeResponse where
 
 -- | Construct a value of type 'ItemPublicTokenExchangeResponse' (by applying it's required fields, if any)
 mkItemPublicTokenExchangeResponse
-  :: Text -- ^ 'itemPublicTokenExchangeResponseAccessToken': The access token associated with the Item data is being requested for.
-  -> Text -- ^ 'itemPublicTokenExchangeResponseItemId': The `item_id` value of the Item associated with the returned `access_token`
+  :: AccessToken -- ^ 'itemPublicTokenExchangeResponseAccessToken': The access token associated with the Item data is being requested for.
+  -> ItemId -- ^ 'itemPublicTokenExchangeResponseItemId': The `item_id` value of the Item associated with the returned `access_token`
   -> Text -- ^ 'itemPublicTokenExchangeResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> ItemPublicTokenExchangeResponse
 mkItemPublicTokenExchangeResponse itemPublicTokenExchangeResponseAccessToken itemPublicTokenExchangeResponseItemId itemPublicTokenExchangeResponseRequestId =
@@ -7121,7 +7138,7 @@ mkItemPublicTokenExchangeResponse itemPublicTokenExchangeResponseAccessToken ite
 data ItemRemoveRequest = ItemRemoveRequest
   { itemRemoveRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , itemRemoveRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , itemRemoveRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , itemRemoveRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ItemRemoveRequest
@@ -7144,7 +7161,7 @@ instance A.ToJSON ItemRemoveRequest where
 
 -- | Construct a value of type 'ItemRemoveRequest' (by applying it's required fields, if any)
 mkItemRemoveRequest
-  :: Text -- ^ 'itemRemoveRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'itemRemoveRequestAccessToken': The access token associated with the Item data is being requested for.
   -> ItemRemoveRequest
 mkItemRemoveRequest itemRemoveRequestAccessToken =
   ItemRemoveRequest
@@ -7228,7 +7245,7 @@ mkItemStatus =
 data ItemWebhookUpdateRequest = ItemWebhookUpdateRequest
   { itemWebhookUpdateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , itemWebhookUpdateRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , itemWebhookUpdateRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , itemWebhookUpdateRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , itemWebhookUpdateRequestWebhook :: !(Text) -- ^ /Required/ "webhook" - The new webhook URL to associate with the Item.
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -7254,7 +7271,7 @@ instance A.ToJSON ItemWebhookUpdateRequest where
 
 -- | Construct a value of type 'ItemWebhookUpdateRequest' (by applying it's required fields, if any)
 mkItemWebhookUpdateRequest
-  :: Text -- ^ 'itemWebhookUpdateRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'itemWebhookUpdateRequestAccessToken': The access token associated with the Item data is being requested for.
   -> Text -- ^ 'itemWebhookUpdateRequestWebhook': The new webhook URL to associate with the Item.
   -> ItemWebhookUpdateRequest
 mkItemWebhookUpdateRequest itemWebhookUpdateRequestAccessToken itemWebhookUpdateRequestWebhook =
@@ -7399,7 +7416,7 @@ mkJWTHeader jWTHeaderId =
 data LiabilitiesGetRequest = LiabilitiesGetRequest
   { liabilitiesGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , liabilitiesGetRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , liabilitiesGetRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , liabilitiesGetRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , liabilitiesGetRequestOptions :: !(Maybe LiabilitiesGetRequestOptions) -- ^ "options"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -7425,7 +7442,7 @@ instance A.ToJSON LiabilitiesGetRequest where
 
 -- | Construct a value of type 'LiabilitiesGetRequest' (by applying it's required fields, if any)
 mkLiabilitiesGetRequest
-  :: Text -- ^ 'liabilitiesGetRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'liabilitiesGetRequestAccessToken': The access token associated with the Item data is being requested for.
   -> LiabilitiesGetRequest
 mkLiabilitiesGetRequest liabilitiesGetRequestAccessToken =
   LiabilitiesGetRequest
@@ -7751,7 +7768,7 @@ data LinkTokenCreateRequest = LinkTokenCreateRequest
   , linkTokenCreateRequestUser :: !(LinkTokenCreateRequestUser) -- ^ /Required/ "user"
   , linkTokenCreateRequestProducts :: !(Maybe [Products]) -- ^ "products" - List of Plaid product(s) you wish to use. If launching Link in update mode, should be omitted; required otherwise. Valid products are:  &#x60;transactions&#x60;, &#x60;auth&#x60;, &#x60;identity&#x60;, &#x60;assets&#x60;, &#x60;investments&#x60;, &#x60;liabilities&#x60;, &#x60;payment_initiation&#x60;, &#x60;deposit_switch&#x60;  Example: &#x60;[&#39;auth&#39;, &#39;transactions&#39;]&#x60;  &#x60;balance&#x60; is *not* a valid value, the Balance product does not require explicit initalization and will automatically be initialized when any other product is initialized.  Only institutions that support *all* requested products will be shown in Link; to maximize the number of institutions listed, it is recommended to initialize Link with the minimal product set required for your use case. Additional products can be added after Link initialization by calling the relevant endpoints. For details and exceptions, see [Choosing when to initialize products](/docs/link/best-practices/#choosing-when-to-initialize-products).  In Production, you will be billed for each product that you specify when initializing Link. Note that a product cannot be removed from an Item once the Item has been initialized with that product. To stop billing on an Item for subscription-based products, such as Liabilities, Investments, and Transactions, remove the Item via &#x60;/item/remove&#x60;.
   , linkTokenCreateRequestWebhook :: !(Maybe Text) -- ^ "webhook" - The destination URL to which any webhooks should be sent.
-  , linkTokenCreateRequestAccessToken :: !(Maybe Text) -- ^ "access_token" - The &#x60;access_token&#x60; associated with the Item to update, used when updating or modifying an existing &#x60;access_token&#x60;. Used when launching Link in update mode, when completing the Same-day (manual) Micro-deposit flow, or (optionally) when initializing Link as part of the Payment Initiation (UK and Europe) flow.
+  , linkTokenCreateRequestAccessToken :: !(Maybe AccessToken) -- ^ "access_token" - The &#x60;access_token&#x60; associated with the Item to update, used when updating or modifying an existing &#x60;access_token&#x60;. Used when launching Link in update mode, when completing the Same-day (manual) Micro-deposit flow, or (optionally) when initializing Link as part of the Payment Initiation (UK and Europe) flow.
   , linkTokenCreateRequestLinkCustomizationName :: !(Maybe Text) -- ^ "link_customization_name" - The name of the Link customization from the Plaid Dashboard to be applied to Link. If not specified, the &#x60;default&#x60; customization will be used. When using a Link customization, the language in the customization must match the language selected via the &#x60;language&#x60; parameter, and the countries in the customization should match the country codes selected via &#x60;country_codes&#x60;.
   , linkTokenCreateRequestRedirectUri :: !(Maybe Text) -- ^ "redirect_uri" - A URI indicating the destination where a user should be forwarded after completing the Link flow; used to support OAuth authentication flows when launching Link in the browser or via a webview. The &#x60;redirect_uri&#x60; should not contain any query parameters. If &#x60;android_package_name&#x60; is specified, this field should be left blank. Any redirect URI specified here must also be added under the \&quot;Allowed redirect URIs\&quot; configuration on the [developer dashboard](https://dashboard.plaid.com/team/api). In non-Sandbox (Production and Development) environments, the &#x60;redirect_uri&#x60; must begin with https.
   , linkTokenCreateRequestAndroidPackageName :: !(Maybe Text) -- ^ "android_package_name" - The name of your app&#39;s Android package. Required if using the &#x60;link_token&#x60; to initialize Link on Android. When creating a &#x60;link_token&#x60; for initializing Link on other platforms, this field must be left blank. Any package name specified here must also be added to the Allowed Android package names setting on the [developer dashboard](https://dashboard.plaid.com/team/api).
@@ -10471,7 +10488,7 @@ mkPaystubYTDDetails paystubYTDDetailsGrossEarnings paystubYTDDetailsNetEarnings 
 data PendingExpirationWebhook = PendingExpirationWebhook
   { pendingExpirationWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;ITEM&#x60;
   , pendingExpirationWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;PENDING_EXPIRATION&#x60;
-  , pendingExpirationWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , pendingExpirationWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   , pendingExpirationWebhookConsentExpirationTime :: !(Maybe TI.UTCTime) -- ^ /Required/ "consent_expiration_time" - The date and time at which the Item&#39;s access consent will expire, in ISO 8601 format
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -10499,7 +10516,7 @@ instance A.ToJSON PendingExpirationWebhook where
 mkPendingExpirationWebhook
   :: Text -- ^ 'pendingExpirationWebhookWebhookType': `ITEM`
   -> Text -- ^ 'pendingExpirationWebhookWebhookCode': `PENDING_EXPIRATION`
-  -> Text -- ^ 'pendingExpirationWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'pendingExpirationWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> (Maybe TI.UTCTime) -- ^ 'pendingExpirationWebhookConsentExpirationTime': The date and time at which the Item's access consent will expire, in ISO 8601 format
   -> PendingExpirationWebhook
 mkPendingExpirationWebhook pendingExpirationWebhookWebhookType pendingExpirationWebhookWebhookCode pendingExpirationWebhookItemId pendingExpirationWebhookConsentExpirationTime =
@@ -10556,7 +10573,7 @@ mkPhoneNumber phoneNumberData =
 data ProcessorApexProcessorTokenCreateRequest = ProcessorApexProcessorTokenCreateRequest
   { processorApexProcessorTokenCreateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , processorApexProcessorTokenCreateRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , processorApexProcessorTokenCreateRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , processorApexProcessorTokenCreateRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , processorApexProcessorTokenCreateRequestAccountId :: !(Text) -- ^ /Required/ "account_id" - The &#x60;account_id&#x60; value obtained from the &#x60;onSuccess&#x60; callback in Link
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -10582,7 +10599,7 @@ instance A.ToJSON ProcessorApexProcessorTokenCreateRequest where
 
 -- | Construct a value of type 'ProcessorApexProcessorTokenCreateRequest' (by applying it's required fields, if any)
 mkProcessorApexProcessorTokenCreateRequest
-  :: Text -- ^ 'processorApexProcessorTokenCreateRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'processorApexProcessorTokenCreateRequestAccessToken': The access token associated with the Item data is being requested for.
   -> Text -- ^ 'processorApexProcessorTokenCreateRequestAccountId': The `account_id` value obtained from the `onSuccess` callback in Link
   -> ProcessorApexProcessorTokenCreateRequest
 mkProcessorApexProcessorTokenCreateRequest processorApexProcessorTokenCreateRequestAccessToken processorApexProcessorTokenCreateRequestAccountId =
@@ -10864,7 +10881,7 @@ mkProcessorNumber =
 data ProcessorStripeBankAccountTokenCreateRequest = ProcessorStripeBankAccountTokenCreateRequest
   { processorStripeBankAccountTokenCreateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , processorStripeBankAccountTokenCreateRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , processorStripeBankAccountTokenCreateRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , processorStripeBankAccountTokenCreateRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , processorStripeBankAccountTokenCreateRequestAccountId :: !(Text) -- ^ /Required/ "account_id" - The &#x60;account_id&#x60; value obtained from the &#x60;onSuccess&#x60; callback in Link
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -10890,7 +10907,7 @@ instance A.ToJSON ProcessorStripeBankAccountTokenCreateRequest where
 
 -- | Construct a value of type 'ProcessorStripeBankAccountTokenCreateRequest' (by applying it's required fields, if any)
 mkProcessorStripeBankAccountTokenCreateRequest
-  :: Text -- ^ 'processorStripeBankAccountTokenCreateRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'processorStripeBankAccountTokenCreateRequestAccessToken': The access token associated with the Item data is being requested for.
   -> Text -- ^ 'processorStripeBankAccountTokenCreateRequestAccountId': The `account_id` value obtained from the `onSuccess` callback in Link
   -> ProcessorStripeBankAccountTokenCreateRequest
 mkProcessorStripeBankAccountTokenCreateRequest processorStripeBankAccountTokenCreateRequestAccessToken processorStripeBankAccountTokenCreateRequestAccountId =
@@ -10942,7 +10959,7 @@ mkProcessorStripeBankAccountTokenCreateResponse processorStripeBankAccountTokenC
 data ProcessorTokenCreateRequest = ProcessorTokenCreateRequest
   { processorTokenCreateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , processorTokenCreateRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , processorTokenCreateRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , processorTokenCreateRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , processorTokenCreateRequestAccountId :: !(Text) -- ^ /Required/ "account_id" - The &#x60;account_id&#x60; value obtained from the &#x60;onSuccess&#x60; callback in Link
   , processorTokenCreateRequestProcessor :: !(Text) -- ^ /Required/ "processor" - The processor you are integrating with. Valid values are &#x60;\&quot;achq\&quot;&#x60;, &#x60;\&quot;check\&quot;&#x60;, &#x60;\&quot;checkbook\&quot;&#x60;, &#x60;\&quot;circle\&quot;&#x60;, &#x60;\&quot;drivewealth\&quot;&#x60;, &#x60;\&quot;dwolla\&quot;&#x60;, &#x60;\&quot;galileo\&quot;&#x60;, \&quot;&#x60;interactive_brokers&#x60;\&quot;, &#x60;\&quot;modern_treasury\&quot;&#x60;, &#x60;\&quot;ocrolus\&quot;&#x60;, &#x60;\&quot;prime_trust\&quot;&#x60;, &#x60;\&quot;rize\&quot;&#x60;, &#x60;\&quot;sila_money\&quot;&#x60;, &#x60;\&quot;unit\&quot;&#x60;, &#x60;\&quot;velox\&quot;&#x60;, &#x60;\&quot;vesta\&quot;&#x60;, &#x60;\&quot;vopay\&quot;&#x60;, &#x60;\&quot;wyre\&quot;&#x60;
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -10971,7 +10988,7 @@ instance A.ToJSON ProcessorTokenCreateRequest where
 
 -- | Construct a value of type 'ProcessorTokenCreateRequest' (by applying it's required fields, if any)
 mkProcessorTokenCreateRequest
-  :: Text -- ^ 'processorTokenCreateRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'processorTokenCreateRequestAccessToken': The access token associated with the Item data is being requested for.
   -> Text -- ^ 'processorTokenCreateRequestAccountId': The `account_id` value obtained from the `onSuccess` callback in Link
   -> Text -- ^ 'processorTokenCreateRequestProcessor': The processor you are integrating with. Valid values are `\"achq\"`, `\"check\"`, `\"checkbook\"`, `\"circle\"`, `\"drivewealth\"`, `\"dwolla\"`, `\"galileo\"`, \"`interactive_brokers`\", `\"modern_treasury\"`, `\"ocrolus\"`, `\"prime_trust\"`, `\"rize\"`, `\"sila_money\"`, `\"unit\"`, `\"velox\"`, `\"vesta\"`, `\"vopay\"`, `\"wyre\"`
   -> ProcessorTokenCreateRequest
@@ -11325,7 +11342,7 @@ mkSandboxBankTransferSimulateResponse sandboxBankTransferSimulateResponseRequest
 data SandboxItemFireWebhookRequest = SandboxItemFireWebhookRequest
   { sandboxItemFireWebhookRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , sandboxItemFireWebhookRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , sandboxItemFireWebhookRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , sandboxItemFireWebhookRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , sandboxItemFireWebhookRequestWebhookCode :: !(Maybe E'WebhookCode) -- ^ "webhook_code" - The following values for &#x60;webhook_code&#x60; are supported:  * &#x60;DEFAULT_UPDATE&#x60;
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -11351,7 +11368,7 @@ instance A.ToJSON SandboxItemFireWebhookRequest where
 
 -- | Construct a value of type 'SandboxItemFireWebhookRequest' (by applying it's required fields, if any)
 mkSandboxItemFireWebhookRequest
-  :: Text -- ^ 'sandboxItemFireWebhookRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'sandboxItemFireWebhookRequestAccessToken': The access token associated with the Item data is being requested for.
   -> SandboxItemFireWebhookRequest
 mkSandboxItemFireWebhookRequest sandboxItemFireWebhookRequestAccessToken =
   SandboxItemFireWebhookRequest
@@ -11402,7 +11419,7 @@ mkSandboxItemFireWebhookResponse sandboxItemFireWebhookResponseWebhookFired sand
 data SandboxItemResetLoginRequest = SandboxItemResetLoginRequest
   { sandboxItemResetLoginRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , sandboxItemResetLoginRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , sandboxItemResetLoginRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , sandboxItemResetLoginRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON SandboxItemResetLoginRequest
@@ -11425,7 +11442,7 @@ instance A.ToJSON SandboxItemResetLoginRequest where
 
 -- | Construct a value of type 'SandboxItemResetLoginRequest' (by applying it's required fields, if any)
 mkSandboxItemResetLoginRequest
-  :: Text -- ^ 'sandboxItemResetLoginRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'sandboxItemResetLoginRequestAccessToken': The access token associated with the Item data is being requested for.
   -> SandboxItemResetLoginRequest
 mkSandboxItemResetLoginRequest sandboxItemResetLoginRequestAccessToken =
   SandboxItemResetLoginRequest
@@ -11475,7 +11492,7 @@ mkSandboxItemResetLoginResponse sandboxItemResetLoginResponseResetLogin sandboxI
 data SandboxItemSetVerificationStatusRequest = SandboxItemSetVerificationStatusRequest
   { sandboxItemSetVerificationStatusRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , sandboxItemSetVerificationStatusRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
-  , sandboxItemSetVerificationStatusRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , sandboxItemSetVerificationStatusRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , sandboxItemSetVerificationStatusRequestAccountId :: !(Text) -- ^ /Required/ "account_id" - The &#x60;account_id&#x60; of the account whose verification status is to be modified
   , sandboxItemSetVerificationStatusRequestVerificationStatus :: !(E'VerificationStatus) -- ^ /Required/ "verification_status" - The verification status to set the account to.
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -11504,7 +11521,7 @@ instance A.ToJSON SandboxItemSetVerificationStatusRequest where
 
 -- | Construct a value of type 'SandboxItemSetVerificationStatusRequest' (by applying it's required fields, if any)
 mkSandboxItemSetVerificationStatusRequest
-  :: Text -- ^ 'sandboxItemSetVerificationStatusRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'sandboxItemSetVerificationStatusRequestAccessToken': The access token associated with the Item data is being requested for.
   -> Text -- ^ 'sandboxItemSetVerificationStatusRequestAccountId': The `account_id` of the account whose verification status is to be modified
   -> E'VerificationStatus -- ^ 'sandboxItemSetVerificationStatusRequestVerificationStatus': The verification status to set the account to.
   -> SandboxItemSetVerificationStatusRequest
@@ -12761,7 +12778,7 @@ mkTransactionOverride transactionOverrideTransactionDate transactionOverridePost
 data TransactionsGetRequest = TransactionsGetRequest
   { transactionsGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , transactionsGetRequestOptions :: !(Maybe TransactionsGetRequestOptions) -- ^ "options"
-  , transactionsGetRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , transactionsGetRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , transactionsGetRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
   , transactionsGetRequestStartDate :: !(Date) -- ^ /Required/ "start_date" - The earliest date for which data should be returned. Dates should be formatted as YYYY-MM-DD.
   , transactionsGetRequestEndDate :: !(Date) -- ^ /Required/ "end_date" - The latest date for which data should be returned. Dates should be formatted as YYYY-MM-DD.
@@ -12793,7 +12810,7 @@ instance A.ToJSON TransactionsGetRequest where
 
 -- | Construct a value of type 'TransactionsGetRequest' (by applying it's required fields, if any)
 mkTransactionsGetRequest
-  :: Text -- ^ 'transactionsGetRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'transactionsGetRequestAccessToken': The access token associated with the Item data is being requested for.
   -> Date -- ^ 'transactionsGetRequestStartDate': The earliest date for which data should be returned. Dates should be formatted as YYYY-MM-DD.
   -> Date -- ^ 'transactionsGetRequestEndDate': The latest date for which data should be returned. Dates should be formatted as YYYY-MM-DD.
   -> TransactionsGetRequest
@@ -12899,7 +12916,7 @@ mkTransactionsGetResponse transactionsGetResponseAccounts transactionsGetRespons
 -- TransactionsRefreshRequest defines the request schema for `/transactions/refresh`
 data TransactionsRefreshRequest = TransactionsRefreshRequest
   { transactionsRefreshRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
-  , transactionsRefreshRequestAccessToken :: !(Text) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , transactionsRefreshRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
   , transactionsRefreshRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -12923,7 +12940,7 @@ instance A.ToJSON TransactionsRefreshRequest where
 
 -- | Construct a value of type 'TransactionsRefreshRequest' (by applying it's required fields, if any)
 mkTransactionsRefreshRequest
-  :: Text -- ^ 'transactionsRefreshRequestAccessToken': The access token associated with the Item data is being requested for.
+  :: AccessToken -- ^ 'transactionsRefreshRequestAccessToken': The access token associated with the Item data is being requested for.
   -> TransactionsRefreshRequest
 mkTransactionsRefreshRequest transactionsRefreshRequestAccessToken =
   TransactionsRefreshRequest
@@ -12972,7 +12989,7 @@ data TransactionsRemovedWebhook = TransactionsRemovedWebhook
   , transactionsRemovedWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;TRANSACTIONS_REMOVED&#x60;
   , transactionsRemovedWebhookError :: !(Maybe Error) -- ^ "error"
   , transactionsRemovedWebhookRemovedTransactions :: !([Text]) -- ^ /Required/ "removed_transactions" - An array of &#x60;transaction_ids&#x60; corresponding to the removed transactions
-  , transactionsRemovedWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , transactionsRemovedWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TransactionsRemovedWebhook
@@ -13002,7 +13019,7 @@ mkTransactionsRemovedWebhook
   :: Text -- ^ 'transactionsRemovedWebhookWebhookType': `TRANSACTIONS`
   -> Text -- ^ 'transactionsRemovedWebhookWebhookCode': `TRANSACTIONS_REMOVED`
   -> [Text] -- ^ 'transactionsRemovedWebhookRemovedTransactions': An array of `transaction_ids` corresponding to the removed transactions
-  -> Text -- ^ 'transactionsRemovedWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'transactionsRemovedWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> TransactionsRemovedWebhook
 mkTransactionsRemovedWebhook transactionsRemovedWebhookWebhookType transactionsRemovedWebhookWebhookCode transactionsRemovedWebhookRemovedTransactions transactionsRemovedWebhookItemId =
   TransactionsRemovedWebhook
@@ -13077,7 +13094,7 @@ mkUserCustomPassword userCustomPasswordSeed userCustomPasswordOverrideAccounts u
 data UserPermissionRevokedWebhook = UserPermissionRevokedWebhook
   { userPermissionRevokedWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;ITEM&#x60;
   , userPermissionRevokedWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;USER_PERMISSION_REVOKED&#x60;
-  , userPermissionRevokedWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , userPermissionRevokedWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   , userPermissionRevokedWebhookError :: !(Maybe Error) -- ^ "error"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -13105,7 +13122,7 @@ instance A.ToJSON UserPermissionRevokedWebhook where
 mkUserPermissionRevokedWebhook
   :: Text -- ^ 'userPermissionRevokedWebhookWebhookType': `ITEM`
   -> Text -- ^ 'userPermissionRevokedWebhookWebhookCode': `USER_PERMISSION_REVOKED`
-  -> Text -- ^ 'userPermissionRevokedWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'userPermissionRevokedWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> UserPermissionRevokedWebhook
 mkUserPermissionRevokedWebhook userPermissionRevokedWebhookWebhookType userPermissionRevokedWebhookWebhookCode userPermissionRevokedWebhookItemId =
   UserPermissionRevokedWebhook
@@ -13123,7 +13140,7 @@ mkUserPermissionRevokedWebhook userPermissionRevokedWebhookWebhookType userPermi
 data VerificationExpiredWebhook = VerificationExpiredWebhook
   { verificationExpiredWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;AUTH&#x60;
   , verificationExpiredWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;VERIFICATION_EXPIRED&#x60;
-  , verificationExpiredWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , verificationExpiredWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   , verificationExpiredWebhookAccountId :: !(Text) -- ^ /Required/ "account_id" - The &#x60;account_id&#x60; of the account associated with the webhook
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -13151,7 +13168,7 @@ instance A.ToJSON VerificationExpiredWebhook where
 mkVerificationExpiredWebhook
   :: Text -- ^ 'verificationExpiredWebhookWebhookType': `AUTH`
   -> Text -- ^ 'verificationExpiredWebhookWebhookCode': `VERIFICATION_EXPIRED`
-  -> Text -- ^ 'verificationExpiredWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'verificationExpiredWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> Text -- ^ 'verificationExpiredWebhookAccountId': The `account_id` of the account associated with the webhook
   -> VerificationExpiredWebhook
 mkVerificationExpiredWebhook verificationExpiredWebhookWebhookType verificationExpiredWebhookWebhookCode verificationExpiredWebhookItemId verificationExpiredWebhookAccountId =
@@ -13212,7 +13229,7 @@ mkWarning warningWarningType warningWarningCode warningCause =
 data WebhookUpdateAcknowledgedWebhook = WebhookUpdateAcknowledgedWebhook
   { webhookUpdateAcknowledgedWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;ITEM&#x60;
   , webhookUpdateAcknowledgedWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;WEBHOOK_UPDATE_ACKNOWLEDGED&#x60;
-  , webhookUpdateAcknowledgedWebhookItemId :: !(Text) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , webhookUpdateAcknowledgedWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
   , webhookUpdateAcknowledgedWebhookNewWebhookUrl :: !(Text) -- ^ /Required/ "new_webhook_url" - The new webhook URL
   , webhookUpdateAcknowledgedWebhookError :: !(Maybe Error) -- ^ "error"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -13243,7 +13260,7 @@ instance A.ToJSON WebhookUpdateAcknowledgedWebhook where
 mkWebhookUpdateAcknowledgedWebhook
   :: Text -- ^ 'webhookUpdateAcknowledgedWebhookWebhookType': `ITEM`
   -> Text -- ^ 'webhookUpdateAcknowledgedWebhookWebhookCode': `WEBHOOK_UPDATE_ACKNOWLEDGED`
-  -> Text -- ^ 'webhookUpdateAcknowledgedWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> ItemId -- ^ 'webhookUpdateAcknowledgedWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
   -> Text -- ^ 'webhookUpdateAcknowledgedWebhookNewWebhookUrl': The new webhook URL
   -> WebhookUpdateAcknowledgedWebhook
 mkWebhookUpdateAcknowledgedWebhook webhookUpdateAcknowledgedWebhookWebhookType webhookUpdateAcknowledgedWebhookWebhookCode webhookUpdateAcknowledgedWebhookItemId webhookUpdateAcknowledgedWebhookNewWebhookUrl =
