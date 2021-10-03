@@ -568,6 +568,7 @@ instance A.ToJSON AccountsBalanceGetRequestOptions where
   toJSON AccountsBalanceGetRequestOptions {..} =
    _omitNulls
       [ "account_ids" .= accountsBalanceGetRequestOptionsAccountIds
+      , "min_last_updated_datetime" .= accountsBalanceGetRequestOptionsMinLastIpdatedDatetime
       ]
 
 
