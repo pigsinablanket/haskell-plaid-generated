@@ -553,6 +553,7 @@ mkAccountsBalanceGetRequest accountsBalanceGetRequestAccessToken =
 -- An optional object to filter `/accounts/balance/get` results.
 data AccountsBalanceGetRequestOptions = AccountsBalanceGetRequestOptions
   { accountsBalanceGetRequestOptionsAccountIds :: !(Maybe [Text]) -- ^ "account_ids" - A list of &#x60;account_ids&#x60; to retrieve for the Item. The default value is &#x60;null&#x60;.  Note: An error will be returned if a provided &#x60;account_id&#x60; is not associated with the Item.
+  , accountsBalanceGetRequestOptionsMinLastIpdatedDatetime :: !(Maybe TI.UTCTime)
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON AccountsBalanceGetRequestOptions
@@ -560,12 +561,14 @@ instance A.FromJSON AccountsBalanceGetRequestOptions where
   parseJSON = A.withObject "AccountsBalanceGetRequestOptions" $ \o ->
     AccountsBalanceGetRequestOptions
       <$> (o .:? "account_ids")
+      <*> (o .:? "min_last_updated_datetime")
 
 -- | ToJSON AccountsBalanceGetRequestOptions
 instance A.ToJSON AccountsBalanceGetRequestOptions where
   toJSON AccountsBalanceGetRequestOptions {..} =
    _omitNulls
       [ "account_ids" .= accountsBalanceGetRequestOptionsAccountIds
+      , "min_last_updated_datetime" .= accountsBalanceGetRequestOptionsMinLastIpdatedDatetime
       ]
 
 
@@ -575,6 +578,7 @@ mkAccountsBalanceGetRequestOptions
 mkAccountsBalanceGetRequestOptions =
   AccountsBalanceGetRequestOptions
   { accountsBalanceGetRequestOptionsAccountIds = Nothing
+  , accountsBalanceGetRequestOptionsMinLastIpdatedDatetime = Nothing
   }
 
 -- ** AccountsGetRequest
@@ -14130,6 +14134,7 @@ data E'ErrorType
   | E'ErrorType'OAUTH_ERROR -- ^ @"OAUTH_ERROR"@
   | E'ErrorType'PAYMENT_ERROR -- ^ @"PAYMENT_ERROR"@
   | E'ErrorType'BANK_TRANSFER_ERROR -- ^ @"BANK_TRANSFER_ERROR"@
+  | E'ErrorType'INVALID_RESULT 
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'ErrorType where toJSON = A.toJSON . fromE'ErrorType
@@ -14152,7 +14157,7 @@ fromE'ErrorType = \case
   E'ErrorType'OAUTH_ERROR -> "OAUTH_ERROR"
   E'ErrorType'PAYMENT_ERROR -> "PAYMENT_ERROR"
   E'ErrorType'BANK_TRANSFER_ERROR -> "BANK_TRANSFER_ERROR"
-
+  E'ErrorType'INVALID_RESULT -> "INVALID_RESULT"
 -- | parse 'E'ErrorType' enum
 toE'ErrorType :: Text -> P.Either String E'ErrorType
 toE'ErrorType = \case
@@ -14167,6 +14172,7 @@ toE'ErrorType = \case
   "OAUTH_ERROR" -> P.Right E'ErrorType'OAUTH_ERROR
   "PAYMENT_ERROR" -> P.Right E'ErrorType'PAYMENT_ERROR
   "BANK_TRANSFER_ERROR" -> P.Right E'ErrorType'BANK_TRANSFER_ERROR
+  "INVALID_RESULT" -> P.Right E'ErrorType'INVALID_RESULT
   s -> P.Left $ "toE'ErrorType: enum parse failure: " P.++ P.show s
 
 
