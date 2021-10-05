@@ -553,7 +553,7 @@ mkAccountsBalanceGetRequest accountsBalanceGetRequestAccessToken =
 -- An optional object to filter `/accounts/balance/get` results.
 data AccountsBalanceGetRequestOptions = AccountsBalanceGetRequestOptions
   { accountsBalanceGetRequestOptionsAccountIds :: !(Maybe [Text]) -- ^ "account_ids" - A list of &#x60;account_ids&#x60; to retrieve for the Item. The default value is &#x60;null&#x60;.  Note: An error will be returned if a provided &#x60;account_id&#x60; is not associated with the Item.
-  , accountsBalanceGetRequestOptionsMinLastIpdatedDatetime :: !(Maybe TI.UTCTime)
+  , accountsBalanceGetRequestOptionsMinLastUpdatedDatetime :: !(Maybe TI.UTCTime)
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON AccountsBalanceGetRequestOptions
@@ -568,7 +568,7 @@ instance A.ToJSON AccountsBalanceGetRequestOptions where
   toJSON AccountsBalanceGetRequestOptions {..} =
    _omitNulls
       [ "account_ids" .= accountsBalanceGetRequestOptionsAccountIds
-      , "min_last_updated_datetime" .= accountsBalanceGetRequestOptionsMinLastIpdatedDatetime
+      , "min_last_updated_datetime" .= accountsBalanceGetRequestOptionsMinLastUpdatedDatetime
       ]
 
 
@@ -578,7 +578,7 @@ mkAccountsBalanceGetRequestOptions
 mkAccountsBalanceGetRequestOptions =
   AccountsBalanceGetRequestOptions
   { accountsBalanceGetRequestOptionsAccountIds = Nothing
-  , accountsBalanceGetRequestOptionsMinLastIpdatedDatetime = Nothing
+  , accountsBalanceGetRequestOptionsMinLastUpdatedDatetime = Nothing
   }
 
 -- ** AccountsGetRequest
