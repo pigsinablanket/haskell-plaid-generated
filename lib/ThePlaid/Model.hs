@@ -4320,7 +4320,7 @@ data Error = Error
   , errorErrorCode :: !(Text) -- ^ /Required/ "error_code" - The particular error code. Safe for programmatic use.
   , errorErrorMessage :: !(Text) -- ^ /Required/ "error_message" - A developer-friendly representation of the error code. This may change over time and is not safe for programmatic use.
   , errorDisplayMessage :: !(Maybe Text) -- ^ "display_message" - A user-friendly representation of the error code. &#x60;null&#x60; if the error is not related to user action.  This may change over time and is not safe for programmatic use.
-  , errorRequestId :: !(Text) -- ^ /Required/ "request_id" - A unique identifying the request, to be used for troubleshooting purposes. This field will be omitted in errors provided by webhooks.
+  , errorRequestId :: !(Maybe Text) -- ^ /Required/ "request_id" - A unique identifying the request, to be used for troubleshooting purposes. This field will be omitted in errors provided by webhooks.
   , errorCauses :: !(Maybe [A.Value]) -- ^ "causes" - In the Assets product, a request can pertain to more than one Item. If an error is returned for such a request, &#x60;causes&#x60; will return an array of errors containing a breakdown of these errors on the individual Item level, if any can be identified.  &#x60;causes&#x60; will only be provided for the &#x60;error_type&#x60; &#x60;ASSET_REPORT_ERROR&#x60;.
   , errorStatus :: !(Maybe Double) -- ^ "status" - The HTTP status code associated with the error. This will only be returned in the response body when the error information is provided via a webhook.
   , errorDocumentationUrl :: !(Maybe Text) -- ^ "documentation_url" - The URL of a Plaid documentation page with more information about the error
@@ -4335,7 +4335,7 @@ instance A.FromJSON Error where
       <*> (o .:  "error_code")
       <*> (o .:  "error_message")
       <*> (o .:? "display_message")
-      <*> (o .:  "request_id")
+      <*> (o .:?  "request_id")
       <*> (o .:? "causes")
       <*> (o .:? "status")
       <*> (o .:? "documentation_url")
@@ -4362,7 +4362,7 @@ mkError
   :: E'ErrorType -- ^ 'errorErrorType': A broad categorization of the error. Safe for programatic use.
   -> Text -- ^ 'errorErrorCode': The particular error code. Safe for programmatic use.
   -> Text -- ^ 'errorErrorMessage': A developer-friendly representation of the error code. This may change over time and is not safe for programmatic use.
-  -> Text -- ^ 'errorRequestId': A unique identifying the request, to be used for troubleshooting purposes. This field will be omitted in errors provided by webhooks.
+  -> Maybe Text -- ^ 'errorRequestId': A unique identifying the request, to be used for troubleshooting purposes. This field will be omitted in errors provided by webhooks.
   -> Error
 mkError errorErrorType errorErrorCode errorErrorMessage errorRequestId =
   Error
