@@ -2422,7 +2422,7 @@ errorDisplayMessageL f Error{..} = (\errorDisplayMessage -> Error { errorDisplay
 {-# INLINE errorDisplayMessageL #-}
 
 -- | 'errorRequestId' Lens
-errorRequestIdL :: Lens_' Error (Text)
+errorRequestIdL :: Lens_' Error (Maybe Text)
 errorRequestIdL f Error{..} = (\errorRequestId -> Error { errorRequestId, ..} ) <$> f errorRequestId
 {-# INLINE errorRequestIdL #-}
 
