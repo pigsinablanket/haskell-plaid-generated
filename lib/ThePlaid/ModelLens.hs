@@ -437,7 +437,7 @@ addressDataPostalCodeL f AddressData{..} = (\addressDataPostalCode -> AddressDat
 {-# INLINE addressDataPostalCodeL #-}
 
 -- | 'addressDataCountry' Lens
-addressDataCountryL :: Lens_' AddressData (Text)
+addressDataCountryL :: Lens_' AddressData (Maybe Text)
 addressDataCountryL f AddressData{..} = (\addressDataCountry -> AddressData { addressDataCountry, ..} ) <$> f addressDataCountry
 {-# INLINE addressDataCountryL #-}
 

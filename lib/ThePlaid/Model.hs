@@ -738,7 +738,7 @@ data AddressData = AddressData
   , addressDataRegion :: !(Maybe Text) -- ^ "region" - The region or state Example: &#x60;\&quot;NC\&quot;&#x60;
   , addressDataStreet :: !(Text) -- ^ /Required/ "street" - The full street address Example: &#x60;\&quot;564 Main Street, APT 15\&quot;&#x60;
   , addressDataPostalCode :: !(Maybe Text) -- ^ "postal_code" - The postal code
-  , addressDataCountry :: !(Text) -- ^ /Required/ "country" - The ISO 3166-1 alpha-2 country code
+  , addressDataCountry :: !(Maybe Text) -- ^ "country" - The ISO 3166-1 alpha-2 country code
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON AddressData
@@ -749,7 +749,7 @@ instance A.FromJSON AddressData where
       <*> (o .:? "region")
       <*> (o .:  "street")
       <*> (o .:? "postal_code")
-      <*> (o .:  "country")
+      <*> (o .:?  "country")
 
 -- | ToJSON AddressData
 instance A.ToJSON AddressData where
@@ -767,15 +767,14 @@ instance A.ToJSON AddressData where
 mkAddressData
   :: Text -- ^ 'addressDataCity': The full city name
   -> Text -- ^ 'addressDataStreet': The full street address Example: `\"564 Main Street, APT 15\"`
-  -> Text -- ^ 'addressDataCountry': The ISO 3166-1 alpha-2 country code
   -> AddressData
-mkAddressData addressDataCity addressDataStreet addressDataCountry =
+mkAddressData addressDataCity addressDataStreet =
   AddressData
   { addressDataCity
   , addressDataRegion = Nothing
   , addressDataStreet
   , addressDataPostalCode = Nothing
-  , addressDataCountry
+  , addressDataCountry = Nothing
   }
 
 -- ** Amount
@@ -14134,7 +14133,7 @@ data E'ErrorType
   | E'ErrorType'OAUTH_ERROR -- ^ @"OAUTH_ERROR"@
   | E'ErrorType'PAYMENT_ERROR -- ^ @"PAYMENT_ERROR"@
   | E'ErrorType'BANK_TRANSFER_ERROR -- ^ @"BANK_TRANSFER_ERROR"@
-  | E'ErrorType'INVALID_RESULT 
+  | E'ErrorType'INVALID_RESULT
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'ErrorType where toJSON = A.toJSON . fromE'ErrorType
