@@ -14926,6 +14926,7 @@ data E'VerificationStatus2
   = E'VerificationStatus2'Pending_automatic_verification -- ^ @"pending_automatic_verification"@
   | E'VerificationStatus2'Pending_manual_verification -- ^ @"pending_manual_verification"@
   | E'VerificationStatus2'Manually_verified -- ^ @"manually_verified"@
+  | E'VerificationStatus2'Automatically_verified -- ^ @"automatically_verified"@
   | E'VerificationStatus2'Verification_expired -- ^ @"verification_expired"@
   | E'VerificationStatus2'Verification_failed -- ^ @"verification_failed"@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
@@ -14942,6 +14943,7 @@ fromE'VerificationStatus2 = \case
   E'VerificationStatus2'Pending_automatic_verification -> "pending_automatic_verification"
   E'VerificationStatus2'Pending_manual_verification -> "pending_manual_verification"
   E'VerificationStatus2'Manually_verified -> "manually_verified"
+  E'VerificationStatus2'Automatically_verified -> "automatically_verified"
   E'VerificationStatus2'Verification_expired -> "verification_expired"
   E'VerificationStatus2'Verification_failed -> "verification_failed"
 
@@ -14951,6 +14953,7 @@ toE'VerificationStatus2 = \case
   "pending_automatic_verification" -> P.Right E'VerificationStatus2'Pending_automatic_verification
   "pending_manual_verification" -> P.Right E'VerificationStatus2'Pending_manual_verification
   "manually_verified" -> P.Right E'VerificationStatus2'Manually_verified
+  "automatically_verified" -> P.Right E'VerificationStatus2'Automatically_verified
   "verification_expired" -> P.Right E'VerificationStatus2'Verification_expired
   "verification_failed" -> P.Right E'VerificationStatus2'Verification_failed
   s -> P.Left $ "toE'VerificationStatus2: enum parse failure: " P.++ P.show s
