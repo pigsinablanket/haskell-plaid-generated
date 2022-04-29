@@ -50,6 +50,7 @@ import qualified Data.Time as TI
 import qualified Lens.Micro as L
 import qualified Web.FormUrlEncoded as WH
 import qualified Web.HttpApiData as WH
+import GHC.Generics (Generic)
 
 import Control.Applicative ((<|>))
 import Control.Applicative (Alternative)
@@ -13559,7 +13560,7 @@ data AccountSubtype
   | AccountSubtype'Safe_deposit -- ^ @"safe deposit"@
   | AccountSubtype'Sarsep -- ^ @"sarsep"@
   | AccountSubtype'Null -- ^ @"null"@
-  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum, Generic)
 
 instance A.ToJSON AccountSubtype where toJSON = A.toJSON . fromAccountSubtype
 instance A.FromJSON AccountSubtype where parseJSON o = P.either P.fail (pure . P.id) . toAccountSubtype =<< A.parseJSON o
@@ -14926,6 +14927,7 @@ data E'VerificationStatus2
   = E'VerificationStatus2'Pending_automatic_verification -- ^ @"pending_automatic_verification"@
   | E'VerificationStatus2'Pending_manual_verification -- ^ @"pending_manual_verification"@
   | E'VerificationStatus2'Manually_verified -- ^ @"manually_verified"@
+  | E'VerificationStatus2'Automatically_verified -- ^ @"automatically_verified"@
   | E'VerificationStatus2'Verification_expired -- ^ @"verification_expired"@
   | E'VerificationStatus2'Verification_failed -- ^ @"verification_failed"@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
@@ -14942,6 +14944,7 @@ fromE'VerificationStatus2 = \case
   E'VerificationStatus2'Pending_automatic_verification -> "pending_automatic_verification"
   E'VerificationStatus2'Pending_manual_verification -> "pending_manual_verification"
   E'VerificationStatus2'Manually_verified -> "manually_verified"
+  E'VerificationStatus2'Automatically_verified -> "automatically_verified"
   E'VerificationStatus2'Verification_expired -> "verification_expired"
   E'VerificationStatus2'Verification_failed -> "verification_failed"
 
@@ -14951,6 +14954,7 @@ toE'VerificationStatus2 = \case
   "pending_automatic_verification" -> P.Right E'VerificationStatus2'Pending_automatic_verification
   "pending_manual_verification" -> P.Right E'VerificationStatus2'Pending_manual_verification
   "manually_verified" -> P.Right E'VerificationStatus2'Manually_verified
+  "automatically_verified" -> P.Right E'VerificationStatus2'Automatically_verified
   "verification_expired" -> P.Right E'VerificationStatus2'Verification_expired
   "verification_failed" -> P.Right E'VerificationStatus2'Verification_failed
   s -> P.Left $ "toE'VerificationStatus2: enum parse failure: " P.++ P.show s
