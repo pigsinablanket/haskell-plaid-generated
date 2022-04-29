@@ -50,6 +50,7 @@ import qualified Data.Time as TI
 import qualified Lens.Micro as L
 import qualified Web.FormUrlEncoded as WH
 import qualified Web.HttpApiData as WH
+import GHC.Generics (Generic)
 
 import Control.Applicative ((<|>))
 import Control.Applicative (Alternative)
@@ -13559,7 +13560,7 @@ data AccountSubtype
   | AccountSubtype'Safe_deposit -- ^ @"safe deposit"@
   | AccountSubtype'Sarsep -- ^ @"sarsep"@
   | AccountSubtype'Null -- ^ @"null"@
-  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum, Generic)
 
 instance A.ToJSON AccountSubtype where toJSON = A.toJSON . fromAccountSubtype
 instance A.FromJSON AccountSubtype where parseJSON o = P.either P.fail (pure . P.id) . toAccountSubtype =<< A.parseJSON o
