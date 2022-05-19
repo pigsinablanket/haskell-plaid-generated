@@ -15002,7 +15002,9 @@ data Products
   | Products'Credit_details -- ^ @"credit_details"@
   | Products'Income -- ^ @"income"@
   | Products'Deposit_switch -- ^ @"deposit_switch"@
-  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+  | Products'RecurringTransactions -- ^ @"recurring_transactions"@
+  | Products'UNKNOWN Text -- ^ asimuskov: Plaid could dynamically add new products. Exclude fails for such cases.
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord)
 
 instance A.ToJSON Products where toJSON = A.toJSON . fromProducts
 instance A.FromJSON Products where parseJSON o = P.either P.fail (pure . P.id) . toProducts =<< A.parseJSON o
@@ -15024,6 +15026,8 @@ fromProducts = \case
   Products'Credit_details -> "credit_details"
   Products'Income -> "income"
   Products'Deposit_switch -> "deposit_switch"
+  Products'RecurringTransactions -> "recurring_transactions"
+  Products'UNKNOWN unknownProduct -> unknownProduct
 
 -- | parse 'Products' enum
 toProducts :: Text -> P.Either String Products
@@ -15039,6 +15043,8 @@ toProducts = \case
   "credit_details" -> P.Right Products'Credit_details
   "income" -> P.Right Products'Income
   "deposit_switch" -> P.Right Products'Deposit_switch
+  "recurring_transactions" -> P.Right Products'RecurringTransactions
+  unknownProduct -> P.Right (Products'UNKNOWN unknownProduct)
   s -> P.Left $ "toProducts: enum parse failure: " P.++ P.show s
 
 
