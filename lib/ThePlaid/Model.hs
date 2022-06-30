@@ -12578,6 +12578,7 @@ data Transaction = Transaction
   , transactionDate :: !(Text) -- ^ /Required/ "date" - For pending transactions, the date that the transaction occurred; for posted transactions, the date that the transaction posted. Both dates are returned in an ISO 8601 format ( &#x60;YYYY-MM-DD&#x60; ).
   , transactionDatetime :: !(Maybe Text) -- ^ "datetime" - Date and time when a transaction was posted in ISO 8601 format ( &#x60;YYYY-MM-DDTHH:mm:ssZ&#x60; ).  This field is only populated for UK institutions. For institutions in other countries, will be &#x60;null&#x60;.
   , transactionCategoryId :: !(Maybe Text) -- ^ "category_id" - The ID of the category to which this transaction belongs. See [Categories](https://plaid.com/docs/#category-overview).  If the &#x60;transaction&#x60; object was returned by an Assets endpoint such as &#x60;/asset_report/get/&#x60; or &#x60;/asset_report/pdf/get&#x60;, this field will only appear in an Asset Report with Insights.
+  , transactionPersonalFinanceCategory :: !(Maybe PersonalFinanceCategory)
   , transactionCategory :: !(Maybe [Text]) -- ^ "category" - A hierarchical array of the categories to which this transaction belongs. See [Categories](https://plaid.com/docs/#category-overview).  If the &#x60;transaction&#x60; object was returned by an Assets endpoint such as &#x60;/asset_report/get/&#x60; or &#x60;/asset_report/pdf/get&#x60;, this field will only appear in an Asset Report with Insights.
   , transactionUnofficialCurrencyCode :: !(Maybe Text) -- ^ "unofficial_currency_code" - The unofficial currency code associated with the transaction. Always &#x60;null&#x60; if &#x60;iso_currency_code&#x60; is non-&#x60;null&#x60;. Unofficial currency codes are used for currencies that do not have official ISO currency codes, such as cryptocurrencies and the currencies of certain countries.  See the [currency code schema](/docs/api/accounts#currency-code-schema) for a full listing of supported &#x60;iso_currency_code&#x60;s.
   , transactionIsoCurrencyCode :: !(Maybe Text) -- ^ "iso_currency_code" - The ISO-4217 currency code of the transaction. Always &#x60;null&#x60; if &#x60;unofficial_currency_code&#x60; is non-null.
@@ -12585,6 +12586,18 @@ data Transaction = Transaction
   , transactionAccountId :: !(Text) -- ^ /Required/ "account_id" - The ID of the account in which this transaction occurred.
   , transactionTransactionCode :: !(Maybe TransactionCode) -- ^ "transaction_code"
   } deriving (P.Show, P.Eq, P.Typeable)
+
+data PersonalFinanceCategory = PersonalFinanceCategory
+  { personalFinanceCategoryPrimary :: !T.Text
+  , personalFinanceCategoryDetailed :: !T.Text
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+
+instance A.FromJSON PersonalFinanceCategory where
+  parseJSON = A.withObject "PersonalFinanceCategory" $ \o -> do
+    PersonalFinanceCategory
+      <$> (o .: "primary")
+      <*> (o .: "detailed")
 
 -- | FromJSON Transaction
 instance A.FromJSON Transaction where
@@ -12605,6 +12618,7 @@ instance A.FromJSON Transaction where
       <*> (o .:  "date")
       <*> (o .:? "datetime")
       <*> (o .:? "category_id")
+      <*> (o .:? "personal_finance_category")
       <*> (o .:? "category")
       <*> (o .:? "unofficial_currency_code")
       <*> (o .:? "iso_currency_code")
@@ -12665,6 +12679,7 @@ mkTransaction transactionTransactionId transactionPending transactionDate transa
   , transactionDate
   , transactionDatetime = Nothing
   , transactionCategoryId = Nothing
+  , transactionPersonalFinanceCategory = Nothing
   , transactionCategory = Nothing
   , transactionUnofficialCurrencyCode = Nothing
   , transactionIsoCurrencyCode = Nothing
@@ -12835,6 +12850,7 @@ data TransactionsGetRequestOptions = TransactionsGetRequestOptions
   { transactionsGetRequestOptionsAccountIds :: !(Maybe [Text]) -- ^ "account_ids" - A list of &#x60;account_ids&#x60; to retrieve for the Item  Note: An error will be returned if a provided &#x60;account_id&#x60; is not associated with the Item.
   , transactionsGetRequestOptionsCount :: !(Maybe Int) -- ^ "count" - The number of transactions to fetch.
   , transactionsGetRequestOptionsOffset :: !(Maybe Int) -- ^ "offset" - The number of transactions to skip. The default value is 0.
+  , transactionsGetRequestOptionsIncludePersonalFinanceCategory :: !Bool
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TransactionsGetRequestOptions
@@ -12844,6 +12860,7 @@ instance A.FromJSON TransactionsGetRequestOptions where
       <$> (o .:? "account_ids")
       <*> (o .:? "count")
       <*> (o .:? "offset")
+      <*> (o .: "include_personal_finance_category")
 
 -- | ToJSON TransactionsGetRequestOptions
 instance A.ToJSON TransactionsGetRequestOptions where
@@ -12852,6 +12869,7 @@ instance A.ToJSON TransactionsGetRequestOptions where
       [ "account_ids" .= transactionsGetRequestOptionsAccountIds
       , "count" .= transactionsGetRequestOptionsCount
       , "offset" .= transactionsGetRequestOptionsOffset
+      , "include_personal_finance_category" .= transactionsGetRequestOptionsIncludePersonalFinanceCategory
       ]
 
 
@@ -12863,6 +12881,7 @@ mkTransactionsGetRequestOptions =
   { transactionsGetRequestOptionsAccountIds = Nothing
   , transactionsGetRequestOptionsCount = Nothing
   , transactionsGetRequestOptionsOffset = Nothing
+  , transactionsGetRequestOptionsIncludePersonalFinanceCategory = False
   }
 
 -- ** TransactionsGetResponse
