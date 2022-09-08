@@ -21,6 +21,7 @@ Module : ThePlaid.Client
 {-# LANGUAGE DeriveFoldable #-}
 {-# LANGUAGE DeriveTraversable #-}
 {-# OPTIONS_GHC -fno-warn-unused-binds -fno-warn-unused-imports #-}
+{-# LANGUAGE DeriveAnyClass #-}
 
 module ThePlaid.Client where
 
@@ -49,6 +50,7 @@ import Data.Function ((&))
 import Data.Monoid ((<>))
 import Data.Text (Text)
 import GHC.Exts (IsString(..))
+import Control.Exception (Exception)
 
 data RawRequestData = RawRequestData
   {
@@ -85,7 +87,7 @@ data MimeError =
            , apiErrorStatus :: !Int
            }
   | BadResponseError !T.Text
-  deriving (Eq, Show)
+  deriving (Eq, Show, Exception)
 
 -- | send a request returning the 'MimeResult'
 dispatchMime
