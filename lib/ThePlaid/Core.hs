@@ -70,7 +70,7 @@ import Prelude (($), (.), (<$>), (<*>), Maybe(..), Bool(..), Char, String, fmap,
 
 -- * ThePlaidConfig
 
--- | 
+-- |
 data ThePlaidConfig = ThePlaidConfig
   { configHost  :: BCL.ByteString -- ^ host supplied in the Request
   , configUserAgent :: Text -- ^ user-agent supplied in the Request
@@ -108,7 +108,7 @@ newConfig = do
         , configLogContext = logCxt
         , configAuthMethods = []
         , configValidateAuthMethods = True
-        }  
+        }
 
 -- | updates config use AuthMethod on matching requests
 addAuthMethod :: AuthMethod auth => ThePlaidConfig -> auth -> ThePlaidConfig
@@ -130,7 +130,7 @@ withStderrLogging p = do
 -- | updates the config to disable logging
 withNoLogging :: ThePlaidConfig -> ThePlaidConfig
 withNoLogging p = p { configLogExecWithContext =  runNullLogExec}
- 
+
 -- * ThePlaidRequest
 
 -- | Represents a request.
@@ -229,7 +229,7 @@ data ParamBody
 
 -- ** ThePlaidRequest Utils
 
-_mkRequest :: NH.Method -- ^ Method 
+_mkRequest :: NH.Method -- ^ Method
           -> [BCL.ByteString] -- ^ Endpoint
           -> ThePlaidRequest req contentType res accept -- ^ req: Request Type, res: Response Type
 _mkRequest m u = ThePlaidRequest m u _mkParams []
@@ -263,13 +263,13 @@ removeHeader req header =
 
 _setContentTypeHeader :: forall req contentType res accept. MimeType contentType => ThePlaidRequest req contentType res accept -> ThePlaidRequest req contentType res accept
 _setContentTypeHeader req =
-    case mimeType (P.Proxy :: P.Proxy contentType) of 
+    case mimeType (P.Proxy :: P.Proxy contentType) of
         Just m -> req `setHeader` [("content-type", BC.pack $ P.show m)]
         Nothing -> req `removeHeader` ["content-type"]
 
 _setAcceptHeader :: forall req contentType res accept. MimeType accept => ThePlaidRequest req contentType res accept -> ThePlaidRequest req contentType res accept
 _setAcceptHeader req =
-    case mimeType (P.Proxy :: P.Proxy accept) of 
+    case mimeType (P.Proxy :: P.Proxy accept) of
         Just m -> req `setHeader` [("accept", BC.pack $ P.show m)]
         Nothing -> req `removeHeader` ["accept"]
 
@@ -293,25 +293,25 @@ addQuery ::
 addQuery req query = req & L.over (rParamsL . paramsQueryL) (query P.++)
 
 addForm :: ThePlaidRequest req contentType res accept -> WH.Form -> ThePlaidRequest req contentType res accept
-addForm req newform = 
+addForm req newform =
     let form = case paramsBody (rParams req) of
             ParamBodyFormUrlEncoded _form -> _form
             _ -> mempty
     in req & L.set (rParamsL . paramsBodyL) (ParamBodyFormUrlEncoded (newform <> form))
 
 _addMultiFormPart :: ThePlaidRequest req contentType res accept -> NH.Part -> ThePlaidRequest req contentType res accept
-_addMultiFormPart req newpart = 
+_addMultiFormPart req newpart =
     let parts = case paramsBody (rParams req) of
             ParamBodyMultipartFormData _parts -> _parts
             _ -> []
     in req & L.set (rParamsL . paramsBodyL) (ParamBodyMultipartFormData (newpart : parts))
 
 _setBodyBS :: ThePlaidRequest req contentType res accept -> B.ByteString -> ThePlaidRequest req contentType res accept
-_setBodyBS req body = 
+_setBodyBS req body =
     req & L.set (rParamsL . paramsBodyL) (ParamBodyB body)
 
 _setBodyLBS :: ThePlaidRequest req contentType res accept -> BL.ByteString -> ThePlaidRequest req contentType res accept
-_setBodyLBS req body = 
+_setBodyLBS req body =
     req & L.set (rParamsL . paramsBodyL) (ParamBodyBL body)
 
 _hasAuthType :: AuthMethod authMethod => ThePlaidRequest req contentType res accept -> P.Proxy authMethod -> ThePlaidRequest req contentType res accept
@@ -380,7 +380,7 @@ _toCollA' c encode one xs = case c of
     {-# INLINE go #-}
     {-# INLINE expandList #-}
     {-# INLINE combine #-}
-  
+
 -- * AuthMethods
 
 -- | Provides a method to apply auth methods to requests
@@ -411,11 +411,11 @@ _applyAuthMethods req config@(ThePlaidConfig {configAuthMethods = as}) =
   foldlM go req as
   where
     go r (AnyAuthMethod a) = applyAuthMethod config a r
-  
+
 -- * Utils
 
 -- | Removes Null fields.  (OpenAPI-Specification 2.0 does not allow Null in JSON)
-_omitNulls :: [(Text, A.Value)] -> A.Value
+_omitNulls :: [(A.Key, A.Value)] -> A.Value
 _omitNulls = A.object . P.filter notNull
   where
     notNull (_, A.Null) = False
@@ -504,7 +504,7 @@ _showDate =
 
 -- * Byte/Binary Formatting
 
-  
+
 -- | base64 encoded characters
 newtype ByteArray = ByteArray { unByteArray :: BL.ByteString }
   deriving (P.Eq,P.Data,P.Ord,P.Typeable,NF.NFData)
