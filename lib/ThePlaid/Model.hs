@@ -7780,6 +7780,7 @@ data LinkTokenCreateRequest = LinkTokenCreateRequest
   , linkTokenCreateRequestInstitutionId :: !(Maybe Text) -- ^ "institution_id" - Used for certain legacy use cases
   , linkTokenCreateRequestPaymentInitiation :: !(Maybe LinkTokenCreateRequestPaymentInitiation) -- ^ "payment_initiation"
   , linkTokenCreateRequestDepositSwitch :: !(Maybe LinkTokenCreateRequestDepositSwitch) -- ^ "deposit_switch"
+  , linkTokenCreateRequestUpdate :: !(Maybe LinkTokenCreateRequestUpdateDict) -- ^ "update" [Using update mode to request new accounts](https://plaid.com/docs/link/update-mode/#using-update-mode-to-request-new-accounts)
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON LinkTokenCreateRequest
@@ -7802,6 +7803,7 @@ instance A.FromJSON LinkTokenCreateRequest where
       <*> (o .:? "institution_id")
       <*> (o .:? "payment_initiation")
       <*> (o .:? "deposit_switch")
+      <*> (o .:? "update")
 
 -- | ToJSON LinkTokenCreateRequest
 instance A.ToJSON LinkTokenCreateRequest where
@@ -7823,6 +7825,7 @@ instance A.ToJSON LinkTokenCreateRequest where
       , "institution_id" .= linkTokenCreateRequestInstitutionId
       , "payment_initiation" .= linkTokenCreateRequestPaymentInitiation
       , "deposit_switch" .= linkTokenCreateRequestDepositSwitch
+      , "update" .= linkTokenCreateRequestUpdate
       ]
 
 
@@ -7851,6 +7854,7 @@ mkLinkTokenCreateRequest linkTokenCreateRequestClientName linkTokenCreateRequest
   , linkTokenCreateRequestInstitutionId = Nothing
   , linkTokenCreateRequestPaymentInitiation = Nothing
   , linkTokenCreateRequestDepositSwitch = Nothing
+  , linkTokenCreateRequestUpdate = Nothing
   }
 
 -- ** LinkTokenCreateRequestAccountSubtypes
@@ -7892,6 +7896,36 @@ mkLinkTokenCreateRequestAccountSubtypes =
   , linkTokenCreateRequestAccountSubtypesCredit = Nothing
   , linkTokenCreateRequestAccountSubtypesLoan = Nothing
   , linkTokenCreateRequestAccountSubtypesInvestment = Nothing
+  }
+
+
+-- ** LinkTokenCreateRequestUpdateDict
+-- | LinkTokenCreateRequestUpdateDict
+newtype LinkTokenCreateRequestUpdateDict =
+  LinkTokenCreateRequestUpdateDict
+    { linkTokenCreateRequestUpdateDictAccountSelectionEnabled :: Bool
+    } deriving (P.Show, P.Eq, P.Typeable)
+
+
+-- | FromJSON LinkTokenCreateRequestUpdateDict
+instance A.FromJSON LinkTokenCreateRequestUpdateDict where
+  parseJSON = A.withObject "LinkTokenCreateRequestUpdateDict" $ \o ->
+    LinkTokenCreateRequestUpdateDict
+      <$> (o .: "account_selection_enabled")
+
+-- | ToJSON LinkTokenCreateRequestUpdateDict
+instance A.ToJSON LinkTokenCreateRequestUpdateDict where
+  toJSON LinkTokenCreateRequestUpdateDict {..} =
+   _omitNulls
+      [ "account_selection_enabled" .= linkTokenCreateRequestUpdateDictAccountSelectionEnabled
+      ]
+
+-- | Construct a value of type 'LinkTokenCreateRequestAccountSubtypes' (by applying it's required fields, if any)
+mkLinkTokenCreateRequestUpdateDict
+  :: LinkTokenCreateRequestUpdateDict
+mkLinkTokenCreateRequestUpdateDict =
+  LinkTokenCreateRequestUpdateDict
+  { linkTokenCreateRequestUpdateDictAccountSelectionEnabled = True
   }
 
 -- ** LinkTokenCreateRequestDepositSwitch

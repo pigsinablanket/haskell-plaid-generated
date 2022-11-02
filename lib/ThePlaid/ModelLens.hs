@@ -4389,6 +4389,10 @@ linkTokenCreateRequestDepositSwitchL :: Lens_' LinkTokenCreateRequest (Maybe Lin
 linkTokenCreateRequestDepositSwitchL f LinkTokenCreateRequest{..} = (\linkTokenCreateRequestDepositSwitch -> LinkTokenCreateRequest { linkTokenCreateRequestDepositSwitch, ..} ) <$> f linkTokenCreateRequestDepositSwitch
 {-# INLINE linkTokenCreateRequestDepositSwitchL #-}
 
+-- | 'linkTokenCreateRequestUpdate' Lens
+linkTokenCreateRequestUpdateL :: Lens_' LinkTokenCreateRequest (Maybe LinkTokenCreateRequestUpdateDict)
+linkTokenCreateRequestUpdateL f LinkTokenCreateRequest{..} = (\linkTokenCreateRequestUpdate -> LinkTokenCreateRequest { linkTokenCreateRequestUpdate, ..} ) <$> f linkTokenCreateRequestUpdate
+{-# INLINE linkTokenCreateRequestUpdateL #-}
 
 
 -- * LinkTokenCreateRequestAccountSubtypes
