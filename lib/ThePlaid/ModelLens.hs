@@ -6277,6 +6277,15 @@ recipientBACSSortCodeL f RecipientBACS{..} = (\recipientBACSSortCode -> Recipien
 
 
 
+-- * RemovedTransaction
+
+-- | 'removedTransactionTransactionId' Lens
+removedTransactionTransactionIdL :: Lens_' RemovedTransaction (Maybe Text)
+removedTransactionTransactionIdL f RemovedTransaction{..} = (\removedTransactionTransactionId -> RemovedTransaction { removedTransactionTransactionId, ..} ) <$> f removedTransactionTransactionId
+{-# INLINE removedTransactionTransactionIdL #-}
+
+
+
 -- * SandboxBankTransferSimulateRequest
 
 -- | 'sandboxBankTransferSimulateRequestClientId' Lens
@@ -7142,6 +7151,35 @@ studentRepaymentPlanTypeL f StudentRepaymentPlan{..} = (\studentRepaymentPlanTyp
 
 
 
+-- * SyncUpdatesAvailableWebhook
+
+-- | 'syncUpdatesAvailableWebhookWebhookType' Lens
+syncUpdatesAvailableWebhookWebhookTypeL :: Lens_' SyncUpdatesAvailableWebhook (Text)
+syncUpdatesAvailableWebhookWebhookTypeL f SyncUpdatesAvailableWebhook{..} = (\syncUpdatesAvailableWebhookWebhookType -> SyncUpdatesAvailableWebhook { syncUpdatesAvailableWebhookWebhookType, ..} ) <$> f syncUpdatesAvailableWebhookWebhookType
+{-# INLINE syncUpdatesAvailableWebhookWebhookTypeL #-}
+
+-- | 'syncUpdatesAvailableWebhookWebhookCode' Lens
+syncUpdatesAvailableWebhookWebhookCodeL :: Lens_' SyncUpdatesAvailableWebhook (Text)
+syncUpdatesAvailableWebhookWebhookCodeL f SyncUpdatesAvailableWebhook{..} = (\syncUpdatesAvailableWebhookWebhookCode -> SyncUpdatesAvailableWebhook { syncUpdatesAvailableWebhookWebhookCode, ..} ) <$> f syncUpdatesAvailableWebhookWebhookCode
+{-# INLINE syncUpdatesAvailableWebhookWebhookCodeL #-}
+
+-- | 'syncUpdatesAvailableWebhookItemId' Lens
+syncUpdatesAvailableWebhookItemIdL :: Lens_' SyncUpdatesAvailableWebhook (ItemId)
+syncUpdatesAvailableWebhookItemIdL f SyncUpdatesAvailableWebhook{..} = (\syncUpdatesAvailableWebhookItemId -> SyncUpdatesAvailableWebhook { syncUpdatesAvailableWebhookItemId, ..} ) <$> f syncUpdatesAvailableWebhookItemId
+{-# INLINE syncUpdatesAvailableWebhookItemIdL #-}
+
+-- | 'syncUpdatesAvailableWebhookInitialUpdateComplete' Lens
+syncUpdatesAvailableWebhookInitialUpdateCompleteL :: Lens_' SyncUpdatesAvailableWebhook (Bool)
+syncUpdatesAvailableWebhookInitialUpdateCompleteL f SyncUpdatesAvailableWebhook{..} = (\syncUpdatesAvailableWebhookInitialUpdateComplete -> SyncUpdatesAvailableWebhook { syncUpdatesAvailableWebhookInitialUpdateComplete, ..} ) <$> f syncUpdatesAvailableWebhookInitialUpdateComplete
+{-# INLINE syncUpdatesAvailableWebhookInitialUpdateCompleteL #-}
+
+-- | 'syncUpdatesAvailableWebhookHistoricalUpdateComplete' Lens
+syncUpdatesAvailableWebhookHistoricalUpdateCompleteL :: Lens_' SyncUpdatesAvailableWebhook (Bool)
+syncUpdatesAvailableWebhookHistoricalUpdateCompleteL f SyncUpdatesAvailableWebhook{..} = (\syncUpdatesAvailableWebhookHistoricalUpdateComplete -> SyncUpdatesAvailableWebhook { syncUpdatesAvailableWebhookHistoricalUpdateComplete, ..} ) <$> f syncUpdatesAvailableWebhookHistoricalUpdateComplete
+{-# INLINE syncUpdatesAvailableWebhookHistoricalUpdateCompleteL #-}
+
+
+
 -- * Transaction
 
 -- | 'transactionTransactionType' Lens
@@ -7449,6 +7487,88 @@ transactionsRemovedWebhookRemovedTransactionsL f TransactionsRemovedWebhook{..} 
 transactionsRemovedWebhookItemIdL :: Lens_' TransactionsRemovedWebhook (ItemId)
 transactionsRemovedWebhookItemIdL f TransactionsRemovedWebhook{..} = (\transactionsRemovedWebhookItemId -> TransactionsRemovedWebhook { transactionsRemovedWebhookItemId, ..} ) <$> f transactionsRemovedWebhookItemId
 {-# INLINE transactionsRemovedWebhookItemIdL #-}
+
+
+
+-- * TransactionsSyncRequest
+
+-- | 'transactionsSyncRequestClientId' Lens
+transactionsSyncRequestClientIdL :: Lens_' TransactionsSyncRequest (Maybe Text)
+transactionsSyncRequestClientIdL f TransactionsSyncRequest{..} = (\transactionsSyncRequestClientId -> TransactionsSyncRequest { transactionsSyncRequestClientId, ..} ) <$> f transactionsSyncRequestClientId
+{-# INLINE transactionsSyncRequestClientIdL #-}
+
+-- | 'transactionsSyncRequestAccessToken' Lens
+transactionsSyncRequestAccessTokenL :: Lens_' TransactionsSyncRequest (AccessToken)
+transactionsSyncRequestAccessTokenL f TransactionsSyncRequest{..} = (\transactionsSyncRequestAccessToken -> TransactionsSyncRequest { transactionsSyncRequestAccessToken, ..} ) <$> f transactionsSyncRequestAccessToken
+{-# INLINE transactionsSyncRequestAccessTokenL #-}
+
+-- | 'transactionsSyncRequestSecret' Lens
+transactionsSyncRequestSecretL :: Lens_' TransactionsSyncRequest (Maybe Text)
+transactionsSyncRequestSecretL f TransactionsSyncRequest{..} = (\transactionsSyncRequestSecret -> TransactionsSyncRequest { transactionsSyncRequestSecret, ..} ) <$> f transactionsSyncRequestSecret
+{-# INLINE transactionsSyncRequestSecretL #-}
+
+-- | 'transactionsSyncRequestCursor' Lens
+transactionsSyncRequestCursorL :: Lens_' TransactionsSyncRequest (Maybe Cursor)
+transactionsSyncRequestCursorL f TransactionsSyncRequest{..} = (\transactionsSyncRequestCursor -> TransactionsSyncRequest { transactionsSyncRequestCursor, ..} ) <$> f transactionsSyncRequestCursor
+{-# INLINE transactionsSyncRequestCursorL #-}
+
+-- | 'transactionsSyncRequestCount' Lens
+transactionsSyncRequestCountL :: Lens_' TransactionsSyncRequest (Maybe Int)
+transactionsSyncRequestCountL f TransactionsSyncRequest{..} = (\transactionsSyncRequestCount -> TransactionsSyncRequest { transactionsSyncRequestCount, ..} ) <$> f transactionsSyncRequestCount
+{-# INLINE transactionsSyncRequestCountL #-}
+
+-- | 'transactionsSyncRequestOptions' Lens
+transactionsSyncRequestOptionsL :: Lens_' TransactionsSyncRequest (Maybe TransactionsSyncRequestOptions)
+transactionsSyncRequestOptionsL f TransactionsSyncRequest{..} = (\transactionsSyncRequestOptions -> TransactionsSyncRequest { transactionsSyncRequestOptions, ..} ) <$> f transactionsSyncRequestOptions
+{-# INLINE transactionsSyncRequestOptionsL #-}
+
+
+
+-- * TransactionsSyncRequestOptions
+
+-- | 'transactionsSyncRequestOptionsIncludeOriginalDescription' Lens
+transactionsSyncRequestOptionsIncludeOriginalDescriptionL :: Lens_' TransactionsSyncRequestOptions (Maybe Bool)
+transactionsSyncRequestOptionsIncludeOriginalDescriptionL f TransactionsSyncRequestOptions{..} = (\transactionsSyncRequestOptionsIncludeOriginalDescription -> TransactionsSyncRequestOptions { transactionsSyncRequestOptionsIncludeOriginalDescription, ..} ) <$> f transactionsSyncRequestOptionsIncludeOriginalDescription
+{-# INLINE transactionsSyncRequestOptionsIncludeOriginalDescriptionL #-}
+
+-- | 'transactionsSyncRequestOptionsIncludePersonalFinanceCategory' Lens
+transactionsSyncRequestOptionsIncludePersonalFinanceCategoryL :: Lens_' TransactionsSyncRequestOptions (Maybe Bool)
+transactionsSyncRequestOptionsIncludePersonalFinanceCategoryL f TransactionsSyncRequestOptions{..} = (\transactionsSyncRequestOptionsIncludePersonalFinanceCategory -> TransactionsSyncRequestOptions { transactionsSyncRequestOptionsIncludePersonalFinanceCategory, ..} ) <$> f transactionsSyncRequestOptionsIncludePersonalFinanceCategory
+{-# INLINE transactionsSyncRequestOptionsIncludePersonalFinanceCategoryL #-}
+
+
+
+-- * TransactionsSyncResponse
+
+-- | 'transactionsSyncResponseAdded' Lens
+transactionsSyncResponseAddedL :: Lens_' TransactionsSyncResponse ([Transaction])
+transactionsSyncResponseAddedL f TransactionsSyncResponse{..} = (\transactionsSyncResponseAdded -> TransactionsSyncResponse { transactionsSyncResponseAdded, ..} ) <$> f transactionsSyncResponseAdded
+{-# INLINE transactionsSyncResponseAddedL #-}
+
+-- | 'transactionsSyncResponseModified' Lens
+transactionsSyncResponseModifiedL :: Lens_' TransactionsSyncResponse ([Transaction])
+transactionsSyncResponseModifiedL f TransactionsSyncResponse{..} = (\transactionsSyncResponseModified -> TransactionsSyncResponse { transactionsSyncResponseModified, ..} ) <$> f transactionsSyncResponseModified
+{-# INLINE transactionsSyncResponseModifiedL #-}
+
+-- | 'transactionsSyncResponseRemoved' Lens
+transactionsSyncResponseRemovedL :: Lens_' TransactionsSyncResponse ([RemovedTransaction])
+transactionsSyncResponseRemovedL f TransactionsSyncResponse{..} = (\transactionsSyncResponseRemoved -> TransactionsSyncResponse { transactionsSyncResponseRemoved, ..} ) <$> f transactionsSyncResponseRemoved
+{-# INLINE transactionsSyncResponseRemovedL #-}
+
+-- | 'transactionsSyncResponseNextCursor' Lens
+transactionsSyncResponseNextCursorL :: Lens_' TransactionsSyncResponse (Cursor)
+transactionsSyncResponseNextCursorL f TransactionsSyncResponse{..} = (\transactionsSyncResponseNextCursor -> TransactionsSyncResponse { transactionsSyncResponseNextCursor, ..} ) <$> f transactionsSyncResponseNextCursor
+{-# INLINE transactionsSyncResponseNextCursorL #-}
+
+-- | 'transactionsSyncResponseHasMore' Lens
+transactionsSyncResponseHasMoreL :: Lens_' TransactionsSyncResponse (Bool)
+transactionsSyncResponseHasMoreL f TransactionsSyncResponse{..} = (\transactionsSyncResponseHasMore -> TransactionsSyncResponse { transactionsSyncResponseHasMore, ..} ) <$> f transactionsSyncResponseHasMore
+{-# INLINE transactionsSyncResponseHasMoreL #-}
+
+-- | 'transactionsSyncResponseRequestId' Lens
+transactionsSyncResponseRequestIdL :: Lens_' TransactionsSyncResponse (Text)
+transactionsSyncResponseRequestIdL f TransactionsSyncResponse{..} = (\transactionsSyncResponseRequestId -> TransactionsSyncResponse { transactionsSyncResponseRequestId, ..} ) <$> f transactionsSyncResponseRequestId
+{-# INLINE transactionsSyncResponseRequestIdL #-}
 
 
 

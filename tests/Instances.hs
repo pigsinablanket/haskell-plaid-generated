@@ -71,7 +71,7 @@ instance Arbitrary A.Value where
       sizedObject n =
         liftM (A.object . map mapF) $
         replicateM n $ (,) <$> (arbitrary :: Gen String) <*> simpleAndArrays
-
+    
 -- | Checks if a given list has no duplicates in _O(n log n)_.
 hasNoDups
   :: (Ord a)
@@ -86,7 +86,7 @@ hasNoDups = go Set.empty
 
 instance ApproxEq TI.Day where
   (=~) = (==)
-
+    
 arbitraryReduced :: Arbitrary a => Int -> Gen a
 arbitraryReduced n = resize (n `div` 2) arbitrary
 
@@ -103,7 +103,7 @@ arbitraryReducedMaybeValue n = do
     else return generated
 
 -- * Models
-
+ 
 instance Arbitrary APR where
   arbitrary = sized genAPR
 
@@ -114,7 +114,7 @@ genAPR n =
     <*> arbitrary -- aPRAprType :: E'AprType
     <*> arbitraryReducedMaybe n -- aPRBalanceSubjectToApr :: Maybe Double
     <*> arbitraryReducedMaybe n -- aPRInterestChargeAmount :: Maybe Double
-
+  
 instance Arbitrary AccountAssets where
   arbitrary = sized genAccountAssets
 
@@ -133,7 +133,7 @@ genAccountAssets n =
     <*> arbitraryReducedMaybe n -- accountAssetsTransactions :: Maybe [AssetReportTransaction]
     <*> arbitraryReduced n -- accountAssetsOwners :: [Owner]
     <*> arbitraryReducedMaybe n -- accountAssetsHistoricalBalances :: Maybe [HistoricalBalance]
-
+  
 instance Arbitrary AccountAssetsAllOf where
   arbitrary = sized genAccountAssetsAllOf
 
@@ -144,7 +144,7 @@ genAccountAssetsAllOf n =
     <*> arbitraryReducedMaybe n -- accountAssetsAllOfTransactions :: Maybe [AssetReportTransaction]
     <*> arbitraryReduced n -- accountAssetsAllOfOwners :: [Owner]
     <*> arbitraryReducedMaybe n -- accountAssetsAllOfHistoricalBalances :: Maybe [HistoricalBalance]
-
+  
 instance Arbitrary AccountBalance where
   arbitrary = sized genAccountBalance
 
@@ -156,7 +156,7 @@ genAccountBalance n =
     <*> arbitraryReducedMaybe n -- accountBalanceLimit :: Maybe Double
     <*> arbitraryReducedMaybe n -- accountBalanceIsoCurrencyCode :: Maybe Text
     <*> arbitraryReducedMaybe n -- accountBalanceUnofficialCurrencyCode :: Maybe Text
-
+  
 instance Arbitrary AccountBase where
   arbitrary = sized genAccountBase
 
@@ -171,7 +171,7 @@ genAccountBase n =
     <*> arbitraryReduced n -- accountBaseType :: AccountType
     <*> arbitraryReduced n -- accountBaseSubtype :: AccountSubtype
     <*> arbitraryReducedMaybe n -- accountBaseVerificationStatus :: Maybe E'VerificationStatus2
-
+  
 instance Arbitrary AccountFiltersResponse where
   arbitrary = sized genAccountFiltersResponse
 
@@ -182,7 +182,7 @@ genAccountFiltersResponse n =
     <*> arbitraryReducedMaybe n -- accountFiltersResponseCredit :: Maybe CreditFilter
     <*> arbitraryReducedMaybe n -- accountFiltersResponseLoan :: Maybe LoanFilter
     <*> arbitraryReducedMaybe n -- accountFiltersResponseInvestment :: Maybe InvestmentFilter
-
+  
 instance Arbitrary AccountIdentity where
   arbitrary = sized genAccountIdentity
 
@@ -198,7 +198,7 @@ genAccountIdentity n =
     <*> arbitraryReduced n -- accountIdentitySubtype :: AccountSubtype
     <*> arbitraryReducedMaybe n -- accountIdentityVerificationStatus :: Maybe E'VerificationStatus2
     <*> arbitraryReduced n -- accountIdentityOwners :: [Owner]
-
+  
 instance Arbitrary AccountIdentityAllOf where
   arbitrary = sized genAccountIdentityAllOf
 
@@ -206,7 +206,7 @@ genAccountIdentityAllOf :: Int -> Gen AccountIdentityAllOf
 genAccountIdentityAllOf n =
   AccountIdentityAllOf
     <$> arbitraryReduced n -- accountIdentityAllOfOwners :: [Owner]
-
+  
 instance Arbitrary AccountsBalanceGetRequest where
   arbitrary = sized genAccountsBalanceGetRequest
 
@@ -217,7 +217,7 @@ genAccountsBalanceGetRequest n =
     <*> arbitraryReducedMaybe n -- accountsBalanceGetRequestSecret :: Maybe Text
     <*> arbitraryReducedMaybe n -- accountsBalanceGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- accountsBalanceGetRequestOptions :: Maybe AccountsBalanceGetRequestOptions
-
+  
 instance Arbitrary AccountsBalanceGetRequestOptions where
   arbitrary = sized genAccountsBalanceGetRequestOptions
 
@@ -225,7 +225,7 @@ genAccountsBalanceGetRequestOptions :: Int -> Gen AccountsBalanceGetRequestOptio
 genAccountsBalanceGetRequestOptions n =
   AccountsBalanceGetRequestOptions
     <$> arbitraryReducedMaybe n -- accountsBalanceGetRequestOptionsAccountIds :: Maybe [Text]
-
+  
 instance Arbitrary AccountsGetRequest where
   arbitrary = sized genAccountsGetRequest
 
@@ -236,7 +236,7 @@ genAccountsGetRequest n =
     <*> arbitraryReducedMaybe n -- accountsGetRequestSecret :: Maybe Text
     <*> arbitrary -- accountsGetRequestAccessToken :: Text
     <*> arbitraryReducedMaybe n -- accountsGetRequestOptions :: Maybe AccountsGetRequestOptions
-
+  
 instance Arbitrary AccountsGetRequestOptions where
   arbitrary = sized genAccountsGetRequestOptions
 
@@ -244,7 +244,7 @@ genAccountsGetRequestOptions :: Int -> Gen AccountsGetRequestOptions
 genAccountsGetRequestOptions n =
   AccountsGetRequestOptions
     <$> arbitraryReducedMaybe n -- accountsGetRequestOptionsAccountIds :: Maybe [Text]
-
+  
 instance Arbitrary AccountsGetResponse where
   arbitrary = sized genAccountsGetResponse
 
@@ -254,7 +254,7 @@ genAccountsGetResponse n =
     <$> arbitraryReduced n -- accountsGetResponseAccounts :: [AccountBase]
     <*> arbitraryReduced n -- accountsGetResponseItem :: Item
     <*> arbitrary -- accountsGetResponseRequestId :: Text
-
+  
 instance Arbitrary Address where
   arbitrary = sized genAddress
 
@@ -263,7 +263,7 @@ genAddress n =
   Address
     <$> arbitraryReduced n -- addressData :: AddressData
     <*> arbitraryReducedMaybe n -- addressPrimary :: Maybe Bool
-
+  
 instance Arbitrary AddressData where
   arbitrary = sized genAddressData
 
@@ -275,7 +275,7 @@ genAddressData n =
     <*> arbitrary -- addressDataStreet :: Text
     <*> arbitraryReducedMaybe n -- addressDataPostalCode :: Maybe Text
     <*> arbitrary -- addressDataCountry :: Text
-
+  
 instance Arbitrary Amount where
   arbitrary = sized genAmount
 
@@ -284,7 +284,7 @@ genAmount n =
   Amount
     <$> arbitrary -- amountCurrency :: E'Currency
     <*> arbitrary -- amountValue :: Double
-
+  
 instance Arbitrary AssetReport where
   arbitrary = sized genAssetReport
 
@@ -297,7 +297,7 @@ genAssetReport n =
     <*> arbitrary -- assetReportDaysRequested :: Double
     <*> arbitraryReduced n -- assetReportUser :: AssetReportUser
     <*> arbitraryReduced n -- assetReportItems :: [AssetReportItem]
-
+  
 instance Arbitrary AssetReportAuditCopyCreateRequest where
   arbitrary = sized genAssetReportAuditCopyCreateRequest
 
@@ -308,7 +308,7 @@ genAssetReportAuditCopyCreateRequest n =
     <*> arbitraryReducedMaybe n -- assetReportAuditCopyCreateRequestSecret :: Maybe Text
     <*> arbitrary -- assetReportAuditCopyCreateRequestAssetReportToken :: Text
     <*> arbitrary -- assetReportAuditCopyCreateRequestAuditorId :: Text
-
+  
 instance Arbitrary AssetReportAuditCopyCreateResponse where
   arbitrary = sized genAssetReportAuditCopyCreateResponse
 
@@ -317,7 +317,7 @@ genAssetReportAuditCopyCreateResponse n =
   AssetReportAuditCopyCreateResponse
     <$> arbitrary -- assetReportAuditCopyCreateResponseAuditCopyToken :: Text
     <*> arbitrary -- assetReportAuditCopyCreateResponseRequestId :: Text
-
+  
 instance Arbitrary AssetReportAuditCopyGetRequest where
   arbitrary = sized genAssetReportAuditCopyGetRequest
 
@@ -327,7 +327,7 @@ genAssetReportAuditCopyGetRequest n =
     <$> arbitraryReducedMaybe n -- assetReportAuditCopyGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- assetReportAuditCopyGetRequestSecret :: Maybe Text
     <*> arbitrary -- assetReportAuditCopyGetRequestAuditCopyToken :: Text
-
+  
 instance Arbitrary AssetReportAuditCopyRemoveRequest where
   arbitrary = sized genAssetReportAuditCopyRemoveRequest
 
@@ -337,7 +337,7 @@ genAssetReportAuditCopyRemoveRequest n =
     <$> arbitraryReducedMaybe n -- assetReportAuditCopyRemoveRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- assetReportAuditCopyRemoveRequestSecret :: Maybe Text
     <*> arbitrary -- assetReportAuditCopyRemoveRequestAuditCopyToken :: Text
-
+  
 instance Arbitrary AssetReportAuditCopyRemoveResponse where
   arbitrary = sized genAssetReportAuditCopyRemoveResponse
 
@@ -346,7 +346,7 @@ genAssetReportAuditCopyRemoveResponse n =
   AssetReportAuditCopyRemoveResponse
     <$> arbitrary -- assetReportAuditCopyRemoveResponseRemoved :: Bool
     <*> arbitrary -- assetReportAuditCopyRemoveResponseRequestId :: Text
-
+  
 instance Arbitrary AssetReportCreateRequest where
   arbitrary = sized genAssetReportCreateRequest
 
@@ -358,7 +358,7 @@ genAssetReportCreateRequest n =
     <*> arbitrary -- assetReportCreateRequestAccessTokens :: [Text]
     <*> arbitrary -- assetReportCreateRequestDaysRequested :: Int
     <*> arbitraryReducedMaybe n -- assetReportCreateRequestOptions :: Maybe AssetReportCreateRequestOptions
-
+  
 instance Arbitrary AssetReportCreateRequestOptions where
   arbitrary = sized genAssetReportCreateRequestOptions
 
@@ -368,7 +368,7 @@ genAssetReportCreateRequestOptions n =
     <$> arbitraryReducedMaybe n -- assetReportCreateRequestOptionsClientReportId :: Maybe Text
     <*> arbitraryReducedMaybe n -- assetReportCreateRequestOptionsWebhook :: Maybe Text
     <*> arbitraryReducedMaybe n -- assetReportCreateRequestOptionsUser :: Maybe AssetReportUser
-
+  
 instance Arbitrary AssetReportCreateResponse where
   arbitrary = sized genAssetReportCreateResponse
 
@@ -378,7 +378,7 @@ genAssetReportCreateResponse n =
     <$> arbitrary -- assetReportCreateResponseAssetReportToken :: Text
     <*> arbitrary -- assetReportCreateResponseAssetReportId :: Text
     <*> arbitrary -- assetReportCreateResponseRequestId :: Text
-
+  
 instance Arbitrary AssetReportFilterRequest where
   arbitrary = sized genAssetReportFilterRequest
 
@@ -389,7 +389,7 @@ genAssetReportFilterRequest n =
     <*> arbitraryReducedMaybe n -- assetReportFilterRequestSecret :: Maybe Text
     <*> arbitrary -- assetReportFilterRequestAssetReportToken :: Text
     <*> arbitrary -- assetReportFilterRequestAccountIdsToExclude :: [Text]
-
+  
 instance Arbitrary AssetReportFilterResponse where
   arbitrary = sized genAssetReportFilterResponse
 
@@ -399,7 +399,7 @@ genAssetReportFilterResponse n =
     <$> arbitrary -- assetReportFilterResponseAssetReportToken :: Text
     <*> arbitrary -- assetReportFilterResponseAssetReportId :: Text
     <*> arbitrary -- assetReportFilterResponseRequestId :: Text
-
+  
 instance Arbitrary AssetReportGetRequest where
   arbitrary = sized genAssetReportGetRequest
 
@@ -410,7 +410,7 @@ genAssetReportGetRequest n =
     <*> arbitraryReducedMaybe n -- assetReportGetRequestSecret :: Maybe Text
     <*> arbitrary -- assetReportGetRequestAssetReportToken :: Text
     <*> arbitraryReducedMaybe n -- assetReportGetRequestIncludeInsights :: Maybe Bool
-
+  
 instance Arbitrary AssetReportGetResponse where
   arbitrary = sized genAssetReportGetResponse
 
@@ -420,7 +420,7 @@ genAssetReportGetResponse n =
     <$> arbitraryReduced n -- assetReportGetResponseReport :: AssetReport
     <*> arbitraryReduced n -- assetReportGetResponseWarnings :: [Warning]
     <*> arbitrary -- assetReportGetResponseRequestId :: Text
-
+  
 instance Arbitrary AssetReportItem where
   arbitrary = sized genAssetReportItem
 
@@ -432,7 +432,7 @@ genAssetReportItem n =
     <*> arbitrary -- assetReportItemInstitutionId :: Text
     <*> arbitrary -- assetReportItemDateLastUpdated :: Text
     <*> arbitraryReduced n -- assetReportItemAccounts :: [AccountAssets]
-
+  
 instance Arbitrary AssetReportPDFGetRequest where
   arbitrary = sized genAssetReportPDFGetRequest
 
@@ -442,7 +442,7 @@ genAssetReportPDFGetRequest n =
     <$> arbitraryReducedMaybe n -- assetReportPDFGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- assetReportPDFGetRequestSecret :: Maybe Text
     <*> arbitrary -- assetReportPDFGetRequestAssetReportToken :: Text
-
+  
 instance Arbitrary AssetReportRefreshRequest where
   arbitrary = sized genAssetReportRefreshRequest
 
@@ -454,7 +454,7 @@ genAssetReportRefreshRequest n =
     <*> arbitrary -- assetReportRefreshRequestAssetReportToken :: Text
     <*> arbitraryReducedMaybe n -- assetReportRefreshRequestDaysRequested :: Maybe Int
     <*> arbitraryReducedMaybe n -- assetReportRefreshRequestOptions :: Maybe AssetReportRefreshRequestOptions
-
+  
 instance Arbitrary AssetReportRefreshRequestOptions where
   arbitrary = sized genAssetReportRefreshRequestOptions
 
@@ -464,7 +464,7 @@ genAssetReportRefreshRequestOptions n =
     <$> arbitraryReducedMaybe n -- assetReportRefreshRequestOptionsClientReportId :: Maybe Text
     <*> arbitraryReducedMaybe n -- assetReportRefreshRequestOptionsWebhook :: Maybe Text
     <*> arbitraryReducedMaybe n -- assetReportRefreshRequestOptionsUser :: Maybe AssetReportUser
-
+  
 instance Arbitrary AssetReportRefreshResponse where
   arbitrary = sized genAssetReportRefreshResponse
 
@@ -474,7 +474,7 @@ genAssetReportRefreshResponse n =
     <$> arbitrary -- assetReportRefreshResponseAssetReportId :: Text
     <*> arbitrary -- assetReportRefreshResponseAssetReportToken :: Text
     <*> arbitrary -- assetReportRefreshResponseRequestId :: Text
-
+  
 instance Arbitrary AssetReportRemoveRequest where
   arbitrary = sized genAssetReportRemoveRequest
 
@@ -484,7 +484,7 @@ genAssetReportRemoveRequest n =
     <$> arbitraryReducedMaybe n -- assetReportRemoveRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- assetReportRemoveRequestSecret :: Maybe Text
     <*> arbitrary -- assetReportRemoveRequestAssetReportToken :: Text
-
+  
 instance Arbitrary AssetReportRemoveResponse where
   arbitrary = sized genAssetReportRemoveResponse
 
@@ -493,7 +493,7 @@ genAssetReportRemoveResponse n =
   AssetReportRemoveResponse
     <$> arbitrary -- assetReportRemoveResponseRemoved :: Bool
     <*> arbitrary -- assetReportRemoveResponseRequestId :: Text
-
+  
 instance Arbitrary AssetReportTransaction where
   arbitrary = sized genAssetReportTransaction
 
@@ -523,7 +523,7 @@ genAssetReportTransaction n =
     <*> arbitraryReducedMaybe n -- assetReportTransactionTransactionCode :: Maybe TransactionCode
     <*> arbitraryReducedMaybe n -- assetReportTransactionDateTransacted :: Maybe Text
     <*> arbitrary -- assetReportTransactionOriginalDescription :: Text
-
+  
 instance Arbitrary AssetReportTransactionAllOf where
   arbitrary = sized genAssetReportTransactionAllOf
 
@@ -532,7 +532,7 @@ genAssetReportTransactionAllOf n =
   AssetReportTransactionAllOf
     <$> arbitraryReducedMaybe n -- assetReportTransactionAllOfDateTransacted :: Maybe Text
     <*> arbitrary -- assetReportTransactionAllOfOriginalDescription :: Text
-
+  
 instance Arbitrary AssetReportUser where
   arbitrary = sized genAssetReportUser
 
@@ -546,7 +546,7 @@ genAssetReportUser n =
     <*> arbitraryReducedMaybe n -- assetReportUserSsn :: Maybe Text
     <*> arbitraryReducedMaybe n -- assetReportUserPhoneNumber :: Maybe Text
     <*> arbitraryReducedMaybe n -- assetReportUserEmail :: Maybe Text
-
+  
 instance Arbitrary AssetsErrorWebhook where
   arbitrary = sized genAssetsErrorWebhook
 
@@ -557,7 +557,7 @@ genAssetsErrorWebhook n =
     <*> arbitrary -- assetsErrorWebhookWebhookCode :: Text
     <*> arbitraryReduced n -- assetsErrorWebhookError :: Error
     <*> arbitrary -- assetsErrorWebhookAssetReportId :: Text
-
+  
 instance Arbitrary AssetsProductReadyWebhook where
   arbitrary = sized genAssetsProductReadyWebhook
 
@@ -567,7 +567,7 @@ genAssetsProductReadyWebhook n =
     <$> arbitrary -- assetsProductReadyWebhookWebhookType :: Text
     <*> arbitrary -- assetsProductReadyWebhookWebhookCode :: Text
     <*> arbitrary -- assetsProductReadyWebhookAssetReportId :: Text
-
+  
 instance Arbitrary AuthGetNumbers where
   arbitrary = sized genAuthGetNumbers
 
@@ -578,7 +578,7 @@ genAuthGetNumbers n =
     <*> arbitraryReducedMaybe n -- authGetNumbersEft :: Maybe [NumbersEFT]
     <*> arbitraryReducedMaybe n -- authGetNumbersInternational :: Maybe [NumbersInternational]
     <*> arbitraryReducedMaybe n -- authGetNumbersBacs :: Maybe [NumbersBACS]
-
+  
 instance Arbitrary AuthGetRequest where
   arbitrary = sized genAuthGetRequest
 
@@ -589,7 +589,7 @@ genAuthGetRequest n =
     <*> arbitraryReducedMaybe n -- authGetRequestSecret :: Maybe Text
     <*> arbitrary -- authGetRequestAccessToken :: Text
     <*> arbitraryReducedMaybe n -- authGetRequestOptions :: Maybe AuthGetRequestOptions
-
+  
 instance Arbitrary AuthGetRequestOptions where
   arbitrary = sized genAuthGetRequestOptions
 
@@ -597,7 +597,7 @@ genAuthGetRequestOptions :: Int -> Gen AuthGetRequestOptions
 genAuthGetRequestOptions n =
   AuthGetRequestOptions
     <$> arbitraryReducedMaybe n -- authGetRequestOptionsAccountIds :: Maybe [Text]
-
+  
 instance Arbitrary AuthGetResponse where
   arbitrary = sized genAuthGetResponse
 
@@ -608,7 +608,7 @@ genAuthGetResponse n =
     <*> arbitraryReduced n -- authGetResponseNumbers :: AuthGetNumbers
     <*> arbitraryReduced n -- authGetResponseItem :: Item
     <*> arbitrary -- authGetResponseRequestId :: Text
-
+  
 instance Arbitrary AutomaticallyVerifiedWebhook where
   arbitrary = sized genAutomaticallyVerifiedWebhook
 
@@ -619,7 +619,7 @@ genAutomaticallyVerifiedWebhook n =
     <*> arbitrary -- automaticallyVerifiedWebhookWebhookCode :: Text
     <*> arbitrary -- automaticallyVerifiedWebhookAccountId :: Text
     <*> arbitrary -- automaticallyVerifiedWebhookItemId :: Text
-
+  
 instance Arbitrary BankTransfer where
   arbitrary = sized genBankTransfer
 
@@ -643,7 +643,7 @@ genBankTransfer n =
     <*> arbitrary -- bankTransferMetadata :: (Map.Map String Text)
     <*> arbitrary -- bankTransferOriginationAccountId :: Text
     <*> arbitraryReduced n -- bankTransferDirection :: BankTransferDirection
-
+  
 instance Arbitrary BankTransferBalance where
   arbitrary = sized genBankTransferBalance
 
@@ -652,7 +652,7 @@ genBankTransferBalance n =
   BankTransferBalance
     <$> arbitrary -- bankTransferBalanceAvailable :: Text
     <*> arbitrary -- bankTransferBalanceTransactable :: Text
-
+  
 instance Arbitrary BankTransferBalanceGetRequest where
   arbitrary = sized genBankTransferBalanceGetRequest
 
@@ -662,7 +662,7 @@ genBankTransferBalanceGetRequest n =
     <$> arbitraryReducedMaybe n -- bankTransferBalanceGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- bankTransferBalanceGetRequestSecret :: Maybe Text
     <*> arbitraryReducedMaybe n -- bankTransferBalanceGetRequestOriginationAccountId :: Maybe Text
-
+  
 instance Arbitrary BankTransferBalanceGetResponse where
   arbitrary = sized genBankTransferBalanceGetResponse
 
@@ -672,7 +672,7 @@ genBankTransferBalanceGetResponse n =
     <$> arbitraryReduced n -- bankTransferBalanceGetResponseBalance :: BankTransferBalance
     <*> arbitrary -- bankTransferBalanceGetResponseOriginationAccountId :: Text
     <*> arbitrary -- bankTransferBalanceGetResponseRequestId :: Text
-
+  
 instance Arbitrary BankTransferCancelRequest where
   arbitrary = sized genBankTransferCancelRequest
 
@@ -682,7 +682,7 @@ genBankTransferCancelRequest n =
     <$> arbitraryReducedMaybe n -- bankTransferCancelRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- bankTransferCancelRequestSecret :: Maybe Text
     <*> arbitrary -- bankTransferCancelRequestBankTransferId :: Text
-
+  
 instance Arbitrary BankTransferCancelResponse where
   arbitrary = sized genBankTransferCancelResponse
 
@@ -690,7 +690,7 @@ genBankTransferCancelResponse :: Int -> Gen BankTransferCancelResponse
 genBankTransferCancelResponse n =
   BankTransferCancelResponse
     <$> arbitrary -- bankTransferCancelResponseRequestId :: Text
-
+  
 instance Arbitrary BankTransferCreateRequest where
   arbitrary = sized genBankTransferCreateRequest
 
@@ -712,7 +712,7 @@ genBankTransferCreateRequest n =
     <*> arbitraryReducedMaybe n -- bankTransferCreateRequestCustomTag :: Maybe Text
     <*> arbitraryReducedMaybe n -- bankTransferCreateRequestMetadata :: Maybe (Map.Map String Text)
     <*> arbitraryReducedMaybe n -- bankTransferCreateRequestOriginationAccountId :: Maybe Text
-
+  
 instance Arbitrary BankTransferCreateResponse where
   arbitrary = sized genBankTransferCreateResponse
 
@@ -721,7 +721,7 @@ genBankTransferCreateResponse n =
   BankTransferCreateResponse
     <$> arbitraryReduced n -- bankTransferCreateResponseBankTransfer :: BankTransfer
     <*> arbitrary -- bankTransferCreateResponseRequestId :: Text
-
+  
 instance Arbitrary BankTransferEvent where
   arbitrary = sized genBankTransferEvent
 
@@ -740,7 +740,7 @@ genBankTransferEvent n =
     <*> arbitraryReduced n -- bankTransferEventFailureReason :: BankTransferFailure
     <*> arbitraryReduced n -- bankTransferEventDirection :: BankTransferDirection
     <*> arbitraryReduced n -- bankTransferEventReceiverDetails :: BankTransferReceiverDetails
-
+  
 instance Arbitrary BankTransferEventListRequest where
   arbitrary = sized genBankTransferEventListRequest
 
@@ -759,7 +759,7 @@ genBankTransferEventListRequest n =
     <*> arbitraryReducedMaybe n -- bankTransferEventListRequestOffset :: Maybe Int
     <*> arbitraryReducedMaybe n -- bankTransferEventListRequestOriginationAccountId :: Maybe Text
     <*> arbitraryReducedMaybe n -- bankTransferEventListRequestDirection :: Maybe Text
-
+  
 instance Arbitrary BankTransferEventListResponse where
   arbitrary = sized genBankTransferEventListResponse
 
@@ -768,7 +768,7 @@ genBankTransferEventListResponse n =
   BankTransferEventListResponse
     <$> arbitraryReduced n -- bankTransferEventListResponseBankTransferEvents :: [BankTransferEvent]
     <*> arbitrary -- bankTransferEventListResponseRequestId :: Text
-
+  
 instance Arbitrary BankTransferEventSyncRequest where
   arbitrary = sized genBankTransferEventSyncRequest
 
@@ -779,7 +779,7 @@ genBankTransferEventSyncRequest n =
     <*> arbitraryReducedMaybe n -- bankTransferEventSyncRequestSecret :: Maybe Text
     <*> arbitrary -- bankTransferEventSyncRequestAfterId :: Int
     <*> arbitraryReducedMaybe n -- bankTransferEventSyncRequestCount :: Maybe Int
-
+  
 instance Arbitrary BankTransferEventSyncResponse where
   arbitrary = sized genBankTransferEventSyncResponse
 
@@ -788,7 +788,7 @@ genBankTransferEventSyncResponse n =
   BankTransferEventSyncResponse
     <$> arbitraryReduced n -- bankTransferEventSyncResponseBankTransferEvents :: [BankTransferEvent]
     <*> arbitrary -- bankTransferEventSyncResponseRequestId :: Text
-
+  
 instance Arbitrary BankTransferFailure where
   arbitrary = sized genBankTransferFailure
 
@@ -797,7 +797,7 @@ genBankTransferFailure n =
   BankTransferFailure
     <$> arbitraryReducedMaybe n -- bankTransferFailureAchReturnCode :: Maybe Text
     <*> arbitraryReducedMaybe n -- bankTransferFailureDescription :: Maybe Text
-
+  
 instance Arbitrary BankTransferGetRequest where
   arbitrary = sized genBankTransferGetRequest
 
@@ -807,7 +807,7 @@ genBankTransferGetRequest n =
     <$> arbitraryReducedMaybe n -- bankTransferGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- bankTransferGetRequestSecret :: Maybe Text
     <*> arbitrary -- bankTransferGetRequestBankTransferId :: Text
-
+  
 instance Arbitrary BankTransferGetResponse where
   arbitrary = sized genBankTransferGetResponse
 
@@ -816,7 +816,7 @@ genBankTransferGetResponse n =
   BankTransferGetResponse
     <$> arbitraryReduced n -- bankTransferGetResponseBankTransfer :: BankTransfer
     <*> arbitrary -- bankTransferGetResponseRequestId :: Text
-
+  
 instance Arbitrary BankTransferListRequest where
   arbitrary = sized genBankTransferListRequest
 
@@ -831,7 +831,7 @@ genBankTransferListRequest n =
     <*> arbitraryReducedMaybe n -- bankTransferListRequestOffset :: Maybe Int
     <*> arbitraryReducedMaybe n -- bankTransferListRequestOriginationAccountId :: Maybe Text
     <*> arbitraryReducedMaybe n -- bankTransferListRequestDirection :: Maybe BankTransferDirection
-
+  
 instance Arbitrary BankTransferListResponse where
   arbitrary = sized genBankTransferListResponse
 
@@ -840,7 +840,7 @@ genBankTransferListResponse n =
   BankTransferListResponse
     <$> arbitraryReduced n -- bankTransferListResponseBankTransfers :: [BankTransfer]
     <*> arbitrary -- bankTransferListResponseRequestId :: Text
-
+  
 instance Arbitrary BankTransferMigrateAccountRequest where
   arbitrary = sized genBankTransferMigrateAccountRequest
 
@@ -852,7 +852,7 @@ genBankTransferMigrateAccountRequest n =
     <*> arbitrary -- bankTransferMigrateAccountRequestAccountNumber :: Text
     <*> arbitrary -- bankTransferMigrateAccountRequestRoutingNumber :: Text
     <*> arbitrary -- bankTransferMigrateAccountRequestAccountType :: Text
-
+  
 instance Arbitrary BankTransferMigrateAccountResponse where
   arbitrary = sized genBankTransferMigrateAccountResponse
 
@@ -862,7 +862,7 @@ genBankTransferMigrateAccountResponse n =
     <$> arbitrary -- bankTransferMigrateAccountResponseAccessToken :: Text
     <*> arbitrary -- bankTransferMigrateAccountResponseAccountId :: Text
     <*> arbitrary -- bankTransferMigrateAccountResponseRequestId :: Text
-
+  
 instance Arbitrary BankTransferReceiverDetails where
   arbitrary = sized genBankTransferReceiverDetails
 
@@ -870,7 +870,7 @@ genBankTransferReceiverDetails :: Int -> Gen BankTransferReceiverDetails
 genBankTransferReceiverDetails n =
   BankTransferReceiverDetails
     <$> arbitraryReducedMaybe n -- bankTransferReceiverDetailsAvailableBalance :: Maybe E'AvailableBalance
-
+  
 instance Arbitrary BankTransferUser where
   arbitrary = sized genBankTransferUser
 
@@ -880,7 +880,7 @@ genBankTransferUser n =
     <$> arbitrary -- bankTransferUserLegalName :: Text
     <*> arbitraryReducedMaybe n -- bankTransferUserEmailAddress :: Maybe Text
     <*> arbitraryReducedMaybe n -- bankTransferUserRoutingNumber :: Maybe Text
-
+  
 instance Arbitrary CategoriesGetResponse where
   arbitrary = sized genCategoriesGetResponse
 
@@ -889,7 +889,7 @@ genCategoriesGetResponse n =
   CategoriesGetResponse
     <$> arbitraryReduced n -- categoriesGetResponseCategories :: [Category]
     <*> arbitrary -- categoriesGetResponseRequestId :: Text
-
+  
 instance Arbitrary Category where
   arbitrary = sized genCategory
 
@@ -899,7 +899,7 @@ genCategory n =
     <$> arbitrary -- categoryCategoryId :: Text
     <*> arbitrary -- categoryGroup :: Text
     <*> arbitrary -- categoryHierarchy :: [Text]
-
+  
 instance Arbitrary Cause where
   arbitrary = sized genCause
 
@@ -908,7 +908,7 @@ genCause n =
   Cause
     <$> arbitrary -- causeItemId :: Text
     <*> arbitraryReduced n -- causeError :: Error
-
+  
 instance Arbitrary CreditCardLiability where
   arbitrary = sized genCreditCardLiability
 
@@ -924,7 +924,7 @@ genCreditCardLiability n =
     <*> arbitrary -- creditCardLiabilityLastStatementIssueDate :: Text
     <*> arbitrary -- creditCardLiabilityMinimumPaymentAmount :: Double
     <*> arbitrary -- creditCardLiabilityNextPaymentDueDate :: Text
-
+  
 instance Arbitrary CreditFilter where
   arbitrary = sized genCreditFilter
 
@@ -932,7 +932,7 @@ genCreditFilter :: Int -> Gen CreditFilter
 genCreditFilter n =
   CreditFilter
     <$> arbitraryReduced n -- creditFilterAccountSubtypes :: [AccountSubtype]
-
+  
 instance Arbitrary DefaultUpdateWebhook where
   arbitrary = sized genDefaultUpdateWebhook
 
@@ -944,7 +944,7 @@ genDefaultUpdateWebhook n =
     <*> arbitraryReducedMaybe n -- defaultUpdateWebhookError :: Maybe Error
     <*> arbitrary -- defaultUpdateWebhookNewTransactions :: Double
     <*> arbitrary -- defaultUpdateWebhookItemId :: Text
-
+  
 instance Arbitrary DepositSwitchAddressData where
   arbitrary = sized genDepositSwitchAddressData
 
@@ -956,7 +956,7 @@ genDepositSwitchAddressData n =
     <*> arbitrary -- depositSwitchAddressDataStreet :: Text
     <*> arbitrary -- depositSwitchAddressDataPostalCode :: Text
     <*> arbitrary -- depositSwitchAddressDataCountry :: Text
-
+  
 instance Arbitrary DepositSwitchAltCreateRequest where
   arbitrary = sized genDepositSwitchAltCreateRequest
 
@@ -967,7 +967,7 @@ genDepositSwitchAltCreateRequest n =
     <*> arbitraryReducedMaybe n -- depositSwitchAltCreateRequestSecret :: Maybe Text
     <*> arbitraryReduced n -- depositSwitchAltCreateRequestTargetAccount :: DepositSwitchTargetAccount
     <*> arbitraryReduced n -- depositSwitchAltCreateRequestTargetUser :: DepositSwitchTargetUser
-
+  
 instance Arbitrary DepositSwitchAltCreateResponse where
   arbitrary = sized genDepositSwitchAltCreateResponse
 
@@ -976,7 +976,7 @@ genDepositSwitchAltCreateResponse n =
   DepositSwitchAltCreateResponse
     <$> arbitrary -- depositSwitchAltCreateResponseDepositSwitchId :: Text
     <*> arbitrary -- depositSwitchAltCreateResponseRequestId :: Text
-
+  
 instance Arbitrary DepositSwitchCreateRequest where
   arbitrary = sized genDepositSwitchCreateRequest
 
@@ -987,7 +987,7 @@ genDepositSwitchCreateRequest n =
     <*> arbitraryReducedMaybe n -- depositSwitchCreateRequestSecret :: Maybe Text
     <*> arbitrary -- depositSwitchCreateRequestTargetAccessToken :: Text
     <*> arbitrary -- depositSwitchCreateRequestTargetAccountId :: Text
-
+  
 instance Arbitrary DepositSwitchCreateResponse where
   arbitrary = sized genDepositSwitchCreateResponse
 
@@ -996,7 +996,7 @@ genDepositSwitchCreateResponse n =
   DepositSwitchCreateResponse
     <$> arbitrary -- depositSwitchCreateResponseDepositSwitchId :: Text
     <*> arbitrary -- depositSwitchCreateResponseRequestId :: Text
-
+  
 instance Arbitrary DepositSwitchGetRequest where
   arbitrary = sized genDepositSwitchGetRequest
 
@@ -1006,7 +1006,7 @@ genDepositSwitchGetRequest n =
     <$> arbitraryReducedMaybe n -- depositSwitchGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- depositSwitchGetRequestSecret :: Maybe Text
     <*> arbitrary -- depositSwitchGetRequestDepositSwitchId :: Text
-
+  
 instance Arbitrary DepositSwitchGetResponse where
   arbitrary = sized genDepositSwitchGetResponse
 
@@ -1024,7 +1024,7 @@ genDepositSwitchGetResponse n =
     <*> arbitraryReduced n -- depositSwitchGetResponseDateCreated :: Date
     <*> arbitraryReduced n -- depositSwitchGetResponseDateCompleted :: Date
     <*> arbitrary -- depositSwitchGetResponseRequestId :: Text
-
+  
 instance Arbitrary DepositSwitchTargetAccount where
   arbitrary = sized genDepositSwitchTargetAccount
 
@@ -1035,7 +1035,7 @@ genDepositSwitchTargetAccount n =
     <*> arbitrary -- depositSwitchTargetAccountRoutingNumber :: Text
     <*> arbitrary -- depositSwitchTargetAccountAccountName :: Text
     <*> arbitrary -- depositSwitchTargetAccountAccountSubtype :: E'AccountSubtype
-
+  
 instance Arbitrary DepositSwitchTargetUser where
   arbitrary = sized genDepositSwitchTargetUser
 
@@ -1048,7 +1048,7 @@ genDepositSwitchTargetUser n =
     <*> arbitrary -- depositSwitchTargetUserEmail :: Text
     <*> arbitraryReducedMaybe n -- depositSwitchTargetUserAddress :: Maybe DepositSwitchAddressData
     <*> arbitraryReducedMaybe n -- depositSwitchTargetUserTaxPayerId :: Maybe Text
-
+  
 instance Arbitrary DepositSwitchTokenCreateRequest where
   arbitrary = sized genDepositSwitchTokenCreateRequest
 
@@ -1058,7 +1058,7 @@ genDepositSwitchTokenCreateRequest n =
     <$> arbitraryReducedMaybe n -- depositSwitchTokenCreateRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- depositSwitchTokenCreateRequestSecret :: Maybe Text
     <*> arbitrary -- depositSwitchTokenCreateRequestDepositSwitchId :: Text
-
+  
 instance Arbitrary DepositSwitchTokenCreateResponse where
   arbitrary = sized genDepositSwitchTokenCreateResponse
 
@@ -1068,7 +1068,7 @@ genDepositSwitchTokenCreateResponse n =
     <$> arbitrary -- depositSwitchTokenCreateResponseDepositSwitchToken :: Text
     <*> arbitrary -- depositSwitchTokenCreateResponseDepositSwitchTokenExpirationTime :: Text
     <*> arbitrary -- depositSwitchTokenCreateResponseRequestId :: Text
-
+  
 instance Arbitrary DepositoryFilter where
   arbitrary = sized genDepositoryFilter
 
@@ -1076,7 +1076,7 @@ genDepositoryFilter :: Int -> Gen DepositoryFilter
 genDepositoryFilter n =
   DepositoryFilter
     <$> arbitraryReduced n -- depositoryFilterAccountSubtypes :: [AccountSubtype]
-
+  
 instance Arbitrary Email where
   arbitrary = sized genEmail
 
@@ -1086,7 +1086,7 @@ genEmail n =
     <$> arbitrary -- emailData :: Text
     <*> arbitrary -- emailPrimary :: Bool
     <*> arbitrary -- emailType :: E'Type2
-
+  
 instance Arbitrary Employee where
   arbitrary = sized genEmployee
 
@@ -1096,7 +1096,7 @@ genEmployee n =
     <$> arbitraryReducedMaybe n -- employeeName :: Maybe Text
     <*> arbitraryReducedMaybe n -- employeeAddress :: Maybe NullableAddressData
     <*> arbitraryReducedMaybe n -- employeeSsnMasked :: Maybe Text
-
+  
 instance Arbitrary EmployeeIncomeSummaryFieldString where
   arbitrary = sized genEmployeeIncomeSummaryFieldString
 
@@ -1105,7 +1105,7 @@ genEmployeeIncomeSummaryFieldString n =
   EmployeeIncomeSummaryFieldString
     <$> arbitrary -- employeeIncomeSummaryFieldStringValue :: Text
     <*> arbitraryReduced n -- employeeIncomeSummaryFieldStringVerificationStatus :: VerificationStatus
-
+  
 instance Arbitrary Employer where
   arbitrary = sized genEmployer
 
@@ -1116,7 +1116,7 @@ genEmployer n =
     <*> arbitrary -- employerName :: Text
     <*> arbitraryReducedMaybe n -- employerAddress :: Maybe NullableAddressData
     <*> arbitraryReducedMaybe n -- employerConfidenceScore :: Maybe Double
-
+  
 instance Arbitrary EmployerIncomeSummaryFieldString where
   arbitrary = sized genEmployerIncomeSummaryFieldString
 
@@ -1125,7 +1125,7 @@ genEmployerIncomeSummaryFieldString n =
   EmployerIncomeSummaryFieldString
     <$> arbitrary -- employerIncomeSummaryFieldStringValue :: Text
     <*> arbitraryReduced n -- employerIncomeSummaryFieldStringVerificationStatus :: VerificationStatus
-
+  
 instance Arbitrary EmployersSearchRequest where
   arbitrary = sized genEmployersSearchRequest
 
@@ -1136,7 +1136,7 @@ genEmployersSearchRequest n =
     <*> arbitraryReducedMaybe n -- employersSearchRequestSecret :: Maybe Text
     <*> arbitrary -- employersSearchRequestQuery :: Text
     <*> arbitrary -- employersSearchRequestProducts :: [Text]
-
+  
 instance Arbitrary EmployersSearchResponse where
   arbitrary = sized genEmployersSearchResponse
 
@@ -1145,7 +1145,7 @@ genEmployersSearchResponse n =
   EmployersSearchResponse
     <$> arbitraryReduced n -- employersSearchResponseEmployers :: [Employer]
     <*> arbitrary -- employersSearchResponseRequestId :: Text
-
+  
 instance Arbitrary Error where
   arbitrary = sized genError
 
@@ -1161,7 +1161,7 @@ genError n =
     <*> arbitraryReducedMaybe n -- errorStatus :: Maybe Double
     <*> arbitraryReducedMaybe n -- errorDocumentationUrl :: Maybe Text
     <*> arbitraryReducedMaybe n -- errorSuggestedAction :: Maybe Text
-
+  
 instance Arbitrary ExternalPaymentSchedule where
   arbitrary = sized genExternalPaymentSchedule
 
@@ -1172,7 +1172,7 @@ genExternalPaymentSchedule n =
     <*> arbitrary -- externalPaymentScheduleIntervalExecutionDay :: Double
     <*> arbitraryReduced n -- externalPaymentScheduleStartDate :: Date
     <*> arbitraryReducedMaybe n -- externalPaymentScheduleEndDate :: Maybe Date
-
+  
 instance Arbitrary ExternalPaymentScheduleGet where
   arbitrary = sized genExternalPaymentScheduleGet
 
@@ -1184,7 +1184,7 @@ genExternalPaymentScheduleGet n =
     <*> arbitrary -- externalPaymentScheduleGetIntervalExecutionDay :: Double
     <*> arbitraryReduced n -- externalPaymentScheduleGetStartDate :: Date
     <*> arbitraryReducedMaybe n -- externalPaymentScheduleGetEndDate :: Maybe Date
-
+  
 instance Arbitrary HealthIncident where
   arbitrary = sized genHealthIncident
 
@@ -1195,7 +1195,7 @@ genHealthIncident n =
     <*> arbitraryReducedMaybe n -- healthIncidentEndDate :: Maybe Text
     <*> arbitraryReducedMaybe n -- healthIncidentTitle :: Maybe Text
     <*> arbitraryReducedMaybe n -- healthIncidentIncidentUpdates :: Maybe [IncidentUpdate]
-
+  
 instance Arbitrary HistoricalBalance where
   arbitrary = sized genHistoricalBalance
 
@@ -1206,7 +1206,7 @@ genHistoricalBalance n =
     <*> arbitrary -- historicalBalanceCurrent :: Double
     <*> arbitraryReducedMaybe n -- historicalBalanceIsoCurrencyCode :: Maybe Text
     <*> arbitraryReducedMaybe n -- historicalBalanceUnofficialCurrencyCode :: Maybe Text
-
+  
 instance Arbitrary HistoricalUpdateWebhook where
   arbitrary = sized genHistoricalUpdateWebhook
 
@@ -1218,7 +1218,7 @@ genHistoricalUpdateWebhook n =
     <*> arbitraryReducedMaybe n -- historicalUpdateWebhookError :: Maybe Error
     <*> arbitrary -- historicalUpdateWebhookNewTransactions :: Double
     <*> arbitrary -- historicalUpdateWebhookItemId :: Text
-
+  
 instance Arbitrary Holding where
   arbitrary = sized genHolding
 
@@ -1234,7 +1234,7 @@ genHolding n =
     <*> arbitrary -- holdingQuantity :: Double
     <*> arbitraryReducedMaybe n -- holdingIsoCurrencyCode :: Maybe Text
     <*> arbitraryReducedMaybe n -- holdingUnofficialCurrencyCode :: Maybe Text
-
+  
 instance Arbitrary HoldingsDefaultUpdateWebhook where
   arbitrary = sized genHoldingsDefaultUpdateWebhook
 
@@ -1247,7 +1247,7 @@ genHoldingsDefaultUpdateWebhook n =
     <*> arbitraryReducedMaybe n -- holdingsDefaultUpdateWebhookError :: Maybe Error
     <*> arbitrary -- holdingsDefaultUpdateWebhookNewHoldings :: Double
     <*> arbitrary -- holdingsDefaultUpdateWebhookUpdatedHoldings :: Double
-
+  
 instance Arbitrary IdentityGetRequest where
   arbitrary = sized genIdentityGetRequest
 
@@ -1258,7 +1258,7 @@ genIdentityGetRequest n =
     <*> arbitraryReducedMaybe n -- identityGetRequestSecret :: Maybe Text
     <*> arbitrary -- identityGetRequestAccessToken :: Text
     <*> arbitraryReducedMaybe n -- identityGetRequestOptions :: Maybe IdentityGetRequestOptions
-
+  
 instance Arbitrary IdentityGetRequestOptions where
   arbitrary = sized genIdentityGetRequestOptions
 
@@ -1266,7 +1266,7 @@ genIdentityGetRequestOptions :: Int -> Gen IdentityGetRequestOptions
 genIdentityGetRequestOptions n =
   IdentityGetRequestOptions
     <$> arbitraryReducedMaybe n -- identityGetRequestOptionsAccountIds :: Maybe [Text]
-
+  
 instance Arbitrary IdentityGetResponse where
   arbitrary = sized genIdentityGetResponse
 
@@ -1276,7 +1276,7 @@ genIdentityGetResponse n =
     <$> arbitraryReduced n -- identityGetResponseAccounts :: [AccountIdentity]
     <*> arbitraryReduced n -- identityGetResponseItem :: Item
     <*> arbitrary -- identityGetResponseRequestId :: Text
-
+  
 instance Arbitrary IncidentUpdate where
   arbitrary = sized genIncidentUpdate
 
@@ -1286,7 +1286,7 @@ genIncidentUpdate n =
     <$> arbitraryReducedMaybe n -- incidentUpdateDescription :: Maybe Text
     <*> arbitraryReducedMaybe n -- incidentUpdateStatus :: Maybe E'Status3
     <*> arbitraryReducedMaybe n -- incidentUpdateUpdatedDate :: Maybe Text
-
+  
 instance Arbitrary IncomeBreakdown where
   arbitrary = sized genIncomeBreakdown
 
@@ -1297,7 +1297,7 @@ genIncomeBreakdown n =
     <*> arbitraryReducedMaybe n -- incomeBreakdownRate :: Maybe Double
     <*> arbitraryReducedMaybe n -- incomeBreakdownHours :: Maybe Double
     <*> arbitraryReducedMaybe n -- incomeBreakdownTotal :: Maybe Double
-
+  
 instance Arbitrary IncomeSummary where
   arbitrary = sized genIncomeSummary
 
@@ -1311,7 +1311,7 @@ genIncomeSummary n =
     <*> arbitraryReducedMaybe n -- incomeSummaryPayFrequency :: Maybe PayFrequency
     <*> arbitraryReducedMaybe n -- incomeSummaryProjectedWage :: Maybe ProjectedIncomeSummaryFieldNumber
     <*> arbitraryReducedMaybe n -- incomeSummaryVerifiedTransaction :: Maybe TransactionData
-
+  
 instance Arbitrary IncomeSummaryFieldNumber where
   arbitrary = sized genIncomeSummaryFieldNumber
 
@@ -1320,7 +1320,7 @@ genIncomeSummaryFieldNumber n =
   IncomeSummaryFieldNumber
     <$> arbitrary -- incomeSummaryFieldNumberValue :: Double
     <*> arbitraryReduced n -- incomeSummaryFieldNumberVerificationStatus :: VerificationStatus
-
+  
 instance Arbitrary IncomeSummaryFieldString where
   arbitrary = sized genIncomeSummaryFieldString
 
@@ -1329,7 +1329,7 @@ genIncomeSummaryFieldString n =
   IncomeSummaryFieldString
     <$> arbitrary -- incomeSummaryFieldStringValue :: Text
     <*> arbitraryReduced n -- incomeSummaryFieldStringVerificationStatus :: VerificationStatus
-
+  
 instance Arbitrary IncomeVerificationCreateRequest where
   arbitrary = sized genIncomeVerificationCreateRequest
 
@@ -1339,7 +1339,7 @@ genIncomeVerificationCreateRequest n =
     <$> arbitraryReducedMaybe n -- incomeVerificationCreateRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- incomeVerificationCreateRequestSecret :: Maybe Text
     <*> arbitrary -- incomeVerificationCreateRequestWebhook :: Text
-
+  
 instance Arbitrary IncomeVerificationCreateResponse where
   arbitrary = sized genIncomeVerificationCreateResponse
 
@@ -1348,7 +1348,7 @@ genIncomeVerificationCreateResponse n =
   IncomeVerificationCreateResponse
     <$> arbitrary -- incomeVerificationCreateResponseIncomeVerificationId :: Text
     <*> arbitrary -- incomeVerificationCreateResponseRequestId :: Text
-
+  
 instance Arbitrary IncomeVerificationDocumentsDownloadRequest where
   arbitrary = sized genIncomeVerificationDocumentsDownloadRequest
 
@@ -1358,7 +1358,7 @@ genIncomeVerificationDocumentsDownloadRequest n =
     <$> arbitraryReducedMaybe n -- incomeVerificationDocumentsDownloadRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- incomeVerificationDocumentsDownloadRequestSecret :: Maybe Text
     <*> arbitrary -- incomeVerificationDocumentsDownloadRequestIncomeVerificationId :: Text
-
+  
 instance Arbitrary IncomeVerificationDocumentsDownloadResponse where
   arbitrary = sized genIncomeVerificationDocumentsDownloadResponse
 
@@ -1366,7 +1366,7 @@ genIncomeVerificationDocumentsDownloadResponse :: Int -> Gen IncomeVerificationD
 genIncomeVerificationDocumentsDownloadResponse n =
   IncomeVerificationDocumentsDownloadResponse
     <$> arbitrary -- incomeVerificationDocumentsDownloadResponseId :: Text
-
+  
 instance Arbitrary IncomeVerificationPaystubGetRequest where
   arbitrary = sized genIncomeVerificationPaystubGetRequest
 
@@ -1376,7 +1376,7 @@ genIncomeVerificationPaystubGetRequest n =
     <$> arbitraryReducedMaybe n -- incomeVerificationPaystubGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- incomeVerificationPaystubGetRequestSecret :: Maybe Text
     <*> arbitrary -- incomeVerificationPaystubGetRequestIncomeVerificationId :: Text
-
+  
 instance Arbitrary IncomeVerificationPaystubGetResponse where
   arbitrary = sized genIncomeVerificationPaystubGetResponse
 
@@ -1385,7 +1385,7 @@ genIncomeVerificationPaystubGetResponse n =
   IncomeVerificationPaystubGetResponse
     <$> arbitraryReducedMaybe n -- incomeVerificationPaystubGetResponsePaystub :: Maybe Paystub
     <*> arbitraryReducedMaybe n -- incomeVerificationPaystubGetResponseRequestId :: Maybe Text
-
+  
 instance Arbitrary IncomeVerificationStatusWebhook where
   arbitrary = sized genIncomeVerificationStatusWebhook
 
@@ -1396,7 +1396,7 @@ genIncomeVerificationStatusWebhook n =
     <*> arbitrary -- incomeVerificationStatusWebhookWebhookCode :: Text
     <*> arbitrary -- incomeVerificationStatusWebhookIncomeVerificationId :: Text
     <*> arbitrary -- incomeVerificationStatusWebhookVerificationStatus :: Text
-
+  
 instance Arbitrary IncomeVerificationSummaryGetRequest where
   arbitrary = sized genIncomeVerificationSummaryGetRequest
 
@@ -1406,7 +1406,7 @@ genIncomeVerificationSummaryGetRequest n =
     <$> arbitraryReducedMaybe n -- incomeVerificationSummaryGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- incomeVerificationSummaryGetRequestSecret :: Maybe Text
     <*> arbitrary -- incomeVerificationSummaryGetRequestIncomeVerificationId :: Text
-
+  
 instance Arbitrary IncomeVerificationSummaryGetResponse where
   arbitrary = sized genIncomeVerificationSummaryGetResponse
 
@@ -1415,7 +1415,7 @@ genIncomeVerificationSummaryGetResponse n =
   IncomeVerificationSummaryGetResponse
     <$> arbitraryReduced n -- incomeVerificationSummaryGetResponseIncomeSummaries :: [IncomeSummary]
     <*> arbitrary -- incomeVerificationSummaryGetResponseRequestId :: Text
-
+  
 instance Arbitrary IncomeVerificationWebhookStatus where
   arbitrary = sized genIncomeVerificationWebhookStatus
 
@@ -1423,7 +1423,7 @@ genIncomeVerificationWebhookStatus :: Int -> Gen IncomeVerificationWebhookStatus
 genIncomeVerificationWebhookStatus n =
   IncomeVerificationWebhookStatus
     <$> arbitrary -- incomeVerificationWebhookStatusId :: Text
-
+  
 instance Arbitrary InflowModel where
   arbitrary = sized genInflowModel
 
@@ -1435,7 +1435,7 @@ genInflowModel n =
     <*> arbitrary -- inflowModelPaymentDayOfMonth :: Double
     <*> arbitrary -- inflowModelTransactionName :: Text
     <*> arbitrary -- inflowModelStatementDayOfMonth :: Text
-
+  
 instance Arbitrary InitialUpdateWebhook where
   arbitrary = sized genInitialUpdateWebhook
 
@@ -1447,7 +1447,7 @@ genInitialUpdateWebhook n =
     <*> arbitraryReducedMaybe n -- initialUpdateWebhookError :: Maybe Text
     <*> arbitrary -- initialUpdateWebhookNewTransactions :: Double
     <*> arbitrary -- initialUpdateWebhookItemId :: Text
-
+  
 instance Arbitrary Institution where
   arbitrary = sized genInstitution
 
@@ -1464,7 +1464,7 @@ genInstitution n =
     <*> arbitraryReducedMaybe n -- institutionRoutingNumbers :: Maybe [Text]
     <*> arbitrary -- institutionOauth :: Bool
     <*> arbitraryReducedMaybe n -- institutionStatus :: Maybe InstitutionStatus
-
+  
 instance Arbitrary InstitutionStatus where
   arbitrary = sized genInstitutionStatus
 
@@ -1478,7 +1478,7 @@ genInstitutionStatus n =
     <*> arbitraryReduced n -- institutionStatusIdentity :: ProductStatus
     <*> arbitraryReduced n -- institutionStatusInvestmentsUpdates :: ProductStatus
     <*> arbitraryReducedMaybe n -- institutionStatusHealthIncidents :: Maybe [HealthIncident]
-
+  
 instance Arbitrary InstitutionsGetByIdRequest where
   arbitrary = sized genInstitutionsGetByIdRequest
 
@@ -1490,7 +1490,7 @@ genInstitutionsGetByIdRequest n =
     <*> arbitrary -- institutionsGetByIdRequestInstitutionId :: Text
     <*> arbitraryReduced n -- institutionsGetByIdRequestCountryCodes :: [CountryCode]
     <*> arbitraryReducedMaybe n -- institutionsGetByIdRequestOptions :: Maybe InstitutionsGetByIdRequestOptions
-
+  
 instance Arbitrary InstitutionsGetByIdRequestOptions where
   arbitrary = sized genInstitutionsGetByIdRequestOptions
 
@@ -1499,7 +1499,7 @@ genInstitutionsGetByIdRequestOptions n =
   InstitutionsGetByIdRequestOptions
     <$> arbitraryReducedMaybe n -- institutionsGetByIdRequestOptionsIncludeOptionalMetadata :: Maybe Bool
     <*> arbitraryReducedMaybe n -- institutionsGetByIdRequestOptionsIncludeStatus :: Maybe Bool
-
+  
 instance Arbitrary InstitutionsGetByIdResponse where
   arbitrary = sized genInstitutionsGetByIdResponse
 
@@ -1508,7 +1508,7 @@ genInstitutionsGetByIdResponse n =
   InstitutionsGetByIdResponse
     <$> arbitraryReduced n -- institutionsGetByIdResponseInstitution :: Institution
     <*> arbitrary -- institutionsGetByIdResponseRequestId :: Text
-
+  
 instance Arbitrary InstitutionsGetRequest where
   arbitrary = sized genInstitutionsGetRequest
 
@@ -1521,7 +1521,7 @@ genInstitutionsGetRequest n =
     <*> arbitrary -- institutionsGetRequestOffset :: Int
     <*> arbitraryReduced n -- institutionsGetRequestCountryCodes :: [CountryCode]
     <*> arbitraryReducedMaybe n -- institutionsGetRequestOptions :: Maybe InstitutionsGetRequestOptions
-
+  
 instance Arbitrary InstitutionsGetRequestOptions where
   arbitrary = sized genInstitutionsGetRequestOptions
 
@@ -1532,7 +1532,7 @@ genInstitutionsGetRequestOptions n =
     <*> arbitraryReducedMaybe n -- institutionsGetRequestOptionsRoutingNumbers :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- institutionsGetRequestOptionsOauth :: Maybe Bool
     <*> arbitraryReducedMaybe n -- institutionsGetRequestOptionsIncludeOptionalMetadata :: Maybe Bool
-
+  
 instance Arbitrary InstitutionsGetResponse where
   arbitrary = sized genInstitutionsGetResponse
 
@@ -1542,7 +1542,7 @@ genInstitutionsGetResponse n =
     <$> arbitraryReduced n -- institutionsGetResponseInstitutions :: [Institution]
     <*> arbitrary -- institutionsGetResponseTotal :: Int
     <*> arbitrary -- institutionsGetResponseRequestId :: Text
-
+  
 instance Arbitrary InstitutionsSearchAccountFilter where
   arbitrary = sized genInstitutionsSearchAccountFilter
 
@@ -1553,7 +1553,7 @@ genInstitutionsSearchAccountFilter n =
     <*> arbitraryReducedMaybe n -- institutionsSearchAccountFilterDepository :: Maybe [AccountSubtype]
     <*> arbitraryReducedMaybe n -- institutionsSearchAccountFilterCredit :: Maybe [AccountSubtype]
     <*> arbitraryReducedMaybe n -- institutionsSearchAccountFilterInvestment :: Maybe [AccountSubtype]
-
+  
 instance Arbitrary InstitutionsSearchRequest where
   arbitrary = sized genInstitutionsSearchRequest
 
@@ -1566,7 +1566,7 @@ genInstitutionsSearchRequest n =
     <*> arbitraryReduced n -- institutionsSearchRequestProducts :: [Products]
     <*> arbitraryReduced n -- institutionsSearchRequestCountryCodes :: [CountryCode]
     <*> arbitraryReducedMaybe n -- institutionsSearchRequestOptions :: Maybe InstitutionsSearchRequestOptions
-
+  
 instance Arbitrary InstitutionsSearchRequestOptions where
   arbitrary = sized genInstitutionsSearchRequestOptions
 
@@ -1576,7 +1576,7 @@ genInstitutionsSearchRequestOptions n =
     <$> arbitraryReducedMaybe n -- institutionsSearchRequestOptionsOauth :: Maybe Bool
     <*> arbitraryReducedMaybe n -- institutionsSearchRequestOptionsIncludeOptionalMetadata :: Maybe Bool
     <*> arbitraryReducedMaybe n -- institutionsSearchRequestOptionsAccountFilter :: Maybe InstitutionsSearchAccountFilter
-
+  
 instance Arbitrary InstitutionsSearchResponse where
   arbitrary = sized genInstitutionsSearchResponse
 
@@ -1585,7 +1585,7 @@ genInstitutionsSearchResponse n =
   InstitutionsSearchResponse
     <$> arbitraryReduced n -- institutionsSearchResponseInstitutions :: [Institution]
     <*> arbitrary -- institutionsSearchResponseRequestId :: Text
-
+  
 instance Arbitrary InvestmentFilter where
   arbitrary = sized genInvestmentFilter
 
@@ -1593,7 +1593,7 @@ genInvestmentFilter :: Int -> Gen InvestmentFilter
 genInvestmentFilter n =
   InvestmentFilter
     <$> arbitraryReduced n -- investmentFilterAccountSubtypes :: [AccountSubtype]
-
+  
 instance Arbitrary InvestmentHoldingsGetRequestOptions where
   arbitrary = sized genInvestmentHoldingsGetRequestOptions
 
@@ -1601,7 +1601,7 @@ genInvestmentHoldingsGetRequestOptions :: Int -> Gen InvestmentHoldingsGetReques
 genInvestmentHoldingsGetRequestOptions n =
   InvestmentHoldingsGetRequestOptions
     <$> arbitraryReducedMaybe n -- investmentHoldingsGetRequestOptionsAccountIds :: Maybe [Text]
-
+  
 instance Arbitrary InvestmentTransaction where
   arbitrary = sized genInvestmentTransaction
 
@@ -1622,7 +1622,7 @@ genInvestmentTransaction n =
     <*> arbitrary -- investmentTransactionSubtype :: E'Subtype
     <*> arbitraryReducedMaybe n -- investmentTransactionIsoCurrencyCode :: Maybe Text
     <*> arbitraryReducedMaybe n -- investmentTransactionUnofficialCurrencyCode :: Maybe Text
-
+  
 instance Arbitrary InvestmentsDefaultUpdateWebhook where
   arbitrary = sized genInvestmentsDefaultUpdateWebhook
 
@@ -1635,7 +1635,7 @@ genInvestmentsDefaultUpdateWebhook n =
     <*> arbitraryReducedMaybe n -- investmentsDefaultUpdateWebhookError :: Maybe Error
     <*> arbitrary -- investmentsDefaultUpdateWebhookNewInvestmentsTransactions :: Double
     <*> arbitrary -- investmentsDefaultUpdateWebhookCanceledInvestmentsTransactions :: Double
-
+  
 instance Arbitrary InvestmentsHoldingsGetRequest where
   arbitrary = sized genInvestmentsHoldingsGetRequest
 
@@ -1646,7 +1646,7 @@ genInvestmentsHoldingsGetRequest n =
     <*> arbitraryReducedMaybe n -- investmentsHoldingsGetRequestSecret :: Maybe Text
     <*> arbitrary -- investmentsHoldingsGetRequestAccessToken :: Text
     <*> arbitraryReducedMaybe n -- investmentsHoldingsGetRequestOptions :: Maybe InvestmentHoldingsGetRequestOptions
-
+  
 instance Arbitrary InvestmentsHoldingsGetResponse where
   arbitrary = sized genInvestmentsHoldingsGetResponse
 
@@ -1658,7 +1658,7 @@ genInvestmentsHoldingsGetResponse n =
     <*> arbitraryReduced n -- investmentsHoldingsGetResponseSecurities :: [Security]
     <*> arbitraryReduced n -- investmentsHoldingsGetResponseItem :: Item
     <*> arbitrary -- investmentsHoldingsGetResponseRequestId :: Text
-
+  
 instance Arbitrary InvestmentsTransactionsGetRequest where
   arbitrary = sized genInvestmentsTransactionsGetRequest
 
@@ -1671,7 +1671,7 @@ genInvestmentsTransactionsGetRequest n =
     <*> arbitraryReduced n -- investmentsTransactionsGetRequestStartDate :: Date
     <*> arbitraryReduced n -- investmentsTransactionsGetRequestEndDate :: Date
     <*> arbitraryReducedMaybe n -- investmentsTransactionsGetRequestOptions :: Maybe InvestmentsTransactionsGetRequestOptions
-
+  
 instance Arbitrary InvestmentsTransactionsGetRequestOptions where
   arbitrary = sized genInvestmentsTransactionsGetRequestOptions
 
@@ -1681,7 +1681,7 @@ genInvestmentsTransactionsGetRequestOptions n =
     <$> arbitraryReducedMaybe n -- investmentsTransactionsGetRequestOptionsAccountIds :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- investmentsTransactionsGetRequestOptionsCount :: Maybe Int
     <*> arbitraryReducedMaybe n -- investmentsTransactionsGetRequestOptionsOffset :: Maybe Int
-
+  
 instance Arbitrary InvestmentsTransactionsGetResponse where
   arbitrary = sized genInvestmentsTransactionsGetResponse
 
@@ -1694,7 +1694,7 @@ genInvestmentsTransactionsGetResponse n =
     <*> arbitraryReduced n -- investmentsTransactionsGetResponseInvestmentTransactions :: [InvestmentTransaction]
     <*> arbitrary -- investmentsTransactionsGetResponseTotalInvestmentTransactions :: Int
     <*> arbitrary -- investmentsTransactionsGetResponseRequestId :: Text
-
+  
 instance Arbitrary Item where
   arbitrary = sized genItem
 
@@ -1709,7 +1709,7 @@ genItem n =
     <*> arbitraryReduced n -- itemBilledProducts :: [Products]
     <*> arbitraryReducedMaybe n -- itemConsentExpirationTime :: Maybe Text
     <*> arbitrary -- itemUpdateType :: E'UpdateType
-
+  
 instance Arbitrary ItemAccessTokenInvalidateRequest where
   arbitrary = sized genItemAccessTokenInvalidateRequest
 
@@ -1719,7 +1719,7 @@ genItemAccessTokenInvalidateRequest n =
     <$> arbitraryReducedMaybe n -- itemAccessTokenInvalidateRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- itemAccessTokenInvalidateRequestSecret :: Maybe Text
     <*> arbitrary -- itemAccessTokenInvalidateRequestAccessToken :: Text
-
+  
 instance Arbitrary ItemAccessTokenInvalidateResponse where
   arbitrary = sized genItemAccessTokenInvalidateResponse
 
@@ -1728,7 +1728,7 @@ genItemAccessTokenInvalidateResponse n =
   ItemAccessTokenInvalidateResponse
     <$> arbitrary -- itemAccessTokenInvalidateResponseNewAccessToken :: Text
     <*> arbitrary -- itemAccessTokenInvalidateResponseRequestId :: Text
-
+  
 instance Arbitrary ItemErrorWebhook where
   arbitrary = sized genItemErrorWebhook
 
@@ -1739,7 +1739,7 @@ genItemErrorWebhook n =
     <*> arbitrary -- itemErrorWebhookWebhookCode :: Text
     <*> arbitrary -- itemErrorWebhookItemId :: Text
     <*> arbitraryReduced n -- itemErrorWebhookError :: Error
-
+  
 instance Arbitrary ItemGetRequest where
   arbitrary = sized genItemGetRequest
 
@@ -1749,7 +1749,7 @@ genItemGetRequest n =
     <$> arbitraryReducedMaybe n -- itemGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- itemGetRequestSecret :: Maybe Text
     <*> arbitrary -- itemGetRequestAccessToken :: Text
-
+  
 instance Arbitrary ItemGetResponse where
   arbitrary = sized genItemGetResponse
 
@@ -1760,7 +1760,7 @@ genItemGetResponse n =
     <*> arbitraryReducedMaybe n -- itemGetResponseStatus :: Maybe NullableItemStatus
     <*> arbitrary -- itemGetResponseRequestId :: Text
     <*> arbitraryReducedMaybe n -- itemGetResponseAccessToken :: Maybe NullableAccessToken
-
+  
 instance Arbitrary ItemImportRequest where
   arbitrary = sized genItemImportRequest
 
@@ -1772,7 +1772,7 @@ genItemImportRequest n =
     <*> arbitraryReduced n -- itemImportRequestProducts :: [Products]
     <*> arbitraryReduced n -- itemImportRequestUserAuth :: ItemImportRequestUserAuth
     <*> arbitraryReducedMaybe n -- itemImportRequestOptions :: Maybe ItemImportRequestOptions
-
+  
 instance Arbitrary ItemImportRequestOptions where
   arbitrary = sized genItemImportRequestOptions
 
@@ -1780,7 +1780,7 @@ genItemImportRequestOptions :: Int -> Gen ItemImportRequestOptions
 genItemImportRequestOptions n =
   ItemImportRequestOptions
     <$> arbitraryReducedMaybe n -- itemImportRequestOptionsWebhook :: Maybe Text
-
+  
 instance Arbitrary ItemImportRequestUserAuth where
   arbitrary = sized genItemImportRequestUserAuth
 
@@ -1789,7 +1789,7 @@ genItemImportRequestUserAuth n =
   ItemImportRequestUserAuth
     <$> arbitrary -- itemImportRequestUserAuthUserId :: Text
     <*> arbitrary -- itemImportRequestUserAuthAuthToken :: Text
-
+  
 instance Arbitrary ItemImportResponse where
   arbitrary = sized genItemImportResponse
 
@@ -1798,7 +1798,7 @@ genItemImportResponse n =
   ItemImportResponse
     <$> arbitrary -- itemImportResponseAccessToken :: Text
     <*> arbitrary -- itemImportResponseRequestId :: Text
-
+  
 instance Arbitrary ItemProductReadyWebhook where
   arbitrary = sized genItemProductReadyWebhook
 
@@ -1809,7 +1809,7 @@ genItemProductReadyWebhook n =
     <*> arbitrary -- itemProductReadyWebhookWebhookCode :: Text
     <*> arbitrary -- itemProductReadyWebhookItemId :: Text
     <*> arbitraryReducedMaybe n -- itemProductReadyWebhookError :: Maybe Error
-
+  
 instance Arbitrary ItemPublicTokenCreateRequest where
   arbitrary = sized genItemPublicTokenCreateRequest
 
@@ -1819,7 +1819,7 @@ genItemPublicTokenCreateRequest n =
     <$> arbitraryReducedMaybe n -- itemPublicTokenCreateRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- itemPublicTokenCreateRequestSecret :: Maybe Text
     <*> arbitrary -- itemPublicTokenCreateRequestAccessToken :: Text
-
+  
 instance Arbitrary ItemPublicTokenCreateResponse where
   arbitrary = sized genItemPublicTokenCreateResponse
 
@@ -1829,7 +1829,7 @@ genItemPublicTokenCreateResponse n =
     <$> arbitrary -- itemPublicTokenCreateResponsePublicToken :: Text
     <*> arbitraryReducedMaybe n -- itemPublicTokenCreateResponseExpiration :: Maybe DateTime
     <*> arbitrary -- itemPublicTokenCreateResponseRequestId :: Text
-
+  
 instance Arbitrary ItemPublicTokenExchangeRequest where
   arbitrary = sized genItemPublicTokenExchangeRequest
 
@@ -1839,7 +1839,7 @@ genItemPublicTokenExchangeRequest n =
     <$> arbitraryReducedMaybe n -- itemPublicTokenExchangeRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- itemPublicTokenExchangeRequestSecret :: Maybe Text
     <*> arbitrary -- itemPublicTokenExchangeRequestPublicToken :: Text
-
+  
 instance Arbitrary ItemPublicTokenExchangeResponse where
   arbitrary = sized genItemPublicTokenExchangeResponse
 
@@ -1849,7 +1849,7 @@ genItemPublicTokenExchangeResponse n =
     <$> arbitrary -- itemPublicTokenExchangeResponseAccessToken :: Text
     <*> arbitrary -- itemPublicTokenExchangeResponseItemId :: Text
     <*> arbitrary -- itemPublicTokenExchangeResponseRequestId :: Text
-
+  
 instance Arbitrary ItemRemoveRequest where
   arbitrary = sized genItemRemoveRequest
 
@@ -1859,7 +1859,7 @@ genItemRemoveRequest n =
     <$> arbitraryReducedMaybe n -- itemRemoveRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- itemRemoveRequestSecret :: Maybe Text
     <*> arbitrary -- itemRemoveRequestAccessToken :: Text
-
+  
 instance Arbitrary ItemRemoveResponse where
   arbitrary = sized genItemRemoveResponse
 
@@ -1867,7 +1867,7 @@ genItemRemoveResponse :: Int -> Gen ItemRemoveResponse
 genItemRemoveResponse n =
   ItemRemoveResponse
     <$> arbitrary -- itemRemoveResponseRequestId :: Text
-
+  
 instance Arbitrary ItemStatus where
   arbitrary = sized genItemStatus
 
@@ -1877,7 +1877,7 @@ genItemStatus n =
     <$> arbitraryReducedMaybe n -- itemStatusInvestments :: Maybe (Map.Map String A.Value)
     <*> arbitraryReducedMaybe n -- itemStatusTransactions :: Maybe (Map.Map String A.Value)
     <*> arbitraryReducedMaybe n -- itemStatusLastWebhook :: Maybe (Map.Map String A.Value)
-
+  
 instance Arbitrary ItemWebhookUpdateRequest where
   arbitrary = sized genItemWebhookUpdateRequest
 
@@ -1888,7 +1888,7 @@ genItemWebhookUpdateRequest n =
     <*> arbitraryReducedMaybe n -- itemWebhookUpdateRequestSecret :: Maybe Text
     <*> arbitrary -- itemWebhookUpdateRequestAccessToken :: Text
     <*> arbitrary -- itemWebhookUpdateRequestWebhook :: Text
-
+  
 instance Arbitrary ItemWebhookUpdateResponse where
   arbitrary = sized genItemWebhookUpdateResponse
 
@@ -1897,7 +1897,7 @@ genItemWebhookUpdateResponse n =
   ItemWebhookUpdateResponse
     <$> arbitraryReduced n -- itemWebhookUpdateResponseItem :: Item
     <*> arbitrary -- itemWebhookUpdateResponseRequestId :: Text
-
+  
 instance Arbitrary JWKPublicKey where
   arbitrary = sized genJWKPublicKey
 
@@ -1913,7 +1913,7 @@ genJWKPublicKey n =
     <*> arbitraryReducedMaybe n -- jWKPublicKeyY :: Maybe Text
     <*> arbitraryReducedMaybe n -- jWKPublicKeyCreatedAt :: Maybe Int
     <*> arbitraryReducedMaybe n -- jWKPublicKeyExpiredAt :: Maybe Int
-
+  
 instance Arbitrary JWTHeader where
   arbitrary = sized genJWTHeader
 
@@ -1921,7 +1921,7 @@ genJWTHeader :: Int -> Gen JWTHeader
 genJWTHeader n =
   JWTHeader
     <$> arbitrary -- jWTHeaderId :: Text
-
+  
 instance Arbitrary LiabilitiesGetRequest where
   arbitrary = sized genLiabilitiesGetRequest
 
@@ -1932,7 +1932,7 @@ genLiabilitiesGetRequest n =
     <*> arbitraryReducedMaybe n -- liabilitiesGetRequestSecret :: Maybe Text
     <*> arbitrary -- liabilitiesGetRequestAccessToken :: Text
     <*> arbitraryReducedMaybe n -- liabilitiesGetRequestOptions :: Maybe LiabilitiesGetRequestOptions
-
+  
 instance Arbitrary LiabilitiesGetRequestOptions where
   arbitrary = sized genLiabilitiesGetRequestOptions
 
@@ -1940,7 +1940,7 @@ genLiabilitiesGetRequestOptions :: Int -> Gen LiabilitiesGetRequestOptions
 genLiabilitiesGetRequestOptions n =
   LiabilitiesGetRequestOptions
     <$> arbitraryReducedMaybe n -- liabilitiesGetRequestOptionsAccountIds :: Maybe [Text]
-
+  
 instance Arbitrary LiabilitiesGetResponse where
   arbitrary = sized genLiabilitiesGetResponse
 
@@ -1951,7 +1951,7 @@ genLiabilitiesGetResponse n =
     <*> arbitraryReduced n -- liabilitiesGetResponseItem :: Item
     <*> arbitraryReduced n -- liabilitiesGetResponseLiabilities :: LiabilitiesObject
     <*> arbitrary -- liabilitiesGetResponseRequestId :: Text
-
+  
 instance Arbitrary LiabilitiesObject where
   arbitrary = sized genLiabilitiesObject
 
@@ -1961,7 +1961,7 @@ genLiabilitiesObject n =
     <$> arbitraryReducedMaybe n -- liabilitiesObjectCredit :: Maybe [CreditCardLiability]
     <*> arbitraryReducedMaybe n -- liabilitiesObjectMortgage :: Maybe [MortgageLiability]
     <*> arbitraryReducedMaybe n -- liabilitiesObjectStudent :: Maybe [StudentLoan]
-
+  
 instance Arbitrary LiabilityOverride where
   arbitrary = sized genLiabilityOverride
 
@@ -1993,7 +1993,7 @@ genLiabilityOverride n =
     <*> arbitrary -- liabilityOverrideRepaymentPlanType :: Text
     <*> arbitrary -- liabilityOverrideSequenceNumber :: Text
     <*> arbitraryReduced n -- liabilityOverrideServicerAddress :: Address
-
+  
 instance Arbitrary LinkTokenAccountFilters where
   arbitrary = sized genLinkTokenAccountFilters
 
@@ -2004,7 +2004,7 @@ genLinkTokenAccountFilters n =
     <*> arbitraryReducedMaybe n -- linkTokenAccountFiltersCredit :: Maybe CreditFilter
     <*> arbitraryReducedMaybe n -- linkTokenAccountFiltersLoan :: Maybe LoanFilter
     <*> arbitraryReducedMaybe n -- linkTokenAccountFiltersInvestment :: Maybe InvestmentFilter
-
+  
 instance Arbitrary LinkTokenCreateRequest where
   arbitrary = sized genLinkTokenCreateRequest
 
@@ -2027,7 +2027,7 @@ genLinkTokenCreateRequest n =
     <*> arbitraryReducedMaybe n -- linkTokenCreateRequestInstitutionId :: Maybe Text
     <*> arbitraryReducedMaybe n -- linkTokenCreateRequestPaymentInitiation :: Maybe LinkTokenCreateRequestPaymentInitiation
     <*> arbitraryReducedMaybe n -- linkTokenCreateRequestDepositSwitch :: Maybe LinkTokenCreateRequestDepositSwitch
-
+  
 instance Arbitrary LinkTokenCreateRequestAccountSubtypes where
   arbitrary = sized genLinkTokenCreateRequestAccountSubtypes
 
@@ -2038,7 +2038,7 @@ genLinkTokenCreateRequestAccountSubtypes n =
     <*> arbitraryReducedMaybe n -- linkTokenCreateRequestAccountSubtypesCredit :: Maybe (Map.Map String A.Value)
     <*> arbitraryReducedMaybe n -- linkTokenCreateRequestAccountSubtypesLoan :: Maybe (Map.Map String A.Value)
     <*> arbitraryReducedMaybe n -- linkTokenCreateRequestAccountSubtypesInvestment :: Maybe (Map.Map String A.Value)
-
+  
 instance Arbitrary LinkTokenCreateRequestDepositSwitch where
   arbitrary = sized genLinkTokenCreateRequestDepositSwitch
 
@@ -2046,7 +2046,7 @@ genLinkTokenCreateRequestDepositSwitch :: Int -> Gen LinkTokenCreateRequestDepos
 genLinkTokenCreateRequestDepositSwitch n =
   LinkTokenCreateRequestDepositSwitch
     <$> arbitrary -- linkTokenCreateRequestDepositSwitchDepositSwitchId :: Text
-
+  
 instance Arbitrary LinkTokenCreateRequestIncomeVerification where
   arbitrary = sized genLinkTokenCreateRequestIncomeVerification
 
@@ -2055,7 +2055,7 @@ genLinkTokenCreateRequestIncomeVerification n =
   LinkTokenCreateRequestIncomeVerification
     <$> arbitrary -- linkTokenCreateRequestIncomeVerificationIncomeVerificationId :: Text
     <*> arbitraryReducedMaybe n -- linkTokenCreateRequestIncomeVerificationAssetReportId :: Maybe Text
-
+  
 instance Arbitrary LinkTokenCreateRequestPaymentInitiation where
   arbitrary = sized genLinkTokenCreateRequestPaymentInitiation
 
@@ -2063,7 +2063,7 @@ genLinkTokenCreateRequestPaymentInitiation :: Int -> Gen LinkTokenCreateRequestP
 genLinkTokenCreateRequestPaymentInitiation n =
   LinkTokenCreateRequestPaymentInitiation
     <$> arbitrary -- linkTokenCreateRequestPaymentInitiationPaymentId :: Text
-
+  
 instance Arbitrary LinkTokenCreateRequestUser where
   arbitrary = sized genLinkTokenCreateRequestUser
 
@@ -2078,7 +2078,7 @@ genLinkTokenCreateRequestUser n =
     <*> arbitraryReducedMaybe n -- linkTokenCreateRequestUserEmailAddressVerifiedTime :: Maybe Text
     <*> arbitraryReducedMaybe n -- linkTokenCreateRequestUserSsn :: Maybe Text
     <*> arbitraryReducedMaybe n -- linkTokenCreateRequestUserDateOfBirth :: Maybe Text
-
+  
 instance Arbitrary LinkTokenCreateResponse where
   arbitrary = sized genLinkTokenCreateResponse
 
@@ -2088,7 +2088,7 @@ genLinkTokenCreateResponse n =
     <$> arbitrary -- linkTokenCreateResponseLinkToken :: Text
     <*> arbitraryReduced n -- linkTokenCreateResponseExpiration :: DateTime
     <*> arbitrary -- linkTokenCreateResponseRequestId :: Text
-
+  
 instance Arbitrary LinkTokenGetMetadataResponse where
   arbitrary = sized genLinkTokenGetMetadataResponse
 
@@ -2102,7 +2102,7 @@ genLinkTokenGetMetadataResponse n =
     <*> arbitraryReducedMaybe n -- linkTokenGetMetadataResponseAccountFilters :: Maybe AccountFiltersResponse
     <*> arbitraryReducedMaybe n -- linkTokenGetMetadataResponseRedirectUri :: Maybe Text
     <*> arbitraryReducedMaybe n -- linkTokenGetMetadataResponseClientName :: Maybe Text
-
+  
 instance Arbitrary LinkTokenGetRequest where
   arbitrary = sized genLinkTokenGetRequest
 
@@ -2112,7 +2112,7 @@ genLinkTokenGetRequest n =
     <$> arbitraryReducedMaybe n -- linkTokenGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- linkTokenGetRequestSecret :: Maybe Text
     <*> arbitrary -- linkTokenGetRequestLinkToken :: Text
-
+  
 instance Arbitrary LinkTokenGetResponse where
   arbitrary = sized genLinkTokenGetResponse
 
@@ -2124,7 +2124,7 @@ genLinkTokenGetResponse n =
     <*> arbitraryReducedMaybe n -- linkTokenGetResponseExpiration :: Maybe DateTime
     <*> arbitraryReducedMaybe n -- linkTokenGetResponseMetadata :: Maybe LinkTokenGetMetadataResponse
     <*> arbitrary -- linkTokenGetResponseRequestId :: Text
-
+  
 instance Arbitrary LoanFilter where
   arbitrary = sized genLoanFilter
 
@@ -2132,7 +2132,7 @@ genLoanFilter :: Int -> Gen LoanFilter
 genLoanFilter n =
   LoanFilter
     <$> arbitraryReduced n -- loanFilterAccountSubtypes :: [AccountSubtype]
-
+  
 instance Arbitrary Location where
   arbitrary = sized genLocation
 
@@ -2147,7 +2147,7 @@ genLocation n =
     <*> arbitraryReducedMaybe n -- locationLat :: Maybe Double
     <*> arbitraryReducedMaybe n -- locationLon :: Maybe Double
     <*> arbitraryReducedMaybe n -- locationStoreNumber :: Maybe Text
-
+  
 instance Arbitrary MFA where
   arbitrary = sized genMFA
 
@@ -2159,7 +2159,7 @@ genMFA n =
     <*> arbitrary -- mFAQuestionsPerRound :: Double
     <*> arbitrary -- mFASelectionRounds :: Double
     <*> arbitrary -- mFASelectionsPerQuestion :: Double
-
+  
 instance Arbitrary Meta where
   arbitrary = sized genMeta
 
@@ -2169,7 +2169,7 @@ genMeta n =
     <$> arbitrary -- metaName :: Text
     <*> arbitrary -- metaOfficialName :: Text
     <*> arbitrary -- metaLimit :: Double
-
+  
 instance Arbitrary MortgageInterestRate where
   arbitrary = sized genMortgageInterestRate
 
@@ -2178,7 +2178,7 @@ genMortgageInterestRate n =
   MortgageInterestRate
     <$> arbitraryReducedMaybe n -- mortgageInterestRatePercentage :: Maybe Double
     <*> arbitraryReducedMaybe n -- mortgageInterestRateType :: Maybe Text
-
+  
 instance Arbitrary MortgageLiability where
   arbitrary = sized genMortgageLiability
 
@@ -2205,7 +2205,7 @@ genMortgageLiability n =
     <*> arbitraryReducedMaybe n -- mortgageLiabilityPropertyAddress :: Maybe MortgagePropertyAddress
     <*> arbitraryReducedMaybe n -- mortgageLiabilityYtdInterestPaid :: Maybe Double
     <*> arbitraryReducedMaybe n -- mortgageLiabilityYtdPrincipalPaid :: Maybe Double
-
+  
 instance Arbitrary MortgagePropertyAddress where
   arbitrary = sized genMortgagePropertyAddress
 
@@ -2217,15 +2217,15 @@ genMortgagePropertyAddress n =
     <*> arbitraryReducedMaybe n -- mortgagePropertyAddressPostalCode :: Maybe Text
     <*> arbitraryReducedMaybe n -- mortgagePropertyAddressRegion :: Maybe Text
     <*> arbitraryReducedMaybe n -- mortgagePropertyAddressStreet :: Maybe Text
-
+  
 instance Arbitrary NullableAccessToken where
   arbitrary = sized genNullableAccessToken
 
 genNullableAccessToken :: Int -> Gen NullableAccessToken
 genNullableAccessToken n =
-
+  
   pure NullableAccessToken
-
+   
 instance Arbitrary NullableAddress where
   arbitrary = sized genNullableAddress
 
@@ -2234,7 +2234,7 @@ genNullableAddress n =
   NullableAddress
     <$> arbitraryReduced n -- nullableAddressData :: AddressData
     <*> arbitraryReducedMaybe n -- nullableAddressPrimary :: Maybe Bool
-
+  
 instance Arbitrary NullableAddressData where
   arbitrary = sized genNullableAddressData
 
@@ -2246,7 +2246,7 @@ genNullableAddressData n =
     <*> arbitrary -- nullableAddressDataStreet :: Text
     <*> arbitraryReducedMaybe n -- nullableAddressDataPostalCode :: Maybe Text
     <*> arbitrary -- nullableAddressDataCountry :: Text
-
+  
 instance Arbitrary NullableItemStatus where
   arbitrary = sized genNullableItemStatus
 
@@ -2256,7 +2256,7 @@ genNullableItemStatus n =
     <$> arbitraryReducedMaybe n -- nullableItemStatusInvestments :: Maybe (Map.Map String A.Value)
     <*> arbitraryReducedMaybe n -- nullableItemStatusTransactions :: Maybe (Map.Map String A.Value)
     <*> arbitraryReducedMaybe n -- nullableItemStatusLastWebhook :: Maybe (Map.Map String A.Value)
-
+  
 instance Arbitrary NullableNumbersACH where
   arbitrary = sized genNullableNumbersACH
 
@@ -2267,7 +2267,7 @@ genNullableNumbersACH n =
     <*> arbitrary -- nullableNumbersACHAccount :: Text
     <*> arbitrary -- nullableNumbersACHRouting :: Text
     <*> arbitraryReducedMaybe n -- nullableNumbersACHWireRouting :: Maybe Text
-
+  
 instance Arbitrary NullableNumbersBACS where
   arbitrary = sized genNullableNumbersBACS
 
@@ -2277,7 +2277,7 @@ genNullableNumbersBACS n =
     <$> arbitrary -- nullableNumbersBACSAccountId :: Text
     <*> arbitrary -- nullableNumbersBACSAccount :: Text
     <*> arbitrary -- nullableNumbersBACSSortCode :: Text
-
+  
 instance Arbitrary NullableNumbersEFT where
   arbitrary = sized genNullableNumbersEFT
 
@@ -2288,7 +2288,7 @@ genNullableNumbersEFT n =
     <*> arbitrary -- nullableNumbersEFTAccount :: Text
     <*> arbitrary -- nullableNumbersEFTInstitution :: Text
     <*> arbitrary -- nullableNumbersEFTBranch :: Text
-
+  
 instance Arbitrary NullableNumbersInternational where
   arbitrary = sized genNullableNumbersInternational
 
@@ -2298,7 +2298,7 @@ genNullableNumbersInternational n =
     <$> arbitrary -- nullableNumbersInternationalAccountId :: Text
     <*> arbitrary -- nullableNumbersInternationalIban :: Text
     <*> arbitrary -- nullableNumbersInternationalBic :: Text
-
+  
 instance Arbitrary NullableRecipientBACS where
   arbitrary = sized genNullableRecipientBACS
 
@@ -2307,7 +2307,7 @@ genNullableRecipientBACS n =
   NullableRecipientBACS
     <$> arbitraryReducedMaybe n -- nullableRecipientBACSAccount :: Maybe Text
     <*> arbitraryReducedMaybe n -- nullableRecipientBACSSortCode :: Maybe Text
-
+  
 instance Arbitrary Numbers where
   arbitrary = sized genNumbers
 
@@ -2322,7 +2322,7 @@ genNumbers n =
     <*> arbitrary -- numbersInternationalBic :: Text
     <*> arbitrary -- numbersInternationalIban :: Text
     <*> arbitrary -- numbersBacsSortCode :: Text
-
+  
 instance Arbitrary NumbersACH where
   arbitrary = sized genNumbersACH
 
@@ -2333,7 +2333,7 @@ genNumbersACH n =
     <*> arbitrary -- numbersACHAccount :: Text
     <*> arbitrary -- numbersACHRouting :: Text
     <*> arbitraryReducedMaybe n -- numbersACHWireRouting :: Maybe Text
-
+  
 instance Arbitrary NumbersBACS where
   arbitrary = sized genNumbersBACS
 
@@ -2343,7 +2343,7 @@ genNumbersBACS n =
     <$> arbitrary -- numbersBACSAccountId :: Text
     <*> arbitrary -- numbersBACSAccount :: Text
     <*> arbitrary -- numbersBACSSortCode :: Text
-
+  
 instance Arbitrary NumbersEFT where
   arbitrary = sized genNumbersEFT
 
@@ -2354,7 +2354,7 @@ genNumbersEFT n =
     <*> arbitrary -- numbersEFTAccount :: Text
     <*> arbitrary -- numbersEFTInstitution :: Text
     <*> arbitrary -- numbersEFTBranch :: Text
-
+  
 instance Arbitrary NumbersInternational where
   arbitrary = sized genNumbersInternational
 
@@ -2364,7 +2364,7 @@ genNumbersInternational n =
     <$> arbitrary -- numbersInternationalAccountId :: Text
     <*> arbitrary -- numbersInternationalIban :: Text
     <*> arbitrary -- numbersInternationalBic :: Text
-
+  
 instance Arbitrary OverrideAccounts where
   arbitrary = sized genOverrideAccounts
 
@@ -2382,7 +2382,7 @@ genOverrideAccounts n =
     <*> arbitraryReduced n -- overrideAccountsIdentity :: OwnerOverride
     <*> arbitraryReduced n -- overrideAccountsLiability :: LiabilityOverride
     <*> arbitraryReduced n -- overrideAccountsInflowModel :: InflowModel
-
+  
 instance Arbitrary Owner where
   arbitrary = sized genOwner
 
@@ -2393,7 +2393,7 @@ genOwner n =
     <*> arbitraryReduced n -- ownerPhoneNumbers :: [PhoneNumber]
     <*> arbitraryReduced n -- ownerEmails :: [Email]
     <*> arbitraryReduced n -- ownerAddresses :: [Address]
-
+  
 instance Arbitrary OwnerOverride where
   arbitrary = sized genOwnerOverride
 
@@ -2404,7 +2404,7 @@ genOwnerOverride n =
     <*> arbitraryReduced n -- ownerOverridePhoneNumbers :: [PhoneNumber]
     <*> arbitraryReduced n -- ownerOverrideEmails :: [Email]
     <*> arbitraryReduced n -- ownerOverrideAddresses :: [Address]
-
+  
 instance Arbitrary PSLFStatus where
   arbitrary = sized genPSLFStatus
 
@@ -2414,7 +2414,7 @@ genPSLFStatus n =
     <$> arbitraryReducedMaybe n -- pSLFStatusEstimatedEligibilityDate :: Maybe Text
     <*> arbitraryReducedMaybe n -- pSLFStatusPaymentsMade :: Maybe Double
     <*> arbitraryReducedMaybe n -- pSLFStatusPaymentsRemaining :: Maybe Double
-
+  
 instance Arbitrary PayFrequency where
   arbitrary = sized genPayFrequency
 
@@ -2423,7 +2423,7 @@ genPayFrequency n =
   PayFrequency
     <$> arbitrary -- payFrequencyValue :: E'Value
     <*> arbitraryReduced n -- payFrequencyVerificationStatus :: VerificationStatus
-
+  
 instance Arbitrary PayPeriodDetails where
   arbitrary = sized genPayPeriodDetails
 
@@ -2435,7 +2435,7 @@ genPayPeriodDetails n =
     <*> arbitraryReducedMaybe n -- payPeriodDetailsPayDay :: Maybe Text
     <*> arbitraryReducedMaybe n -- payPeriodDetailsGrossEarnings :: Maybe Double
     <*> arbitraryReducedMaybe n -- payPeriodDetailsCheckAmount :: Maybe Double
-
+  
 instance Arbitrary PaymentAmount where
   arbitrary = sized genPaymentAmount
 
@@ -2444,7 +2444,7 @@ genPaymentAmount n =
   PaymentAmount
     <$> arbitrary -- paymentAmountCurrency :: Text
     <*> arbitrary -- paymentAmountValue :: Double
-
+  
 instance Arbitrary PaymentInitiationAddress where
   arbitrary = sized genPaymentInitiationAddress
 
@@ -2455,7 +2455,7 @@ genPaymentInitiationAddress n =
     <*> arbitraryReducedMaybe n -- paymentInitiationAddressCity :: Maybe Text
     <*> arbitraryReducedMaybe n -- paymentInitiationAddressPostalCode :: Maybe Text
     <*> arbitraryReducedMaybe n -- paymentInitiationAddressCountry :: Maybe Text
-
+  
 instance Arbitrary PaymentInitiationPaymentCreateRequest where
   arbitrary = sized genPaymentInitiationPaymentCreateRequest
 
@@ -2468,7 +2468,7 @@ genPaymentInitiationPaymentCreateRequest n =
     <*> arbitrary -- paymentInitiationPaymentCreateRequestReference :: Text
     <*> arbitraryReduced n -- paymentInitiationPaymentCreateRequestAmount :: Amount
     <*> arbitraryReducedMaybe n -- paymentInitiationPaymentCreateRequestSchedule :: Maybe ExternalPaymentSchedule
-
+  
 instance Arbitrary PaymentInitiationPaymentCreateResponse where
   arbitrary = sized genPaymentInitiationPaymentCreateResponse
 
@@ -2478,7 +2478,7 @@ genPaymentInitiationPaymentCreateResponse n =
     <$> arbitrary -- paymentInitiationPaymentCreateResponsePaymentId :: Text
     <*> arbitrary -- paymentInitiationPaymentCreateResponseStatus :: Text
     <*> arbitrary -- paymentInitiationPaymentCreateResponseRequestId :: Text
-
+  
 instance Arbitrary PaymentInitiationPaymentGetRequest where
   arbitrary = sized genPaymentInitiationPaymentGetRequest
 
@@ -2488,7 +2488,7 @@ genPaymentInitiationPaymentGetRequest n =
     <$> arbitraryReducedMaybe n -- paymentInitiationPaymentGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- paymentInitiationPaymentGetRequestSecret :: Maybe Text
     <*> arbitrary -- paymentInitiationPaymentGetRequestPaymentId :: Text
-
+  
 instance Arbitrary PaymentInitiationPaymentGetResponse where
   arbitrary = sized genPaymentInitiationPaymentGetResponse
 
@@ -2504,7 +2504,7 @@ genPaymentInitiationPaymentGetResponse n =
     <*> arbitraryReducedMaybe n -- paymentInitiationPaymentGetResponseAdjustedReference :: Maybe Text
     <*> arbitrary -- paymentInitiationPaymentGetResponseLastStatusUpdate :: Text
     <*> arbitraryReducedMaybe n -- paymentInitiationPaymentGetResponseSchedule :: Maybe ExternalPaymentScheduleGet
-
+  
 instance Arbitrary PaymentInitiationPaymentListRequest where
   arbitrary = sized genPaymentInitiationPaymentListRequest
 
@@ -2515,7 +2515,7 @@ genPaymentInitiationPaymentListRequest n =
     <*> arbitraryReducedMaybe n -- paymentInitiationPaymentListRequestSecret :: Maybe Text
     <*> arbitraryReducedMaybe n -- paymentInitiationPaymentListRequestCount :: Maybe Int
     <*> arbitraryReducedMaybe n -- paymentInitiationPaymentListRequestCursor :: Maybe Text
-
+  
 instance Arbitrary PaymentInitiationPaymentListResponse where
   arbitrary = sized genPaymentInitiationPaymentListResponse
 
@@ -2525,7 +2525,7 @@ genPaymentInitiationPaymentListResponse n =
     <$> arbitraryReduced n -- paymentInitiationPaymentListResponsePayments :: [PaymentInitiationPaymentGetResponse]
     <*> arbitrary -- paymentInitiationPaymentListResponseNextCursor :: Text
     <*> arbitrary -- paymentInitiationPaymentListResponseRequestId :: Text
-
+  
 instance Arbitrary PaymentInitiationPaymentTokenCreateRequest where
   arbitrary = sized genPaymentInitiationPaymentTokenCreateRequest
 
@@ -2535,7 +2535,7 @@ genPaymentInitiationPaymentTokenCreateRequest n =
     <$> arbitraryReducedMaybe n -- paymentInitiationPaymentTokenCreateRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- paymentInitiationPaymentTokenCreateRequestSecret :: Maybe Text
     <*> arbitrary -- paymentInitiationPaymentTokenCreateRequestPaymentId :: Text
-
+  
 instance Arbitrary PaymentInitiationPaymentTokenCreateResponse where
   arbitrary = sized genPaymentInitiationPaymentTokenCreateResponse
 
@@ -2545,7 +2545,7 @@ genPaymentInitiationPaymentTokenCreateResponse n =
     <$> arbitrary -- paymentInitiationPaymentTokenCreateResponsePaymentToken :: Text
     <*> arbitrary -- paymentInitiationPaymentTokenCreateResponsePaymentTokenExpirationTime :: Text
     <*> arbitrary -- paymentInitiationPaymentTokenCreateResponseRequestId :: Text
-
+  
 instance Arbitrary PaymentInitiationRecipient where
   arbitrary = sized genPaymentInitiationRecipient
 
@@ -2557,7 +2557,7 @@ genPaymentInitiationRecipient n =
     <*> arbitraryReduced n -- paymentInitiationRecipientAddress :: PaymentInitiationAddress
     <*> arbitraryReducedMaybe n -- paymentInitiationRecipientIban :: Maybe Text
     <*> arbitraryReducedMaybe n -- paymentInitiationRecipientBacs :: Maybe (Map.Map String A.Value)
-
+  
 instance Arbitrary PaymentInitiationRecipientCreateRequest where
   arbitrary = sized genPaymentInitiationRecipientCreateRequest
 
@@ -2570,7 +2570,7 @@ genPaymentInitiationRecipientCreateRequest n =
     <*> arbitraryReducedMaybe n -- paymentInitiationRecipientCreateRequestIban :: Maybe Text
     <*> arbitraryReducedMaybe n -- paymentInitiationRecipientCreateRequestBacs :: Maybe NullableRecipientBACS
     <*> arbitraryReducedMaybe n -- paymentInitiationRecipientCreateRequestAddress :: Maybe PaymentInitiationAddress
-
+  
 instance Arbitrary PaymentInitiationRecipientCreateResponse where
   arbitrary = sized genPaymentInitiationRecipientCreateResponse
 
@@ -2579,7 +2579,7 @@ genPaymentInitiationRecipientCreateResponse n =
   PaymentInitiationRecipientCreateResponse
     <$> arbitrary -- paymentInitiationRecipientCreateResponseRecipientId :: Text
     <*> arbitrary -- paymentInitiationRecipientCreateResponseRequestId :: Text
-
+  
 instance Arbitrary PaymentInitiationRecipientGetRequest where
   arbitrary = sized genPaymentInitiationRecipientGetRequest
 
@@ -2589,7 +2589,7 @@ genPaymentInitiationRecipientGetRequest n =
     <$> arbitraryReducedMaybe n -- paymentInitiationRecipientGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- paymentInitiationRecipientGetRequestSecret :: Maybe Text
     <*> arbitrary -- paymentInitiationRecipientGetRequestRecipientId :: Text
-
+  
 instance Arbitrary PaymentInitiationRecipientGetResponse where
   arbitrary = sized genPaymentInitiationRecipientGetResponse
 
@@ -2602,7 +2602,7 @@ genPaymentInitiationRecipientGetResponse n =
     <*> arbitrary -- paymentInitiationRecipientGetResponseIban :: Text
     <*> arbitraryReducedMaybe n -- paymentInitiationRecipientGetResponseBacs :: Maybe NullableRecipientBACS
     <*> arbitrary -- paymentInitiationRecipientGetResponseRequestId :: Text
-
+  
 instance Arbitrary PaymentInitiationRecipientListRequest where
   arbitrary = sized genPaymentInitiationRecipientListRequest
 
@@ -2611,7 +2611,7 @@ genPaymentInitiationRecipientListRequest n =
   PaymentInitiationRecipientListRequest
     <$> arbitraryReducedMaybe n -- paymentInitiationRecipientListRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- paymentInitiationRecipientListRequestSecret :: Maybe Text
-
+  
 instance Arbitrary PaymentInitiationRecipientListResponse where
   arbitrary = sized genPaymentInitiationRecipientListResponse
 
@@ -2620,7 +2620,7 @@ genPaymentInitiationRecipientListResponse n =
   PaymentInitiationRecipientListResponse
     <$> arbitraryReduced n -- paymentInitiationRecipientListResponseRecipients :: [PaymentInitiationRecipient]
     <*> arbitrary -- paymentInitiationRecipientListResponseRequestId :: Text
-
+  
 instance Arbitrary PaymentMeta where
   arbitrary = sized genPaymentMeta
 
@@ -2635,7 +2635,7 @@ genPaymentMeta n =
     <*> arbitraryReducedMaybe n -- paymentMetaPaymentMethod :: Maybe Text
     <*> arbitraryReducedMaybe n -- paymentMetaPaymentProcessor :: Maybe Text
     <*> arbitraryReducedMaybe n -- paymentMetaReason :: Maybe Text
-
+  
 instance Arbitrary PaymentStatusUpdateWebhook where
   arbitrary = sized genPaymentStatusUpdateWebhook
 
@@ -2653,7 +2653,7 @@ genPaymentStatusUpdateWebhook n =
     <*> arbitraryReducedMaybe n -- paymentStatusUpdateWebhookAdjustedStartDate :: Maybe Date
     <*> arbitrary -- paymentStatusUpdateWebhookTimestamp :: Text
     <*> arbitraryReducedMaybe n -- paymentStatusUpdateWebhookError :: Maybe Error
-
+  
 instance Arbitrary Paystub where
   arbitrary = sized genPaystub
 
@@ -2667,7 +2667,7 @@ genPaystub n =
     <*> arbitraryReduced n -- paystubPayPeriodDetails :: PayPeriodDetails
     <*> arbitraryReduced n -- paystubIncomeBreakdown :: IncomeBreakdown
     <*> arbitraryReduced n -- paystubYtdEarnings :: PaystubYTDDetails
-
+  
 instance Arbitrary PaystubDeduction where
   arbitrary = sized genPaystubDeduction
 
@@ -2677,7 +2677,7 @@ genPaystubDeduction n =
     <$> arbitraryReducedMaybe n -- paystubDeductionType :: Maybe Text
     <*> arbitraryReducedMaybe n -- paystubDeductionIsPretax :: Maybe Bool
     <*> arbitraryReducedMaybe n -- paystubDeductionTotal :: Maybe Double
-
+  
 instance Arbitrary PaystubYTDDetails where
   arbitrary = sized genPaystubYTDDetails
 
@@ -2686,7 +2686,7 @@ genPaystubYTDDetails n =
   PaystubYTDDetails
     <$> arbitrary -- paystubYTDDetailsGrossEarnings :: Double
     <*> arbitrary -- paystubYTDDetailsNetEarnings :: Double
-
+  
 instance Arbitrary PendingExpirationWebhook where
   arbitrary = sized genPendingExpirationWebhook
 
@@ -2697,7 +2697,7 @@ genPendingExpirationWebhook n =
     <*> arbitrary -- pendingExpirationWebhookWebhookCode :: Text
     <*> arbitrary -- pendingExpirationWebhookItemId :: Text
     <*> arbitrary -- pendingExpirationWebhookConsentExpirationTime :: Text
-
+  
 instance Arbitrary PhoneNumber where
   arbitrary = sized genPhoneNumber
 
@@ -2707,7 +2707,7 @@ genPhoneNumber n =
     <$> arbitrary -- phoneNumberData :: Text
     <*> arbitraryReducedMaybe n -- phoneNumberPrimary :: Maybe Bool
     <*> arbitraryReducedMaybe n -- phoneNumberType :: Maybe E'Type
-
+  
 instance Arbitrary ProcessorApexProcessorTokenCreateRequest where
   arbitrary = sized genProcessorApexProcessorTokenCreateRequest
 
@@ -2718,7 +2718,7 @@ genProcessorApexProcessorTokenCreateRequest n =
     <*> arbitraryReducedMaybe n -- processorApexProcessorTokenCreateRequestSecret :: Maybe Text
     <*> arbitrary -- processorApexProcessorTokenCreateRequestAccessToken :: Text
     <*> arbitrary -- processorApexProcessorTokenCreateRequestAccountId :: Text
-
+  
 instance Arbitrary ProcessorAuthGetRequest where
   arbitrary = sized genProcessorAuthGetRequest
 
@@ -2728,7 +2728,7 @@ genProcessorAuthGetRequest n =
     <$> arbitraryReducedMaybe n -- processorAuthGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- processorAuthGetRequestSecret :: Maybe Text
     <*> arbitrary -- processorAuthGetRequestProcessorToken :: Text
-
+  
 instance Arbitrary ProcessorAuthGetResponse where
   arbitrary = sized genProcessorAuthGetResponse
 
@@ -2738,7 +2738,7 @@ genProcessorAuthGetResponse n =
     <$> arbitrary -- processorAuthGetResponseRequestId :: Text
     <*> arbitraryReduced n -- processorAuthGetResponseNumbers :: ProcessorNumber
     <*> arbitraryReduced n -- processorAuthGetResponseAccount :: AccountBase
-
+  
 instance Arbitrary ProcessorBalanceGetRequest where
   arbitrary = sized genProcessorBalanceGetRequest
 
@@ -2748,7 +2748,7 @@ genProcessorBalanceGetRequest n =
     <$> arbitraryReducedMaybe n -- processorBalanceGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- processorBalanceGetRequestSecret :: Maybe Text
     <*> arbitrary -- processorBalanceGetRequestProcessorToken :: Text
-
+  
 instance Arbitrary ProcessorBalanceGetResponse where
   arbitrary = sized genProcessorBalanceGetResponse
 
@@ -2757,7 +2757,7 @@ genProcessorBalanceGetResponse n =
   ProcessorBalanceGetResponse
     <$> arbitraryReduced n -- processorBalanceGetResponseAccount :: AccountBase
     <*> arbitrary -- processorBalanceGetResponseRequestId :: Text
-
+  
 instance Arbitrary ProcessorIdentityGetRequest where
   arbitrary = sized genProcessorIdentityGetRequest
 
@@ -2767,7 +2767,7 @@ genProcessorIdentityGetRequest n =
     <$> arbitraryReducedMaybe n -- processorIdentityGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- processorIdentityGetRequestSecret :: Maybe Text
     <*> arbitrary -- processorIdentityGetRequestProcessorToken :: Text
-
+  
 instance Arbitrary ProcessorIdentityGetResponse where
   arbitrary = sized genProcessorIdentityGetResponse
 
@@ -2776,7 +2776,7 @@ genProcessorIdentityGetResponse n =
   ProcessorIdentityGetResponse
     <$> arbitraryReduced n -- processorIdentityGetResponseAccount :: AccountIdentity
     <*> arbitrary -- processorIdentityGetResponseRequestId :: Text
-
+  
 instance Arbitrary ProcessorNumber where
   arbitrary = sized genProcessorNumber
 
@@ -2787,7 +2787,7 @@ genProcessorNumber n =
     <*> arbitraryReducedMaybe n -- processorNumberEft :: Maybe NullableNumbersEFT
     <*> arbitraryReducedMaybe n -- processorNumberInternational :: Maybe NullableNumbersInternational
     <*> arbitraryReducedMaybe n -- processorNumberBacs :: Maybe NullableNumbersBACS
-
+  
 instance Arbitrary ProcessorStripeBankAccountTokenCreateRequest where
   arbitrary = sized genProcessorStripeBankAccountTokenCreateRequest
 
@@ -2798,7 +2798,7 @@ genProcessorStripeBankAccountTokenCreateRequest n =
     <*> arbitraryReducedMaybe n -- processorStripeBankAccountTokenCreateRequestSecret :: Maybe Text
     <*> arbitrary -- processorStripeBankAccountTokenCreateRequestAccessToken :: Text
     <*> arbitrary -- processorStripeBankAccountTokenCreateRequestAccountId :: Text
-
+  
 instance Arbitrary ProcessorStripeBankAccountTokenCreateResponse where
   arbitrary = sized genProcessorStripeBankAccountTokenCreateResponse
 
@@ -2807,7 +2807,7 @@ genProcessorStripeBankAccountTokenCreateResponse n =
   ProcessorStripeBankAccountTokenCreateResponse
     <$> arbitrary -- processorStripeBankAccountTokenCreateResponseStripeBankAccountToken :: Text
     <*> arbitrary -- processorStripeBankAccountTokenCreateResponseRequestId :: Text
-
+  
 instance Arbitrary ProcessorTokenCreateRequest where
   arbitrary = sized genProcessorTokenCreateRequest
 
@@ -2819,7 +2819,7 @@ genProcessorTokenCreateRequest n =
     <*> arbitrary -- processorTokenCreateRequestAccessToken :: Text
     <*> arbitrary -- processorTokenCreateRequestAccountId :: Text
     <*> arbitrary -- processorTokenCreateRequestProcessor :: Text
-
+  
 instance Arbitrary ProcessorTokenCreateResponse where
   arbitrary = sized genProcessorTokenCreateResponse
 
@@ -2828,7 +2828,7 @@ genProcessorTokenCreateResponse n =
   ProcessorTokenCreateResponse
     <$> arbitrary -- processorTokenCreateResponseProcessorToken :: Text
     <*> arbitrary -- processorTokenCreateResponseRequestId :: Text
-
+  
 instance Arbitrary ProductStatus where
   arbitrary = sized genProductStatus
 
@@ -2838,7 +2838,7 @@ genProductStatus n =
     <$> arbitrary -- productStatusStatus :: E'Status2
     <*> arbitrary -- productStatusLastStatusChange :: Text
     <*> arbitraryReduced n -- productStatusBreakdown :: ProductStatusBreakdown
-
+  
 instance Arbitrary ProductStatusBreakdown where
   arbitrary = sized genProductStatusBreakdown
 
@@ -2849,7 +2849,7 @@ genProductStatusBreakdown n =
     <*> arbitrary -- productStatusBreakdownErrorPlaid :: Double
     <*> arbitrary -- productStatusBreakdownErrorInstitution :: Double
     <*> arbitraryReducedMaybe n -- productStatusBreakdownRefreshInterval :: Maybe E'RefreshInterval
-
+  
 instance Arbitrary ProjectedIncomeSummaryFieldNumber where
   arbitrary = sized genProjectedIncomeSummaryFieldNumber
 
@@ -2858,7 +2858,7 @@ genProjectedIncomeSummaryFieldNumber n =
   ProjectedIncomeSummaryFieldNumber
     <$> arbitrary -- projectedIncomeSummaryFieldNumberValue :: Double
     <*> arbitraryReduced n -- projectedIncomeSummaryFieldNumberVerificationStatus :: VerificationStatus
-
+  
 instance Arbitrary RecaptchaRequiredError where
   arbitrary = sized genRecaptchaRequiredError
 
@@ -2872,7 +2872,7 @@ genRecaptchaRequiredError n =
     <*> arbitrary -- recaptchaRequiredErrorLinkUserExperience :: Text
     <*> arbitrary -- recaptchaRequiredErrorCommonCauses :: Text
     <*> arbitrary -- recaptchaRequiredErrorTroubleshootingSteps :: Text
-
+  
 instance Arbitrary RecipientBACS where
   arbitrary = sized genRecipientBACS
 
@@ -2881,7 +2881,15 @@ genRecipientBACS n =
   RecipientBACS
     <$> arbitraryReducedMaybe n -- recipientBACSAccount :: Maybe Text
     <*> arbitraryReducedMaybe n -- recipientBACSSortCode :: Maybe Text
+  
+instance Arbitrary RemovedTransaction where
+  arbitrary = sized genRemovedTransaction
 
+genRemovedTransaction :: Int -> Gen RemovedTransaction
+genRemovedTransaction n =
+  RemovedTransaction
+    <$> arbitraryReducedMaybe n -- removedTransactionTransactionId :: Maybe Text
+  
 instance Arbitrary SandboxBankTransferSimulateRequest where
   arbitrary = sized genSandboxBankTransferSimulateRequest
 
@@ -2893,7 +2901,7 @@ genSandboxBankTransferSimulateRequest n =
     <*> arbitrary -- sandboxBankTransferSimulateRequestBankTransferId :: Text
     <*> arbitrary -- sandboxBankTransferSimulateRequestEventType :: Text
     <*> arbitraryReducedMaybe n -- sandboxBankTransferSimulateRequestFailureReason :: Maybe BankTransferFailure
-
+  
 instance Arbitrary SandboxBankTransferSimulateResponse where
   arbitrary = sized genSandboxBankTransferSimulateResponse
 
@@ -2901,7 +2909,7 @@ genSandboxBankTransferSimulateResponse :: Int -> Gen SandboxBankTransferSimulate
 genSandboxBankTransferSimulateResponse n =
   SandboxBankTransferSimulateResponse
     <$> arbitrary -- sandboxBankTransferSimulateResponseRequestId :: Text
-
+  
 instance Arbitrary SandboxItemFireWebhookRequest where
   arbitrary = sized genSandboxItemFireWebhookRequest
 
@@ -2912,7 +2920,7 @@ genSandboxItemFireWebhookRequest n =
     <*> arbitraryReducedMaybe n -- sandboxItemFireWebhookRequestSecret :: Maybe Text
     <*> arbitrary -- sandboxItemFireWebhookRequestAccessToken :: Text
     <*> arbitraryReducedMaybe n -- sandboxItemFireWebhookRequestWebhookCode :: Maybe E'WebhookCode
-
+  
 instance Arbitrary SandboxItemFireWebhookResponse where
   arbitrary = sized genSandboxItemFireWebhookResponse
 
@@ -2921,7 +2929,7 @@ genSandboxItemFireWebhookResponse n =
   SandboxItemFireWebhookResponse
     <$> arbitrary -- sandboxItemFireWebhookResponseWebhookFired :: Bool
     <*> arbitrary -- sandboxItemFireWebhookResponseRequestId :: Text
-
+  
 instance Arbitrary SandboxItemResetLoginRequest where
   arbitrary = sized genSandboxItemResetLoginRequest
 
@@ -2931,7 +2939,7 @@ genSandboxItemResetLoginRequest n =
     <$> arbitraryReducedMaybe n -- sandboxItemResetLoginRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- sandboxItemResetLoginRequestSecret :: Maybe Text
     <*> arbitrary -- sandboxItemResetLoginRequestAccessToken :: Text
-
+  
 instance Arbitrary SandboxItemResetLoginResponse where
   arbitrary = sized genSandboxItemResetLoginResponse
 
@@ -2940,7 +2948,7 @@ genSandboxItemResetLoginResponse n =
   SandboxItemResetLoginResponse
     <$> arbitrary -- sandboxItemResetLoginResponseResetLogin :: Bool
     <*> arbitrary -- sandboxItemResetLoginResponseRequestId :: Text
-
+  
 instance Arbitrary SandboxItemSetVerificationStatusRequest where
   arbitrary = sized genSandboxItemSetVerificationStatusRequest
 
@@ -2952,7 +2960,7 @@ genSandboxItemSetVerificationStatusRequest n =
     <*> arbitrary -- sandboxItemSetVerificationStatusRequestAccessToken :: Text
     <*> arbitrary -- sandboxItemSetVerificationStatusRequestAccountId :: Text
     <*> arbitrary -- sandboxItemSetVerificationStatusRequestVerificationStatus :: E'VerificationStatus
-
+  
 instance Arbitrary SandboxItemSetVerificationStatusResponse where
   arbitrary = sized genSandboxItemSetVerificationStatusResponse
 
@@ -2960,7 +2968,7 @@ genSandboxItemSetVerificationStatusResponse :: Int -> Gen SandboxItemSetVerifica
 genSandboxItemSetVerificationStatusResponse n =
   SandboxItemSetVerificationStatusResponse
     <$> arbitrary -- sandboxItemSetVerificationStatusResponseRequestId :: Text
-
+  
 instance Arbitrary SandboxProcessorTokenCreateRequest where
   arbitrary = sized genSandboxProcessorTokenCreateRequest
 
@@ -2971,7 +2979,7 @@ genSandboxProcessorTokenCreateRequest n =
     <*> arbitraryReducedMaybe n -- sandboxProcessorTokenCreateRequestSecret :: Maybe Text
     <*> arbitrary -- sandboxProcessorTokenCreateRequestInstitutionId :: Text
     <*> arbitraryReducedMaybe n -- sandboxProcessorTokenCreateRequestOptions :: Maybe SandboxProcessorTokenCreateRequestOptions
-
+  
 instance Arbitrary SandboxProcessorTokenCreateRequestOptions where
   arbitrary = sized genSandboxProcessorTokenCreateRequestOptions
 
@@ -2980,7 +2988,7 @@ genSandboxProcessorTokenCreateRequestOptions n =
   SandboxProcessorTokenCreateRequestOptions
     <$> arbitraryReducedMaybe n -- sandboxProcessorTokenCreateRequestOptionsOverrideUsername :: Maybe Text
     <*> arbitraryReducedMaybe n -- sandboxProcessorTokenCreateRequestOptionsOverridePassword :: Maybe Text
-
+  
 instance Arbitrary SandboxProcessorTokenCreateResponse where
   arbitrary = sized genSandboxProcessorTokenCreateResponse
 
@@ -2989,7 +2997,7 @@ genSandboxProcessorTokenCreateResponse n =
   SandboxProcessorTokenCreateResponse
     <$> arbitrary -- sandboxProcessorTokenCreateResponseProcessorToken :: Text
     <*> arbitrary -- sandboxProcessorTokenCreateResponseRequestId :: Text
-
+  
 instance Arbitrary SandboxPublicTokenCreateRequest where
   arbitrary = sized genSandboxPublicTokenCreateRequest
 
@@ -3001,7 +3009,7 @@ genSandboxPublicTokenCreateRequest n =
     <*> arbitrary -- sandboxPublicTokenCreateRequestInstitutionId :: Text
     <*> arbitraryReduced n -- sandboxPublicTokenCreateRequestInitialProducts :: [Products]
     <*> arbitraryReducedMaybe n -- sandboxPublicTokenCreateRequestOptions :: Maybe SandboxPublicTokenCreateRequestOptions
-
+  
 instance Arbitrary SandboxPublicTokenCreateRequestOptions where
   arbitrary = sized genSandboxPublicTokenCreateRequestOptions
 
@@ -3012,7 +3020,7 @@ genSandboxPublicTokenCreateRequestOptions n =
     <*> arbitraryReducedMaybe n -- sandboxPublicTokenCreateRequestOptionsOverrideUsername :: Maybe Text
     <*> arbitraryReducedMaybe n -- sandboxPublicTokenCreateRequestOptionsOverridePassword :: Maybe Text
     <*> arbitraryReducedMaybe n -- sandboxPublicTokenCreateRequestOptionsTransactions :: Maybe SandboxPublicTokenCreateRequestOptionsTransactions
-
+  
 instance Arbitrary SandboxPublicTokenCreateRequestOptionsTransactions where
   arbitrary = sized genSandboxPublicTokenCreateRequestOptionsTransactions
 
@@ -3021,7 +3029,7 @@ genSandboxPublicTokenCreateRequestOptionsTransactions n =
   SandboxPublicTokenCreateRequestOptionsTransactions
     <$> arbitraryReducedMaybe n -- sandboxPublicTokenCreateRequestOptionsTransactionsStartDate :: Maybe Text
     <*> arbitraryReducedMaybe n -- sandboxPublicTokenCreateRequestOptionsTransactionsEndDate :: Maybe Text
-
+  
 instance Arbitrary SandboxPublicTokenCreateResponse where
   arbitrary = sized genSandboxPublicTokenCreateResponse
 
@@ -3030,7 +3038,7 @@ genSandboxPublicTokenCreateResponse n =
   SandboxPublicTokenCreateResponse
     <$> arbitrary -- sandboxPublicTokenCreateResponsePublicToken :: Text
     <*> arbitrary -- sandboxPublicTokenCreateResponseRequestId :: Text
-
+  
 instance Arbitrary Security where
   arbitrary = sized genSecurity
 
@@ -3052,7 +3060,7 @@ genSecurity n =
     <*> arbitraryReducedMaybe n -- securityClosePriceAsOf :: Maybe Text
     <*> arbitraryReducedMaybe n -- securityIsoCurrencyCode :: Maybe Text
     <*> arbitraryReducedMaybe n -- securityUnofficialCurrencyCode :: Maybe Text
-
+  
 instance Arbitrary ServicerAddressData where
   arbitrary = sized genServicerAddressData
 
@@ -3064,7 +3072,7 @@ genServicerAddressData n =
     <*> arbitraryReducedMaybe n -- servicerAddressDataStreet :: Maybe Text
     <*> arbitraryReducedMaybe n -- servicerAddressDataPostalCode :: Maybe Text
     <*> arbitraryReducedMaybe n -- servicerAddressDataCountry :: Maybe Text
-
+  
 instance Arbitrary StandaloneAccountType where
   arbitrary = sized genStandaloneAccountType
 
@@ -3076,7 +3084,7 @@ genStandaloneAccountType n =
     <*> arbitrary -- standaloneAccountTypeLoan :: Text
     <*> arbitrary -- standaloneAccountTypeInvestment :: Text
     <*> arbitrary -- standaloneAccountTypeOther :: Text
-
+  
 instance Arbitrary StandaloneCurrencyCodeList where
   arbitrary = sized genStandaloneCurrencyCodeList
 
@@ -3085,7 +3093,7 @@ genStandaloneCurrencyCodeList n =
   StandaloneCurrencyCodeList
     <$> arbitrary -- standaloneCurrencyCodeListIsoCurrencyCode :: Text
     <*> arbitrary -- standaloneCurrencyCodeListUnofficialCurrencyCode :: Text
-
+  
 instance Arbitrary StandaloneInvestmentTransactionSubtype where
   arbitrary = sized genStandaloneInvestmentTransactionSubtype
 
@@ -3136,7 +3144,7 @@ genStandaloneInvestmentTransactionSubtype n =
     <*> arbitraryReducedMaybe n -- standaloneInvestmentTransactionSubtypeTrustFee :: Maybe Text
     <*> arbitraryReducedMaybe n -- standaloneInvestmentTransactionSubtypeUnqualifiedGain :: Maybe Text
     <*> arbitraryReducedMaybe n -- standaloneInvestmentTransactionSubtypeWithdrawal :: Maybe Text
-
+  
 instance Arbitrary StandaloneInvestmentTransactionType where
   arbitrary = sized genStandaloneInvestmentTransactionType
 
@@ -3149,7 +3157,7 @@ genStandaloneInvestmentTransactionType n =
     <*> arbitrary -- standaloneInvestmentTransactionTypeCash :: Text
     <*> arbitrary -- standaloneInvestmentTransactionTypeFee :: Text
     <*> arbitrary -- standaloneInvestmentTransactionTypeTransfer :: Text
-
+  
 instance Arbitrary StudentLoan where
   arbitrary = sized genStudentLoan
 
@@ -3181,7 +3189,7 @@ genStudentLoan n =
     <*> arbitraryReducedMaybe n -- studentLoanServicerAddress :: Maybe ServicerAddressData
     <*> arbitraryReducedMaybe n -- studentLoanYtdInterestPaid :: Maybe Double
     <*> arbitraryReducedMaybe n -- studentLoanYtdPrincipalPaid :: Maybe Double
-
+  
 instance Arbitrary StudentLoanRepaymentModel where
   arbitrary = sized genStudentLoanRepaymentModel
 
@@ -3191,7 +3199,7 @@ genStudentLoanRepaymentModel n =
     <$> arbitrary -- studentLoanRepaymentModelType :: Text
     <*> arbitrary -- studentLoanRepaymentModelNonRepaymentMonths :: Double
     <*> arbitrary -- studentLoanRepaymentModelRepaymentMonths :: Double
-
+  
 instance Arbitrary StudentLoanStatus where
   arbitrary = sized genStudentLoanStatus
 
@@ -3200,7 +3208,7 @@ genStudentLoanStatus n =
   StudentLoanStatus
     <$> arbitraryReducedMaybe n -- studentLoanStatusEndDate :: Maybe Text
     <*> arbitraryReducedMaybe n -- studentLoanStatusType :: Maybe E'Type3
-
+  
 instance Arbitrary StudentRepaymentPlan where
   arbitrary = sized genStudentRepaymentPlan
 
@@ -3209,7 +3217,7 @@ genStudentRepaymentPlan n =
   StudentRepaymentPlan
     <$> arbitraryReducedMaybe n -- studentRepaymentPlanDescription :: Maybe Text
     <*> arbitraryReducedMaybe n -- studentRepaymentPlanType :: Maybe E'Type4
-
+  
 instance Arbitrary Transaction where
   arbitrary = sized genTransaction
 
@@ -3237,7 +3245,7 @@ genTransaction n =
     <*> arbitrary -- transactionAmount :: Double
     <*> arbitrary -- transactionAccountId :: Text
     <*> arbitraryReducedMaybe n -- transactionTransactionCode :: Maybe TransactionCode
-
+  
 instance Arbitrary TransactionData where
   arbitrary = sized genTransactionData
 
@@ -3249,7 +3257,7 @@ genTransactionData n =
     <*> arbitrary -- transactionDataDate :: Text
     <*> arbitrary -- transactionDataAccountId :: Text
     <*> arbitrary -- transactionDataTransactionId :: Text
-
+  
 instance Arbitrary TransactionOverride where
   arbitrary = sized genTransactionOverride
 
@@ -3261,7 +3269,7 @@ genTransactionOverride n =
     <*> arbitrary -- transactionOverrideAmount :: Double
     <*> arbitrary -- transactionOverrideDescription :: Text
     <*> arbitraryReducedMaybe n -- transactionOverrideCurrency :: Maybe Text
-
+  
 instance Arbitrary TransactionsGetRequest where
   arbitrary = sized genTransactionsGetRequest
 
@@ -3274,7 +3282,7 @@ genTransactionsGetRequest n =
     <*> arbitraryReducedMaybe n -- transactionsGetRequestSecret :: Maybe Text
     <*> arbitraryReduced n -- transactionsGetRequestStartDate :: Date
     <*> arbitraryReduced n -- transactionsGetRequestEndDate :: Date
-
+  
 instance Arbitrary TransactionsGetRequestOptions where
   arbitrary = sized genTransactionsGetRequestOptions
 
@@ -3284,7 +3292,7 @@ genTransactionsGetRequestOptions n =
     <$> arbitraryReducedMaybe n -- transactionsGetRequestOptionsAccountIds :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- transactionsGetRequestOptionsCount :: Maybe Int
     <*> arbitraryReducedMaybe n -- transactionsGetRequestOptionsOffset :: Maybe Int
-
+  
 instance Arbitrary TransactionsGetResponse where
   arbitrary = sized genTransactionsGetResponse
 
@@ -3296,7 +3304,7 @@ genTransactionsGetResponse n =
     <*> arbitrary -- transactionsGetResponseTotalTransactions :: Int
     <*> arbitraryReduced n -- transactionsGetResponseItem :: Item
     <*> arbitrary -- transactionsGetResponseRequestId :: Text
-
+  
 instance Arbitrary TransactionsRefreshRequest where
   arbitrary = sized genTransactionsRefreshRequest
 
@@ -3306,7 +3314,7 @@ genTransactionsRefreshRequest n =
     <$> arbitraryReducedMaybe n -- transactionsRefreshRequestClientId :: Maybe Text
     <*> arbitrary -- transactionsRefreshRequestAccessToken :: Text
     <*> arbitraryReducedMaybe n -- transactionsRefreshRequestSecret :: Maybe Text
-
+  
 instance Arbitrary TransactionsRefreshResponse where
   arbitrary = sized genTransactionsRefreshResponse
 
@@ -3314,7 +3322,7 @@ genTransactionsRefreshResponse :: Int -> Gen TransactionsRefreshResponse
 genTransactionsRefreshResponse n =
   TransactionsRefreshResponse
     <$> arbitrary -- transactionsRefreshResponseRequestId :: Text
-
+  
 instance Arbitrary TransactionsRemovedWebhook where
   arbitrary = sized genTransactionsRemovedWebhook
 
@@ -3326,7 +3334,42 @@ genTransactionsRemovedWebhook n =
     <*> arbitraryReducedMaybe n -- transactionsRemovedWebhookError :: Maybe Error
     <*> arbitrary -- transactionsRemovedWebhookRemovedTransactions :: [Text]
     <*> arbitrary -- transactionsRemovedWebhookItemId :: Text
+  
+instance Arbitrary TransactionsSyncRequest where
+  arbitrary = sized genTransactionsSyncRequest
 
+genTransactionsSyncRequest :: Int -> Gen TransactionsSyncRequest
+genTransactionsSyncRequest n =
+  TransactionsSyncRequest
+    <$> arbitraryReducedMaybe n -- transactionsSyncRequestClientId :: Maybe Text
+    <*> arbitrary -- transactionsSyncRequestAccessToken :: Text
+    <*> arbitraryReducedMaybe n -- transactionsSyncRequestSecret :: Maybe Text
+    <*> arbitraryReducedMaybe n -- transactionsSyncRequestCursor :: Maybe Text
+    <*> arbitraryReducedMaybe n -- transactionsSyncRequestCount :: Maybe Int
+    <*> arbitraryReducedMaybe n -- transactionsSyncRequestOptions :: Maybe TransactionsSyncRequestOptions
+  
+instance Arbitrary TransactionsSyncRequestOptions where
+  arbitrary = sized genTransactionsSyncRequestOptions
+
+genTransactionsSyncRequestOptions :: Int -> Gen TransactionsSyncRequestOptions
+genTransactionsSyncRequestOptions n =
+  TransactionsSyncRequestOptions
+    <$> arbitraryReducedMaybe n -- transactionsSyncRequestOptionsIncludeOriginalDescription :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- transactionsSyncRequestOptionsIncludePersonalFinanceCategory :: Maybe Bool
+  
+instance Arbitrary TransactionsSyncResponse where
+  arbitrary = sized genTransactionsSyncResponse
+
+genTransactionsSyncResponse :: Int -> Gen TransactionsSyncResponse
+genTransactionsSyncResponse n =
+  TransactionsSyncResponse
+    <$> arbitraryReduced n -- transactionsSyncResponseAdded :: [Transaction]
+    <*> arbitraryReduced n -- transactionsSyncResponseModified :: [Transaction]
+    <*> arbitraryReduced n -- transactionsSyncResponseRemoved :: [RemovedTransaction]
+    <*> arbitrary -- transactionsSyncResponseNextCursor :: Text
+    <*> arbitrary -- transactionsSyncResponseHasMore :: Bool
+    <*> arbitrary -- transactionsSyncResponseRequestId :: Text
+  
 instance Arbitrary UserCustomPassword where
   arbitrary = sized genUserCustomPassword
 
@@ -3339,7 +3382,7 @@ genUserCustomPassword n =
     <*> arbitraryReduced n -- userCustomPasswordMfa :: MFA
     <*> arbitrary -- userCustomPasswordRecaptcha :: Text
     <*> arbitrary -- userCustomPasswordForceError :: Text
-
+  
 instance Arbitrary UserPermissionRevokedWebhook where
   arbitrary = sized genUserPermissionRevokedWebhook
 
@@ -3350,7 +3393,7 @@ genUserPermissionRevokedWebhook n =
     <*> arbitrary -- userPermissionRevokedWebhookWebhookCode :: Text
     <*> arbitrary -- userPermissionRevokedWebhookItemId :: Text
     <*> arbitraryReducedMaybe n -- userPermissionRevokedWebhookError :: Maybe Error
-
+  
 instance Arbitrary VerificationExpiredWebhook where
   arbitrary = sized genVerificationExpiredWebhook
 
@@ -3361,7 +3404,7 @@ genVerificationExpiredWebhook n =
     <*> arbitrary -- verificationExpiredWebhookWebhookCode :: Text
     <*> arbitrary -- verificationExpiredWebhookItemId :: Text
     <*> arbitrary -- verificationExpiredWebhookAccountId :: Text
-
+  
 instance Arbitrary Warning where
   arbitrary = sized genWarning
 
@@ -3371,7 +3414,7 @@ genWarning n =
     <$> arbitrary -- warningWarningType :: Text
     <*> arbitrary -- warningWarningCode :: Text
     <*> arbitraryReduced n -- warningCause :: Cause
-
+  
 instance Arbitrary WebhookUpdateAcknowledgedWebhook where
   arbitrary = sized genWebhookUpdateAcknowledgedWebhook
 
@@ -3383,7 +3426,7 @@ genWebhookUpdateAcknowledgedWebhook n =
     <*> arbitrary -- webhookUpdateAcknowledgedWebhookItemId :: Text
     <*> arbitrary -- webhookUpdateAcknowledgedWebhookNewWebhookUrl :: Text
     <*> arbitraryReducedMaybe n -- webhookUpdateAcknowledgedWebhookError :: Maybe Error
-
+  
 instance Arbitrary WebhookVerificationKeyGetRequest where
   arbitrary = sized genWebhookVerificationKeyGetRequest
 
@@ -3393,7 +3436,7 @@ genWebhookVerificationKeyGetRequest n =
     <$> arbitraryReducedMaybe n -- webhookVerificationKeyGetRequestClientId :: Maybe Text
     <*> arbitraryReducedMaybe n -- webhookVerificationKeyGetRequestSecret :: Maybe Text
     <*> arbitrary -- webhookVerificationKeyGetRequestKeyId :: Text
-
+  
 instance Arbitrary WebhookVerificationKeyGetResponse where
   arbitrary = sized genWebhookVerificationKeyGetResponse
 
@@ -3402,7 +3445,7 @@ genWebhookVerificationKeyGetResponse n =
   WebhookVerificationKeyGetResponse
     <$> arbitraryReduced n -- webhookVerificationKeyGetResponseKey :: JWKPublicKey
     <*> arbitrary -- webhookVerificationKeyGetResponseRequestId :: Text
-
+  
 instance Arbitrary YTDGrossIncomeSummaryFieldNumber where
   arbitrary = sized genYTDGrossIncomeSummaryFieldNumber
 
@@ -3411,7 +3454,7 @@ genYTDGrossIncomeSummaryFieldNumber n =
   YTDGrossIncomeSummaryFieldNumber
     <$> arbitrary -- yTDGrossIncomeSummaryFieldNumberValue :: Double
     <*> arbitraryReduced n -- yTDGrossIncomeSummaryFieldNumberVerificationStatus :: VerificationStatus
-
+  
 instance Arbitrary YTDNetIncomeSummaryFieldNumber where
   arbitrary = sized genYTDNetIncomeSummaryFieldNumber
 
@@ -3420,7 +3463,7 @@ genYTDNetIncomeSummaryFieldNumber n =
   YTDNetIncomeSummaryFieldNumber
     <$> arbitrary -- yTDNetIncomeSummaryFieldNumberValue :: Double
     <*> arbitraryReduced n -- yTDNetIncomeSummaryFieldNumberVerificationStatus :: VerificationStatus
-
+  
 
 
 

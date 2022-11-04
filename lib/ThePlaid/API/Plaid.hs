@@ -2122,6 +2122,37 @@ instance Consumes TransactionsRefresh MimeJSON
 instance Produces TransactionsRefresh MimeJSON
 
 
+-- *** transactionsSync
+
+-- | @POST \/transactions\/sync@
+-- 
+-- Get incremental transaction updates on an Item
+-- 
+-- This endpoint replaces `/transactions/get` and its associated webhooks for most common use-cases.  The `/transactions/sync` endpoint allows developers to subscribe to all transactions associated with an Item and get updates synchronously in a stream-like manner, using a cursor to track which updates have already been seen. `/transactions/sync` provides the same functionality as `/transactions/get` and can be used instead of `/transactions/get` to simplify the process of tracking transactions updates.  This endpoint provides user-authorized transaction data for `credit`, `depository`, and some loan-type accounts (only those with account subtype `student`; coverage may be limited). For transaction history from `investments` accounts, use `/investments/transactions/get` instead.  Returned transactions data is grouped into three types of update, indicating whether the transaction was added, removed, or modified since the last call to the API.  In the first call to `/transactions/sync` for an Item, the endpoint will return all historical transactions data associated with that Item up until the time of the API call (as \"adds\"), which then generates a `next_cursor` for that Item. In subsequent calls, send the `next_cursor` to receive only the changes that have occurred since the previous call.  Due to the potentially large number of transactions associated with an Item, results are paginated. The `has_more` field specifies if additional calls are necessary to fetch all available transaction updates.  Whenever new or updated transaction data becomes available, `/transactions/sync` will provide these updates. Plaid typically checks for new data multiple times a day, but these checks may occur less frequently, such as once a day, depending on the institution. An Item's `status.transactions.last_successful_update` field will show the timestamp of the most recent successful update. To force Plaid to check for new transactions, use the `/transactions/refresh` endpoint.  Note that for newly created Items, data may not be immediately available to `/transactions/sync`. Plaid begins preparing transactions data when the Item is created, but the process can take anywhere from a few seconds to several minutes to complete, depending on the number of transactions available.  To be alerted when new data is available, listen for the [`SYNC_UPDATES_AVAILABLE`](https://plaid.com/docs/api/products/transactions/#sync_updates_available) webhook.
+-- 
+-- AuthMethod: 'AuthApiKeyClientId', 'AuthApiKeyPlaidVersion', 'AuthApiKeySecret'
+-- 
+transactionsSync 
+  :: (Consumes TransactionsSync MimeJSON, MimeRender MimeJSON TransactionsSyncRequest)
+  => TransactionsSyncRequest -- ^ "transactionsSyncRequest"
+  -> ThePlaidRequest TransactionsSync MimeJSON TransactionsSyncResponse MimeJSON
+transactionsSync transactionsSyncRequest =
+  _mkRequest "POST" ["/transactions/sync"]
+    `_hasAuthType` (P.Proxy :: P.Proxy AuthApiKeyClientId)
+    `_hasAuthType` (P.Proxy :: P.Proxy AuthApiKeyPlaidVersion)
+    `_hasAuthType` (P.Proxy :: P.Proxy AuthApiKeySecret)
+    `setBodyParam` transactionsSyncRequest
+
+data TransactionsSync 
+instance HasBodyParam TransactionsSync TransactionsSyncRequest 
+
+-- | @application/json@
+instance Consumes TransactionsSync MimeJSON
+
+-- | @application/json@
+instance Produces TransactionsSync MimeJSON
+
+
 -- *** webhookVerificationKeyGet
 
 -- | @POST \/webhook_verification_key\/get@

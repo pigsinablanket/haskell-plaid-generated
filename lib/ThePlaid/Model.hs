@@ -89,13 +89,22 @@ instance A.FromJSON AccessToken where
 instance A.ToJSON AccessToken where
   toJSON = A.toJSON . getAccessToken
 
+newtype Cursor = Cursor {getCursor :: T.Text}
+  deriving (P.Eq, P.Show, P.Ord)
+
+instance A.FromJSON Cursor where
+  parseJSON = fmap Cursor . A.parseJSON
+
+instance A.ToJSON Cursor where
+  toJSON = A.toJSON . getCursor
+
 -- ** APR
 -- | APR
 -- APR
---
+-- 
 -- Information about the APR on the account.
 data APR = APR
-  { aPRAprPercentage :: !(Double) -- ^ /Required/ "apr_percentage" - Annual Percentage Rate applied.
+  { aPRAprPercentage :: !(Double) -- ^ /Required/ "apr_percentage" - Annual Percentage Rate applied. 
   , aPRAprType :: !(E'AprType) -- ^ /Required/ "apr_type" - The type of balance to which the APR applies.
   , aPRBalanceSubjectToApr :: !(Maybe Double) -- ^ "balance_subject_to_apr" - Amount of money that is subjected to the APR if a balance was carried beyond payment due date. How it is calculated can vary by card issuer. It is often calculated as an average daily balance.
   , aPRInterestChargeAmount :: !(Maybe Double) -- ^ "interest_charge_amount" - Amount of money charged due to interest from last statement.
@@ -123,7 +132,7 @@ instance A.ToJSON APR where
 
 -- | Construct a value of type 'APR' (by applying it's required fields, if any)
 mkAPR
-  :: Double -- ^ 'aPRAprPercentage': Annual Percentage Rate applied.
+  :: Double -- ^ 'aPRAprPercentage': Annual Percentage Rate applied. 
   -> E'AprType -- ^ 'aPRAprType': The type of balance to which the APR applies.
   -> APR
 mkAPR aPRAprPercentage aPRAprType =
@@ -137,7 +146,7 @@ mkAPR aPRAprPercentage aPRAprType =
 -- ** AccountAssets
 -- | AccountAssets
 -- AccountAssets
---
+-- 
 data AccountAssets = AccountAssets
   { accountAssetsAccountId :: !(Text) -- ^ /Required/ "account_id" - Plaid’s unique identifier for the account. This value will not change unless Plaid can&#39;t reconcile the account with the data returned by the financial institution. This may occur, for example, when the name of the account changes. If this happens a new &#x60;account_id&#x60; will be assigned to the account.  The &#x60;account_id&#x60; can also change if the &#x60;access_token&#x60; is deleted and the same credentials that were used to generate that &#x60;access_token&#x60; are used to generate a new &#x60;access_token&#x60; on a later date. In that case, the new &#x60;account_id&#x60; will be different from the old &#x60;account_id&#x60;.  Like all Plaid identifiers, the &#x60;account_id&#x60; is case sensitive.
   , accountAssetsBalances :: !(AccountBalance) -- ^ /Required/ "balances"
@@ -146,7 +155,7 @@ data AccountAssets = AccountAssets
   , accountAssetsOfficialName :: !(Maybe Text) -- ^ "official_name" - The official name of the account as given by the financial institution
   , accountAssetsType :: !(AccountType) -- ^ /Required/ "type"
   , accountAssetsSubtype :: !(AccountSubtype) -- ^ /Required/ "subtype"
-  , accountAssetsVerificationStatus :: !(Maybe E'VerificationStatus2) -- ^ "verification_status" - The current verification status of an Auth Item initiated through Automated or Manual micro-deposits.  Returned for Auth Items only.  &#x60;pending_automatic_verification&#x60;: The Item is pending automatic verification  &#x60;pending_manual_verification&#x60;: The Item is pending manual micro-deposit verification. Items remain in this state until the user successfully verifies the two amounts.  &#x60;automatically_verified&#x60;: The Item has successfully been automatically verified   &#x60;manually_verified&#x60;: The Item has successfully been manually verified  &#x60;verification_expired&#x60;: Plaid was unable to automatically verify the deposit within 7 calendar days and will no longer attempt to validate the Item. Users may retry by submitting their information again through Link.  &#x60;verification_failed&#x60;: The Item failed manual micro-deposit verification because the user exhausted all 3 verification attempts. Users may retry by submitting their information again through Link.
+  , accountAssetsVerificationStatus :: !(Maybe E'VerificationStatus2) -- ^ "verification_status" - The current verification status of an Auth Item initiated through Automated or Manual micro-deposits.  Returned for Auth Items only.  &#x60;pending_automatic_verification&#x60;: The Item is pending automatic verification  &#x60;pending_manual_verification&#x60;: The Item is pending manual micro-deposit verification. Items remain in this state until the user successfully verifies the two amounts.  &#x60;automatically_verified&#x60;: The Item has successfully been automatically verified   &#x60;manually_verified&#x60;: The Item has successfully been manually verified  &#x60;verification_expired&#x60;: Plaid was unable to automatically verify the deposit within 7 calendar days and will no longer attempt to validate the Item. Users may retry by submitting their information again through Link.  &#x60;verification_failed&#x60;: The Item failed manual micro-deposit verification because the user exhausted all 3 verification attempts. Users may retry by submitting their information again through Link.   
   , accountAssetsDaysAvailable :: !(Maybe Double) -- ^ "days_available" - The duration of transaction history available for this Item, typically defined as the time since the date of the earliest transaction in that account. Only returned by Assets endpoints.
   , accountAssetsTransactions :: !(Maybe [AssetReportTransaction]) -- ^ "transactions" - Transaction history associated with the account. Only returned by Assets endpoints. Transaction history returned by endpoints such as &#x60;/transactions/get&#x60; or &#x60;/investments/transactions/get&#x60; will be returned in the top-level &#x60;transactions&#x60; field instead.
   , accountAssetsOwners :: !([Owner]) -- ^ /Required/ "owners" - Data returned by the financial institution about the account owner or owners. Only returned by Identity or Assets endpoints. Multiple owners on a single account will be represented in the same &#x60;owner&#x60; object, not in multiple owner objects within the array.
@@ -192,10 +201,10 @@ instance A.ToJSON AccountAssets where
 -- | Construct a value of type 'AccountAssets' (by applying it's required fields, if any)
 mkAccountAssets
   :: Text -- ^ 'accountAssetsAccountId': Plaid’s unique identifier for the account. This value will not change unless Plaid can't reconcile the account with the data returned by the financial institution. This may occur, for example, when the name of the account changes. If this happens a new `account_id` will be assigned to the account.  The `account_id` can also change if the `access_token` is deleted and the same credentials that were used to generate that `access_token` are used to generate a new `access_token` on a later date. In that case, the new `account_id` will be different from the old `account_id`.  Like all Plaid identifiers, the `account_id` is case sensitive.
-  -> AccountBalance -- ^ 'accountAssetsBalances'
+  -> AccountBalance -- ^ 'accountAssetsBalances' 
   -> Text -- ^ 'accountAssetsName': The name of the account, either assigned by the user or by the financial institution itself
-  -> AccountType -- ^ 'accountAssetsType'
-  -> AccountSubtype -- ^ 'accountAssetsSubtype'
+  -> AccountType -- ^ 'accountAssetsType' 
+  -> AccountSubtype -- ^ 'accountAssetsSubtype' 
   -> [Owner] -- ^ 'accountAssetsOwners': Data returned by the financial institution about the account owner or owners. Only returned by Identity or Assets endpoints. Multiple owners on a single account will be represented in the same `owner` object, not in multiple owner objects within the array.
   -> AccountAssets
 mkAccountAssets accountAssetsAccountId accountAssetsBalances accountAssetsName accountAssetsType accountAssetsSubtype accountAssetsOwners =
@@ -258,7 +267,7 @@ mkAccountAssetsAllOf accountAssetsAllOfOwners =
 -- ** AccountBalance
 -- | AccountBalance
 -- AccountBalance
---
+-- 
 -- A set of fields describing the balance for an account. Balance information may be cached unless the balance object was returned by `/accounts/balance/get`.
 data AccountBalance = AccountBalance
   { accountBalanceAvailable :: !(Maybe Double) -- ^ "available" - The amount of funds available to be withdrawn from the account, as determined by the financial institution.  For &#x60;credit&#x60;-type accounts, the &#x60;available&#x60; balance typically equals the &#x60;limit&#x60; less the &#x60;current&#x60; balance, less any pending outflows plus any pending inflows.  For &#x60;depository&#x60;-type accounts, the &#x60;available&#x60; balance typically equals the &#x60;current&#x60; balance less any pending outflows plus any pending inflows. For &#x60;depository&#x60;-type accounts, the &#x60;available&#x60; balance does not include the overdraft limit.  For &#x60;investment&#x60;-type accounts, the &#x60;available&#x60; balance is the total cash available to withdraw as presented by the institution.  Note that not all institutions calculate the &#x60;available&#x60;  balance. In the event that &#x60;available&#x60; balance is unavailable, Plaid will return an &#x60;available&#x60; balance value of &#x60;null&#x60;.  Available balance may be cached and is not guaranteed to be up-to-date in realtime unless the value was returned by &#x60;/accounts/balance/get&#x60;.
@@ -306,7 +315,7 @@ mkAccountBalance accountBalanceCurrent =
 -- ** AccountBase
 -- | AccountBase
 -- Account
---
+-- 
 -- A single account at a financial institution.
 data AccountBase = AccountBase
   { accountBaseAccountId :: !(Text) -- ^ /Required/ "account_id" - Plaid’s unique identifier for the account. This value will not change unless Plaid can&#39;t reconcile the account with the data returned by the financial institution. This may occur, for example, when the name of the account changes. If this happens a new &#x60;account_id&#x60; will be assigned to the account.  The &#x60;account_id&#x60; can also change if the &#x60;access_token&#x60; is deleted and the same credentials that were used to generate that &#x60;access_token&#x60; are used to generate a new &#x60;access_token&#x60; on a later date. In that case, the new &#x60;account_id&#x60; will be different from the old &#x60;account_id&#x60;.  Like all Plaid identifiers, the &#x60;account_id&#x60; is case sensitive.
@@ -316,7 +325,7 @@ data AccountBase = AccountBase
   , accountBaseOfficialName :: !(Maybe Text) -- ^ "official_name" - The official name of the account as given by the financial institution
   , accountBaseType :: !(AccountType) -- ^ /Required/ "type"
   , accountBaseSubtype :: !(AccountSubtype) -- ^ /Required/ "subtype"
-  , accountBaseVerificationStatus :: !(Maybe E'VerificationStatus2) -- ^ "verification_status" - The current verification status of an Auth Item initiated through Automated or Manual micro-deposits.  Returned for Auth Items only.  &#x60;pending_automatic_verification&#x60;: The Item is pending automatic verification  &#x60;pending_manual_verification&#x60;: The Item is pending manual micro-deposit verification. Items remain in this state until the user successfully verifies the two amounts.  &#x60;automatically_verified&#x60;: The Item has successfully been automatically verified   &#x60;manually_verified&#x60;: The Item has successfully been manually verified  &#x60;verification_expired&#x60;: Plaid was unable to automatically verify the deposit within 7 calendar days and will no longer attempt to validate the Item. Users may retry by submitting their information again through Link.  &#x60;verification_failed&#x60;: The Item failed manual micro-deposit verification because the user exhausted all 3 verification attempts. Users may retry by submitting their information again through Link.
+  , accountBaseVerificationStatus :: !(Maybe E'VerificationStatus2) -- ^ "verification_status" - The current verification status of an Auth Item initiated through Automated or Manual micro-deposits.  Returned for Auth Items only.  &#x60;pending_automatic_verification&#x60;: The Item is pending automatic verification  &#x60;pending_manual_verification&#x60;: The Item is pending manual micro-deposit verification. Items remain in this state until the user successfully verifies the two amounts.  &#x60;automatically_verified&#x60;: The Item has successfully been automatically verified   &#x60;manually_verified&#x60;: The Item has successfully been manually verified  &#x60;verification_expired&#x60;: Plaid was unable to automatically verify the deposit within 7 calendar days and will no longer attempt to validate the Item. Users may retry by submitting their information again through Link.  &#x60;verification_failed&#x60;: The Item failed manual micro-deposit verification because the user exhausted all 3 verification attempts. Users may retry by submitting their information again through Link.   
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON AccountBase
@@ -350,10 +359,10 @@ instance A.ToJSON AccountBase where
 -- | Construct a value of type 'AccountBase' (by applying it's required fields, if any)
 mkAccountBase
   :: Text -- ^ 'accountBaseAccountId': Plaid’s unique identifier for the account. This value will not change unless Plaid can't reconcile the account with the data returned by the financial institution. This may occur, for example, when the name of the account changes. If this happens a new `account_id` will be assigned to the account.  The `account_id` can also change if the `access_token` is deleted and the same credentials that were used to generate that `access_token` are used to generate a new `access_token` on a later date. In that case, the new `account_id` will be different from the old `account_id`.  Like all Plaid identifiers, the `account_id` is case sensitive.
-  -> AccountBalance -- ^ 'accountBaseBalances'
+  -> AccountBalance -- ^ 'accountBaseBalances' 
   -> Text -- ^ 'accountBaseName': The name of the account, either assigned by the user or by the financial institution itself
-  -> AccountType -- ^ 'accountBaseType'
-  -> AccountSubtype -- ^ 'accountBaseSubtype'
+  -> AccountType -- ^ 'accountBaseType' 
+  -> AccountSubtype -- ^ 'accountBaseSubtype' 
   -> AccountBase
 mkAccountBase accountBaseAccountId accountBaseBalances accountBaseName accountBaseType accountBaseSubtype =
   AccountBase
@@ -370,8 +379,8 @@ mkAccountBase accountBaseAccountId accountBaseBalances accountBaseName accountBa
 -- ** AccountFiltersResponse
 -- | AccountFiltersResponse
 -- AccountFiltersResponse
---
--- The `account_filters` specified in the original call to `/link/token/create`.
+-- 
+-- The `account_filters` specified in the original call to `/link/token/create`. 
 data AccountFiltersResponse = AccountFiltersResponse
   { accountFiltersResponseDepository :: !(Maybe DepositoryFilter) -- ^ "depository"
   , accountFiltersResponseCredit :: !(Maybe CreditFilter) -- ^ "credit"
@@ -413,7 +422,7 @@ mkAccountFiltersResponse =
 -- ** AccountIdentity
 -- | AccountIdentity
 -- AccountIdentity
---
+-- 
 data AccountIdentity = AccountIdentity
   { accountIdentityAccountId :: !(Text) -- ^ /Required/ "account_id" - Plaid’s unique identifier for the account. This value will not change unless Plaid can&#39;t reconcile the account with the data returned by the financial institution. This may occur, for example, when the name of the account changes. If this happens a new &#x60;account_id&#x60; will be assigned to the account.  The &#x60;account_id&#x60; can also change if the &#x60;access_token&#x60; is deleted and the same credentials that were used to generate that &#x60;access_token&#x60; are used to generate a new &#x60;access_token&#x60; on a later date. In that case, the new &#x60;account_id&#x60; will be different from the old &#x60;account_id&#x60;.  Like all Plaid identifiers, the &#x60;account_id&#x60; is case sensitive.
   , accountIdentityBalances :: !(AccountBalance) -- ^ /Required/ "balances"
@@ -422,7 +431,7 @@ data AccountIdentity = AccountIdentity
   , accountIdentityOfficialName :: !(Maybe Text) -- ^ "official_name" - The official name of the account as given by the financial institution
   , accountIdentityType :: !(AccountType) -- ^ /Required/ "type"
   , accountIdentitySubtype :: !(AccountSubtype) -- ^ /Required/ "subtype"
-  , accountIdentityVerificationStatus :: !(Maybe E'VerificationStatus2) -- ^ "verification_status" - The current verification status of an Auth Item initiated through Automated or Manual micro-deposits.  Returned for Auth Items only.  &#x60;pending_automatic_verification&#x60;: The Item is pending automatic verification  &#x60;pending_manual_verification&#x60;: The Item is pending manual micro-deposit verification. Items remain in this state until the user successfully verifies the two amounts.  &#x60;automatically_verified&#x60;: The Item has successfully been automatically verified   &#x60;manually_verified&#x60;: The Item has successfully been manually verified  &#x60;verification_expired&#x60;: Plaid was unable to automatically verify the deposit within 7 calendar days and will no longer attempt to validate the Item. Users may retry by submitting their information again through Link.  &#x60;verification_failed&#x60;: The Item failed manual micro-deposit verification because the user exhausted all 3 verification attempts. Users may retry by submitting their information again through Link.
+  , accountIdentityVerificationStatus :: !(Maybe E'VerificationStatus2) -- ^ "verification_status" - The current verification status of an Auth Item initiated through Automated or Manual micro-deposits.  Returned for Auth Items only.  &#x60;pending_automatic_verification&#x60;: The Item is pending automatic verification  &#x60;pending_manual_verification&#x60;: The Item is pending manual micro-deposit verification. Items remain in this state until the user successfully verifies the two amounts.  &#x60;automatically_verified&#x60;: The Item has successfully been automatically verified   &#x60;manually_verified&#x60;: The Item has successfully been manually verified  &#x60;verification_expired&#x60;: Plaid was unable to automatically verify the deposit within 7 calendar days and will no longer attempt to validate the Item. Users may retry by submitting their information again through Link.  &#x60;verification_failed&#x60;: The Item failed manual micro-deposit verification because the user exhausted all 3 verification attempts. Users may retry by submitting their information again through Link.   
   , accountIdentityOwners :: !([Owner]) -- ^ /Required/ "owners" - Data returned by the financial institution about the account owner or owners. Only returned by Identity or Assets endpoints. Multiple owners on a single account will be represented in the same &#x60;owner&#x60; object, not in multiple owner objects within the array.
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -459,10 +468,10 @@ instance A.ToJSON AccountIdentity where
 -- | Construct a value of type 'AccountIdentity' (by applying it's required fields, if any)
 mkAccountIdentity
   :: Text -- ^ 'accountIdentityAccountId': Plaid’s unique identifier for the account. This value will not change unless Plaid can't reconcile the account with the data returned by the financial institution. This may occur, for example, when the name of the account changes. If this happens a new `account_id` will be assigned to the account.  The `account_id` can also change if the `access_token` is deleted and the same credentials that were used to generate that `access_token` are used to generate a new `access_token` on a later date. In that case, the new `account_id` will be different from the old `account_id`.  Like all Plaid identifiers, the `account_id` is case sensitive.
-  -> AccountBalance -- ^ 'accountIdentityBalances'
+  -> AccountBalance -- ^ 'accountIdentityBalances' 
   -> Text -- ^ 'accountIdentityName': The name of the account, either assigned by the user or by the financial institution itself
-  -> AccountType -- ^ 'accountIdentityType'
-  -> AccountSubtype -- ^ 'accountIdentitySubtype'
+  -> AccountType -- ^ 'accountIdentityType' 
+  -> AccountSubtype -- ^ 'accountIdentitySubtype' 
   -> [Owner] -- ^ 'accountIdentityOwners': Data returned by the financial institution about the account owner or owners. Only returned by Identity or Assets endpoints. Multiple owners on a single account will be represented in the same `owner` object, not in multiple owner objects within the array.
   -> AccountIdentity
 mkAccountIdentity accountIdentityAccountId accountIdentityBalances accountIdentityName accountIdentityType accountIdentitySubtype accountIdentityOwners =
@@ -683,7 +692,7 @@ instance A.ToJSON AccountsGetResponse where
 -- | Construct a value of type 'AccountsGetResponse' (by applying it's required fields, if any)
 mkAccountsGetResponse
   :: [AccountBase] -- ^ 'accountsGetResponseAccounts': An array of financial institution accounts associated with the Item. If `/accounts/balance/get` was called, each account will include real-time balance information.
-  -> Item -- ^ 'accountsGetResponseItem'
+  -> Item -- ^ 'accountsGetResponseItem' 
   -> Text -- ^ 'accountsGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> AccountsGetResponse
 mkAccountsGetResponse accountsGetResponseAccounts accountsGetResponseItem accountsGetResponseRequestId =
@@ -696,7 +705,7 @@ mkAccountsGetResponse accountsGetResponseAccounts accountsGetResponseItem accoun
 -- ** Address
 -- | Address
 -- Address
---
+-- 
 -- A physical mailing address.
 data Address = Address
   { addressData :: !(AddressData) -- ^ /Required/ "data"
@@ -721,7 +730,7 @@ instance A.ToJSON Address where
 
 -- | Construct a value of type 'Address' (by applying it's required fields, if any)
 mkAddress
-  :: AddressData -- ^ 'addressData'
+  :: AddressData -- ^ 'addressData' 
   -> Address
 mkAddress addressData =
   Address
@@ -732,7 +741,7 @@ mkAddress addressData =
 -- ** AddressData
 -- | AddressData
 -- AddressData
---
+-- 
 -- Data about the components comprising an address.
 data AddressData = AddressData
   { addressDataCity :: !(Text) -- ^ /Required/ "city" - The full city name
@@ -781,7 +790,7 @@ mkAddressData addressDataCity addressDataStreet =
 -- ** Amount
 -- | Amount
 -- Amount
---
+-- 
 -- A payment amount.
 data Amount = Amount
   { amountCurrency :: !(E'Currency) -- ^ /Required/ "currency" - The ISO-4217 currency code of the payment. For standing orders, &#x60;\&quot;GBP\&quot;&#x60; must be used.
@@ -818,7 +827,7 @@ mkAmount amountCurrency amountValue =
 -- ** AssetReport
 -- | AssetReport
 -- AssetReport
---
+-- 
 -- An object representing an Asset Report
 data AssetReport = AssetReport
   { assetReportAssetReportId :: !(Text) -- ^ /Required/ "asset_report_id" - A unique ID identifying an Asset Report. Like all Plaid identifiers, this ID is case sensitive.
@@ -859,7 +868,7 @@ mkAssetReport
   -> Text -- ^ 'assetReportClientReportId': An identifier you determine and submit for the Asset Report.
   -> Text -- ^ 'assetReportDateGenerated': The date and time when the Asset Report was created, in ISO 8601 format (e.g. \"2018-04-12T03:32:11Z\").
   -> Double -- ^ 'assetReportDaysRequested': The duration of transaction history you requested
-  -> AssetReportUser -- ^ 'assetReportUser'
+  -> AssetReportUser -- ^ 'assetReportUser' 
   -> [AssetReportItem] -- ^ 'assetReportItems': Data returned by Plaid about each of the Items included in the Asset Report.
   -> AssetReport
 mkAssetReport assetReportAssetReportId assetReportClientReportId assetReportDateGenerated assetReportDaysRequested assetReportUser assetReportItems =
@@ -953,7 +962,7 @@ mkAssetReportAuditCopyCreateResponse assetReportAuditCopyCreateResponseAuditCopy
 -- ** AssetReportAuditCopyGetRequest
 -- | AssetReportAuditCopyGetRequest
 -- AssetReportAuditCopyGetRequest
---
+-- 
 -- AssetReportAuditCopyGetRequest defines the request schema for `/asset_report/audit_copy/get`
 data AssetReportAuditCopyGetRequest = AssetReportAuditCopyGetRequest
   { assetReportAuditCopyGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -1341,7 +1350,7 @@ instance A.ToJSON AssetReportGetResponse where
 
 -- | Construct a value of type 'AssetReportGetResponse' (by applying it's required fields, if any)
 mkAssetReportGetResponse
-  :: AssetReport -- ^ 'assetReportGetResponseReport'
+  :: AssetReport -- ^ 'assetReportGetResponseReport' 
   -> [Warning] -- ^ 'assetReportGetResponseWarnings': If the Asset Report generation was successful but identity information cannot be returned, this array will contain information about the errors causing identity information to be missing
   -> Text -- ^ 'assetReportGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> AssetReportGetResponse
@@ -1355,7 +1364,7 @@ mkAssetReportGetResponse assetReportGetResponseReport assetReportGetResponseWarn
 -- ** AssetReportItem
 -- | AssetReportItem
 -- AssetReportItem
---
+-- 
 -- A representation of an Item within an Asset Report.
 data AssetReportItem = AssetReportItem
   { assetReportItemItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
@@ -1641,14 +1650,14 @@ mkAssetReportRemoveResponse assetReportRemoveResponseRemoved assetReportRemoveRe
 -- ** AssetReportTransaction
 -- | AssetReportTransaction
 -- AssetReportTransaction
---
+-- 
 data AssetReportTransaction = AssetReportTransaction
-  { assetReportTransactionTransactionType :: !(Maybe E'TransactionType) -- ^ "transaction_type" - Please use the &#x60;payment_channel&#x60; field, &#x60;transaction_type&#x60; will be deprecated in the future.  &#x60;digital:&#x60; transactions that took place online.  &#x60;place:&#x60; transactions that were made at a physical location.  &#x60;special:&#x60; transactions that relate to banks, e.g. fees or deposits.  &#x60;unresolved:&#x60; transactions that do not fit into the other three types.
+  { assetReportTransactionTransactionType :: !(Maybe E'TransactionType) -- ^ "transaction_type" - Please use the &#x60;payment_channel&#x60; field, &#x60;transaction_type&#x60; will be deprecated in the future.  &#x60;digital:&#x60; transactions that took place online.  &#x60;place:&#x60; transactions that were made at a physical location.  &#x60;special:&#x60; transactions that relate to banks, e.g. fees or deposits.  &#x60;unresolved:&#x60; transactions that do not fit into the other three types. 
   , assetReportTransactionTransactionId :: !(Text) -- ^ /Required/ "transaction_id" - The unique ID of the transaction. Like all Plaid identifiers, the &#x60;transaction_id&#x60; is case sensitive.
   , assetReportTransactionAccountOwner :: !(Maybe Text) -- ^ "account_owner" - The name of the account owner. This field is not typically populated and only relevant when dealing with sub-accounts.
   , assetReportTransactionPendingTransactionId :: !(Maybe Text) -- ^ "pending_transaction_id" - The ID of a posted transaction&#39;s associated pending transaction, where applicable.
   , assetReportTransactionPending :: !(Bool) -- ^ /Required/ "pending" - When &#x60;true&#x60;, identifies the transaction as pending or unsettled. Pending transaction details (name, type, amount, category ID) may change before they are settled.
-  , assetReportTransactionPaymentChannel :: !(Maybe E'PaymentChannel) -- ^ "payment_channel" - The channel used to make a payment. &#x60;online:&#x60; transactions that took place online.  &#x60;in store:&#x60; transactions that were made at a physical location.  &#x60;other:&#x60; transactions that relate to banks, e.g. fees or deposits.  This field replaces the &#x60;transaction_type&#x60; field.
+  , assetReportTransactionPaymentChannel :: !(Maybe E'PaymentChannel) -- ^ "payment_channel" - The channel used to make a payment. &#x60;online:&#x60; transactions that took place online.  &#x60;in store:&#x60; transactions that were made at a physical location.  &#x60;other:&#x60; transactions that relate to banks, e.g. fees or deposits.  This field replaces the &#x60;transaction_type&#x60; field. 
   , assetReportTransactionPaymentMeta :: !(Maybe PaymentMeta) -- ^ "payment_meta"
   , assetReportTransactionName :: !(Maybe Text) -- ^ "name" - The merchant name or transaction description.  If the &#x60;transaction&#x60; object was returned by a Transactions endpoint such as &#x60;/transactions/get&#x60;, this field will always appear. If the &#x60;transaction&#x60; object was returned by an Assets endpoint such as &#x60;/asset_report/get/&#x60; or &#x60;/asset_report/pdf/get&#x60;, this field will only appear in an Asset Report with Insights.
   , assetReportTransactionMerchantName :: !(Maybe Text) -- ^ "merchant_name" - The merchant name, as extracted by Plaid from the &#x60;name&#x60; field.
@@ -1798,7 +1807,7 @@ mkAssetReportTransactionAllOf assetReportTransactionAllOfOriginalDescription =
 -- ** AssetReportUser
 -- | AssetReportUser
 -- AssetReportUser
---
+-- 
 -- The user object allows you to provide additional information about the user to be appended to the Asset Report. All fields are optional. The `first_name`, `last_name`, and `ssn` fields are required if you would like the Report to be eligible for Fannie Mae’s Day 1 Certainty™ program.
 data AssetReportUser = AssetReportUser
   { assetReportUserClientUserId :: !(Maybe Text) -- ^ "client_user_id" - An identifier you determine and submit for the user.
@@ -1853,7 +1862,7 @@ mkAssetReportUser =
 -- ** AssetsErrorWebhook
 -- | AssetsErrorWebhook
 -- AssetsErrorWebhook
---
+-- 
 -- Fired when Asset Report generation has failed. The resulting `error` will have an `error_type` of `ASSET_REPORT_ERROR`.
 data AssetsErrorWebhook = AssetsErrorWebhook
   { assetsErrorWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;ASSETS&#x60;
@@ -1886,7 +1895,7 @@ instance A.ToJSON AssetsErrorWebhook where
 mkAssetsErrorWebhook
   :: Text -- ^ 'assetsErrorWebhookWebhookType': `ASSETS`
   -> Text -- ^ 'assetsErrorWebhookWebhookCode': `ERROR`
-  -> Error -- ^ 'assetsErrorWebhookError'
+  -> Error -- ^ 'assetsErrorWebhookError' 
   -> Text -- ^ 'assetsErrorWebhookAssetReportId': The ID associated with the Asset Report.
   -> AssetsErrorWebhook
 mkAssetsErrorWebhook assetsErrorWebhookWebhookType assetsErrorWebhookWebhookCode assetsErrorWebhookError assetsErrorWebhookAssetReportId =
@@ -1900,7 +1909,7 @@ mkAssetsErrorWebhook assetsErrorWebhookWebhookType assetsErrorWebhookWebhookCode
 -- ** AssetsProductReadyWebhook
 -- | AssetsProductReadyWebhook
 -- AssetsProductReadyWebhook
---
+-- 
 -- Fired when the Asset Report has been generated and `/asset_report/get` is ready to be called.  If you attempt to retrieve an Asset Report before this webhook has fired, you’ll receive a response with the HTTP status code 400 and a Plaid error code of `PRODUCT_NOT_READY`.
 data AssetsProductReadyWebhook = AssetsProductReadyWebhook
   { assetsProductReadyWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;ASSETS&#x60;
@@ -2084,8 +2093,8 @@ instance A.ToJSON AuthGetResponse where
 -- | Construct a value of type 'AuthGetResponse' (by applying it's required fields, if any)
 mkAuthGetResponse
   :: [AccountBase] -- ^ 'authGetResponseAccounts': The `accounts` for which numbers are being retrieved.
-  -> AuthGetNumbers -- ^ 'authGetResponseNumbers'
-  -> Item -- ^ 'authGetResponseItem'
+  -> AuthGetNumbers -- ^ 'authGetResponseNumbers' 
+  -> Item -- ^ 'authGetResponseItem' 
   -> Text -- ^ 'authGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> AuthGetResponse
 mkAuthGetResponse authGetResponseAccounts authGetResponseNumbers authGetResponseItem authGetResponseRequestId =
@@ -2099,7 +2108,7 @@ mkAuthGetResponse authGetResponseAccounts authGetResponseNumbers authGetResponse
 -- ** AutomaticallyVerifiedWebhook
 -- | AutomaticallyVerifiedWebhook
 -- AutomaticallyVerifiedWebhook
---
+-- 
 -- Fired when an Item is verified via micro-deposits. We recommend communicating to your users when this event is received to notify them that their account is verified and ready for use.
 data AutomaticallyVerifiedWebhook = AutomaticallyVerifiedWebhook
   { automaticallyVerifiedWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;AUTH&#x60;
@@ -2146,7 +2155,7 @@ mkAutomaticallyVerifiedWebhook automaticallyVerifiedWebhookWebhookType automatic
 -- ** BankTransfer
 -- | BankTransfer
 -- BankTransfer
---
+-- 
 -- Represents a bank transfer within the Bank Transfers API.
 data BankTransfer = BankTransfer
   { bankTransferId :: !(Text) -- ^ /Required/ "id" - Plaid’s unique identifier for a bank transfer.
@@ -2163,7 +2172,7 @@ data BankTransfer = BankTransfer
   , bankTransferCancellable :: !(Bool) -- ^ /Required/ "cancellable" - When &#x60;true&#x60;, you can still cancel this bank transfer.
   , bankTransferFailureReason :: !(Maybe BankTransferFailure) -- ^ "failure_reason"
   , bankTransferCustomTag :: !(Maybe Text) -- ^ "custom_tag" - A string containing the custom tag provided by the client in the create request. Will be null if not provided.
-  , bankTransferMetadata :: !((Map.Map String Text)) -- ^ /Required/ "metadata" - The Metadata object is a mapping of client-provided string fields to any string value. The following limitations apply: - The JSON values must be Strings (no nested JSON objects allowed) - Only ASCII characters may be used - Maximum of 50 key/value pairs - Maximum key length of 40 characters - Maximum value length of 500 characters
+  , bankTransferMetadata :: !((Map.Map String Text)) -- ^ /Required/ "metadata" - The Metadata object is a mapping of client-provided string fields to any string value. The following limitations apply: - The JSON values must be Strings (no nested JSON objects allowed) - Only ASCII characters may be used - Maximum of 50 key/value pairs - Maximum key length of 40 characters - Maximum value length of 500 characters 
   , bankTransferOriginationAccountId :: !(Text) -- ^ /Required/ "origination_account_id" - Plaid’s unique identifier for the origination account that was used for this transfer.
   , bankTransferDirection :: !(BankTransferDirection) -- ^ /Required/ "direction"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -2217,20 +2226,20 @@ instance A.ToJSON BankTransfer where
 -- | Construct a value of type 'BankTransfer' (by applying it's required fields, if any)
 mkBankTransfer
   :: Text -- ^ 'bankTransferId': Plaid’s unique identifier for a bank transfer.
-  -> ACHClass -- ^ 'bankTransferAchClass'
+  -> ACHClass -- ^ 'bankTransferAchClass' 
   -> Text -- ^ 'bankTransferAccountId': The account ID that should be credited/debited for this bank transfer.
-  -> BankTransferType -- ^ 'bankTransferType'
-  -> BankTransferUser -- ^ 'bankTransferUser'
+  -> BankTransferType -- ^ 'bankTransferType' 
+  -> BankTransferUser -- ^ 'bankTransferUser' 
   -> Text -- ^ 'bankTransferAmount': The amount of the transfer (decimal string with two digits of precision e.g. “10.00”).
   -> Text -- ^ 'bankTransferIsoCurrencyCode': The currency of the transfer amount, e.g. \"USD\"
   -> Text -- ^ 'bankTransferDescription': The description of the transfer.
   -> Text -- ^ 'bankTransferCreated': The datetime when this bank transfer was created. This will be of the form `2006-01-02T15:04:05Z`
-  -> BankTransferStatus -- ^ 'bankTransferStatus'
-  -> BankTransferNetwork -- ^ 'bankTransferNetwork'
+  -> BankTransferStatus -- ^ 'bankTransferStatus' 
+  -> BankTransferNetwork -- ^ 'bankTransferNetwork' 
   -> Bool -- ^ 'bankTransferCancellable': When `true`, you can still cancel this bank transfer.
-  -> (Map.Map String Text) -- ^ 'bankTransferMetadata': The Metadata object is a mapping of client-provided string fields to any string value. The following limitations apply: - The JSON values must be Strings (no nested JSON objects allowed) - Only ASCII characters may be used - Maximum of 50 key/value pairs - Maximum key length of 40 characters - Maximum value length of 500 characters
+  -> (Map.Map String Text) -- ^ 'bankTransferMetadata': The Metadata object is a mapping of client-provided string fields to any string value. The following limitations apply: - The JSON values must be Strings (no nested JSON objects allowed) - Only ASCII characters may be used - Maximum of 50 key/value pairs - Maximum key length of 40 characters - Maximum value length of 500 characters 
   -> Text -- ^ 'bankTransferOriginationAccountId': Plaid’s unique identifier for the origination account that was used for this transfer.
-  -> BankTransferDirection -- ^ 'bankTransferDirection'
+  -> BankTransferDirection -- ^ 'bankTransferDirection' 
   -> BankTransfer
 mkBankTransfer bankTransferId bankTransferAchClass bankTransferAccountId bankTransferType bankTransferUser bankTransferAmount bankTransferIsoCurrencyCode bankTransferDescription bankTransferCreated bankTransferStatus bankTransferNetwork bankTransferCancellable bankTransferMetadata bankTransferOriginationAccountId bankTransferDirection =
   BankTransfer
@@ -2256,7 +2265,7 @@ mkBankTransfer bankTransferId bankTransferAchClass bankTransferAccountId bankTra
 -- ** BankTransferBalance
 -- | BankTransferBalance
 -- BankTransferBalance
---
+-- 
 data BankTransferBalance = BankTransferBalance
   { bankTransferBalanceAvailable :: !(Text) -- ^ /Required/ "available" - The total available balance - the sum of all successful debit transfer amounts minus all credit transfer amounts.
   , bankTransferBalanceTransactable :: !(Text) -- ^ /Required/ "transactable" - The transactable balance shows the amount in your account that you are able to use for transfers, and is essentially your available balance minus your minimum balance.
@@ -2292,7 +2301,7 @@ mkBankTransferBalance bankTransferBalanceAvailable bankTransferBalanceTransactab
 -- ** BankTransferBalanceGetRequest
 -- | BankTransferBalanceGetRequest
 -- BankTransferBalanceGetRequest
---
+-- 
 -- BankTransferBalanceGetRequest defines the request schema for `/bank_transfer/balance/get`
 data BankTransferBalanceGetRequest = BankTransferBalanceGetRequest
   { bankTransferBalanceGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -2331,7 +2340,7 @@ mkBankTransferBalanceGetRequest =
 -- ** BankTransferBalanceGetResponse
 -- | BankTransferBalanceGetResponse
 -- BankTransferBalanceGetResponse
---
+-- 
 -- BankTransferBalanceGetResponse defines the response schema for `/bank_transfer/balance/get`
 data BankTransferBalanceGetResponse = BankTransferBalanceGetResponse
   { bankTransferBalanceGetResponseBalance :: !(BankTransferBalance) -- ^ /Required/ "balance"
@@ -2359,7 +2368,7 @@ instance A.ToJSON BankTransferBalanceGetResponse where
 
 -- | Construct a value of type 'BankTransferBalanceGetResponse' (by applying it's required fields, if any)
 mkBankTransferBalanceGetResponse
-  :: BankTransferBalance -- ^ 'bankTransferBalanceGetResponseBalance'
+  :: BankTransferBalance -- ^ 'bankTransferBalanceGetResponseBalance' 
   -> Text -- ^ 'bankTransferBalanceGetResponseOriginationAccountId': The ID of the origination account that this balance belongs to.
   -> Text -- ^ 'bankTransferBalanceGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> BankTransferBalanceGetResponse
@@ -2373,7 +2382,7 @@ mkBankTransferBalanceGetResponse bankTransferBalanceGetResponseBalance bankTrans
 -- ** BankTransferCancelRequest
 -- | BankTransferCancelRequest
 -- BankTransferCancelRequest
---
+-- 
 -- BankTransferCancelRequest defines the request schema for `/bank_transfer/cancel`
 data BankTransferCancelRequest = BankTransferCancelRequest
   { bankTransferCancelRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -2413,7 +2422,7 @@ mkBankTransferCancelRequest bankTransferCancelRequestBankTransferId =
 -- ** BankTransferCancelResponse
 -- | BankTransferCancelResponse
 -- BankTransferCancelResponse
---
+-- 
 -- BankTransferCancelResponse defines the response schema for `/bank_transfer/cancel`
 data BankTransferCancelResponse = BankTransferCancelResponse
   { bankTransferCancelResponseRequestId :: !(Text) -- ^ /Required/ "request_id" - A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
@@ -2445,7 +2454,7 @@ mkBankTransferCancelResponse bankTransferCancelResponseRequestId =
 -- ** BankTransferCreateRequest
 -- | BankTransferCreateRequest
 -- BankTransferCreateRequest
---
+-- 
 -- BankTransferCreateRequest defines the request schema for `/bank_transfer/create`
 data BankTransferCreateRequest = BankTransferCreateRequest
   { bankTransferCreateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -2461,7 +2470,7 @@ data BankTransferCreateRequest = BankTransferCreateRequest
   , bankTransferCreateRequestAchClass :: !(Maybe ACHClass) -- ^ "ach_class"
   , bankTransferCreateRequestUser :: !(BankTransferUser) -- ^ /Required/ "user"
   , bankTransferCreateRequestCustomTag :: !(Maybe Text) -- ^ "custom_tag" - An arbitrary string provided by the client for storage with the bank transfer. Will be returned in all &#x60;BankTransfer&#x60; objects. May be up to 100 characters.
-  , bankTransferCreateRequestMetadata :: !(Maybe (Map.Map String Text)) -- ^ "metadata" - The Metadata object is a mapping of client-provided string fields to any string value. The following limitations apply: - The JSON values must be Strings (no nested JSON objects allowed) - Only ASCII characters may be used - Maximum of 50 key/value pairs - Maximum key length of 40 characters - Maximum value length of 500 characters
+  , bankTransferCreateRequestMetadata :: !(Maybe (Map.Map String Text)) -- ^ "metadata" - The Metadata object is a mapping of client-provided string fields to any string value. The following limitations apply: - The JSON values must be Strings (no nested JSON objects allowed) - Only ASCII characters may be used - Maximum of 50 key/value pairs - Maximum key length of 40 characters - Maximum value length of 500 characters 
   , bankTransferCreateRequestOriginationAccountId :: !(Maybe Text) -- ^ "origination_account_id" - Plaid’s unique identifier for the origination account for this transfer. If you have more than one origination account, this value must be specified.
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -2512,12 +2521,12 @@ mkBankTransferCreateRequest
   :: Text -- ^ 'bankTransferCreateRequestIdempotencyKey': A random key provided by the client, per unique bank transfer. Maximum of 50 characters.  The API supports idempotency for safely retrying requests without accidentally performing the same operation twice. For example, if a request to create a bank transfer fails due to a network connection error, you can retry the request with the same idempotency key to guarantee that only a single bank transfer is created.
   -> AccessToken -- ^ 'bankTransferCreateRequestAccessToken': The Plaid `access_token` for the account that will be debited or credited.
   -> Text -- ^ 'bankTransferCreateRequestAccountId': The Plaid `account_id` for the account that will be debited or credited.
-  -> BankTransferType -- ^ 'bankTransferCreateRequestType'
-  -> BankTransferNetwork -- ^ 'bankTransferCreateRequestNetwork'
+  -> BankTransferType -- ^ 'bankTransferCreateRequestType' 
+  -> BankTransferNetwork -- ^ 'bankTransferCreateRequestNetwork' 
   -> Text -- ^ 'bankTransferCreateRequestAmount': The transfer amount (decimal string with two digits of precision e.g. \"10.00\").
   -> Text -- ^ 'bankTransferCreateRequestIsoCurrencyCode': The currency of the transfer amount – should be set to \"USD\".
   -> Text -- ^ 'bankTransferCreateRequestDescription': The transfer description. Maximum of 10 characters.
-  -> BankTransferUser -- ^ 'bankTransferCreateRequestUser'
+  -> BankTransferUser -- ^ 'bankTransferCreateRequestUser' 
   -> BankTransferCreateRequest
 mkBankTransferCreateRequest bankTransferCreateRequestIdempotencyKey bankTransferCreateRequestAccessToken bankTransferCreateRequestAccountId bankTransferCreateRequestType bankTransferCreateRequestNetwork bankTransferCreateRequestAmount bankTransferCreateRequestIsoCurrencyCode bankTransferCreateRequestDescription bankTransferCreateRequestUser =
   BankTransferCreateRequest
@@ -2541,7 +2550,7 @@ mkBankTransferCreateRequest bankTransferCreateRequestIdempotencyKey bankTransfer
 -- ** BankTransferCreateResponse
 -- | BankTransferCreateResponse
 -- BankTransferCreateResponse
---
+-- 
 -- BankTransferCreateResponse defines the response schema for `/bank_transfer/create`
 data BankTransferCreateResponse = BankTransferCreateResponse
   { bankTransferCreateResponseBankTransfer :: !(BankTransfer) -- ^ /Required/ "bank_transfer"
@@ -2566,7 +2575,7 @@ instance A.ToJSON BankTransferCreateResponse where
 
 -- | Construct a value of type 'BankTransferCreateResponse' (by applying it's required fields, if any)
 mkBankTransferCreateResponse
-  :: BankTransfer -- ^ 'bankTransferCreateResponseBankTransfer'
+  :: BankTransfer -- ^ 'bankTransferCreateResponseBankTransfer' 
   -> Text -- ^ 'bankTransferCreateResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> BankTransferCreateResponse
 mkBankTransferCreateResponse bankTransferCreateResponseBankTransfer bankTransferCreateResponseRequestId =
@@ -2578,7 +2587,7 @@ mkBankTransferCreateResponse bankTransferCreateResponseBankTransfer bankTransfer
 -- ** BankTransferEvent
 -- | BankTransferEvent
 -- BankTransferEvent
---
+-- 
 -- Represents an event in the Bank Transfers API.
 data BankTransferEvent = BankTransferEvent
   { bankTransferEventEventId :: !(Int) -- ^ /Required/ "event_id" - Plaid’s unique identifier for this event. IDs are sequential unsigned 64-bit integers.
@@ -2635,15 +2644,15 @@ instance A.ToJSON BankTransferEvent where
 mkBankTransferEvent
   :: Int -- ^ 'bankTransferEventEventId': Plaid’s unique identifier for this event. IDs are sequential unsigned 64-bit integers.
   -> Text -- ^ 'bankTransferEventTimestamp': The datetime when this event occurred. This will be of the form `2006-01-02T15:04:05Z`.
-  -> BankTransferEventType -- ^ 'bankTransferEventEventType'
+  -> BankTransferEventType -- ^ 'bankTransferEventEventType' 
   -> Text -- ^ 'bankTransferEventAccountId': The account ID associated with the bank transfer.
   -> Text -- ^ 'bankTransferEventBankTransferId': Plaid’s unique identifier for a bank transfer.
-  -> BankTransferType -- ^ 'bankTransferEventBankTransferType'
+  -> BankTransferType -- ^ 'bankTransferEventBankTransferType' 
   -> Text -- ^ 'bankTransferEventBankTransferAmount': The bank transfer amount.
   -> Text -- ^ 'bankTransferEventBankTransferIsoCurrencyCode': The currency of the bank transfer amount.
-  -> BankTransferFailure -- ^ 'bankTransferEventFailureReason'
-  -> BankTransferDirection -- ^ 'bankTransferEventDirection'
-  -> BankTransferReceiverDetails -- ^ 'bankTransferEventReceiverDetails'
+  -> BankTransferFailure -- ^ 'bankTransferEventFailureReason' 
+  -> BankTransferDirection -- ^ 'bankTransferEventDirection' 
+  -> BankTransferReceiverDetails -- ^ 'bankTransferEventReceiverDetails' 
   -> BankTransferEvent
 mkBankTransferEvent bankTransferEventEventId bankTransferEventTimestamp bankTransferEventEventType bankTransferEventAccountId bankTransferEventBankTransferId bankTransferEventBankTransferType bankTransferEventBankTransferAmount bankTransferEventBankTransferIsoCurrencyCode bankTransferEventFailureReason bankTransferEventDirection bankTransferEventReceiverDetails =
   BankTransferEvent
@@ -2664,7 +2673,7 @@ mkBankTransferEvent bankTransferEventEventId bankTransferEventTimestamp bankTran
 -- ** BankTransferEventListRequest
 -- | BankTransferEventListRequest
 -- BankTransferEventListRequest
---
+-- 
 -- BankTransferEventListRequest defines the request schema for `/bank_transfer/event/list`
 data BankTransferEventListRequest = BankTransferEventListRequest
   { bankTransferEventListRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -2739,7 +2748,7 @@ mkBankTransferEventListRequest =
 -- ** BankTransferEventListResponse
 -- | BankTransferEventListResponse
 -- BankTransferEventListResponse
---
+-- 
 -- BankTransferEventListResponse defines the response schema for `/bank_transfer/event/list`
 data BankTransferEventListResponse = BankTransferEventListResponse
   { bankTransferEventListResponseBankTransferEvents :: !([BankTransferEvent]) -- ^ /Required/ "bank_transfer_events"
@@ -2764,7 +2773,7 @@ instance A.ToJSON BankTransferEventListResponse where
 
 -- | Construct a value of type 'BankTransferEventListResponse' (by applying it's required fields, if any)
 mkBankTransferEventListResponse
-  :: [BankTransferEvent] -- ^ 'bankTransferEventListResponseBankTransferEvents'
+  :: [BankTransferEvent] -- ^ 'bankTransferEventListResponseBankTransferEvents' 
   -> Text -- ^ 'bankTransferEventListResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> BankTransferEventListResponse
 mkBankTransferEventListResponse bankTransferEventListResponseBankTransferEvents bankTransferEventListResponseRequestId =
@@ -2776,7 +2785,7 @@ mkBankTransferEventListResponse bankTransferEventListResponseBankTransferEvents 
 -- ** BankTransferEventSyncRequest
 -- | BankTransferEventSyncRequest
 -- BankTransferEventSyncRequest
---
+-- 
 -- BankTransferEventSyncRequest defines the request schema for `/bank_transfer/event/sync`
 data BankTransferEventSyncRequest = BankTransferEventSyncRequest
   { bankTransferEventSyncRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -2820,7 +2829,7 @@ mkBankTransferEventSyncRequest bankTransferEventSyncRequestAfterId =
 -- ** BankTransferEventSyncResponse
 -- | BankTransferEventSyncResponse
 -- BankTransferEventSyncResponse
---
+-- 
 -- BankTransferEventSyncResponse defines the response schema for `/bank_transfer/event/sync`
 data BankTransferEventSyncResponse = BankTransferEventSyncResponse
   { bankTransferEventSyncResponseBankTransferEvents :: !([BankTransferEvent]) -- ^ /Required/ "bank_transfer_events"
@@ -2845,7 +2854,7 @@ instance A.ToJSON BankTransferEventSyncResponse where
 
 -- | Construct a value of type 'BankTransferEventSyncResponse' (by applying it's required fields, if any)
 mkBankTransferEventSyncResponse
-  :: [BankTransferEvent] -- ^ 'bankTransferEventSyncResponseBankTransferEvents'
+  :: [BankTransferEvent] -- ^ 'bankTransferEventSyncResponseBankTransferEvents' 
   -> Text -- ^ 'bankTransferEventSyncResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> BankTransferEventSyncResponse
 mkBankTransferEventSyncResponse bankTransferEventSyncResponseBankTransferEvents bankTransferEventSyncResponseRequestId =
@@ -2857,7 +2866,7 @@ mkBankTransferEventSyncResponse bankTransferEventSyncResponseBankTransferEvents 
 -- ** BankTransferFailure
 -- | BankTransferFailure
 -- BankTransferFailure
---
+-- 
 -- The failure reason if the type of this transfer is `\"failed\"` or `\"reversed\"`. Null value otherwise.
 data BankTransferFailure = BankTransferFailure
   { bankTransferFailureAchReturnCode :: !(Maybe Text) -- ^ "ach_return_code" - The ACH return code, e.g. &#x60;R01&#x60;.  A return code will be provided if and only if the transfer status is &#x60;reversed&#x60;. For a full listing of ACH return codes, see [Bank Transfers errors](/docs/errors/bank-transfers/#ach-return-codes).
@@ -2892,7 +2901,7 @@ mkBankTransferFailure =
 -- ** BankTransferGetRequest
 -- | BankTransferGetRequest
 -- BankTransferGetRequest
---
+-- 
 -- BankTransferGetRequest defines the request schema for `/bank_transfer/get`
 data BankTransferGetRequest = BankTransferGetRequest
   { bankTransferGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -2932,7 +2941,7 @@ mkBankTransferGetRequest bankTransferGetRequestBankTransferId =
 -- ** BankTransferGetResponse
 -- | BankTransferGetResponse
 -- BankTransferGetResponse
---
+-- 
 -- BankTransferGetResponse defines the response schema for `/bank_transfer/get`
 data BankTransferGetResponse = BankTransferGetResponse
   { bankTransferGetResponseBankTransfer :: !(BankTransfer) -- ^ /Required/ "bank_transfer"
@@ -2957,7 +2966,7 @@ instance A.ToJSON BankTransferGetResponse where
 
 -- | Construct a value of type 'BankTransferGetResponse' (by applying it's required fields, if any)
 mkBankTransferGetResponse
-  :: BankTransfer -- ^ 'bankTransferGetResponseBankTransfer'
+  :: BankTransfer -- ^ 'bankTransferGetResponseBankTransfer' 
   -> Text -- ^ 'bankTransferGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> BankTransferGetResponse
 mkBankTransferGetResponse bankTransferGetResponseBankTransfer bankTransferGetResponseRequestId =
@@ -2969,7 +2978,7 @@ mkBankTransferGetResponse bankTransferGetResponseBankTransfer bankTransferGetRes
 -- ** BankTransferListRequest
 -- | BankTransferListRequest
 -- BankTransferListRequest
---
+-- 
 -- BankTransferListRequest defines the request schema for `/bank_transfer/list`
 data BankTransferListRequest = BankTransferListRequest
   { bankTransferListRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -3028,7 +3037,7 @@ mkBankTransferListRequest =
 -- ** BankTransferListResponse
 -- | BankTransferListResponse
 -- BankTransferListResponse
---
+-- 
 -- BankTransferListResponse defines the response schema for `/bank_transfer/list`
 data BankTransferListResponse = BankTransferListResponse
   { bankTransferListResponseBankTransfers :: !([BankTransfer]) -- ^ /Required/ "bank_transfers"
@@ -3053,7 +3062,7 @@ instance A.ToJSON BankTransferListResponse where
 
 -- | Construct a value of type 'BankTransferListResponse' (by applying it's required fields, if any)
 mkBankTransferListResponse
-  :: [BankTransfer] -- ^ 'bankTransferListResponseBankTransfers'
+  :: [BankTransfer] -- ^ 'bankTransferListResponseBankTransfers' 
   -> Text -- ^ 'bankTransferListResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> BankTransferListResponse
 mkBankTransferListResponse bankTransferListResponseBankTransfers bankTransferListResponseRequestId =
@@ -3065,7 +3074,7 @@ mkBankTransferListResponse bankTransferListResponseBankTransfers bankTransferLis
 -- ** BankTransferMigrateAccountRequest
 -- | BankTransferMigrateAccountRequest
 -- BankTransferMigrateAccountRequest
---
+-- 
 -- BankTransferMigrateAccountRequest defines the request schema for `/bank_transfer/migrate_account`
 data BankTransferMigrateAccountRequest = BankTransferMigrateAccountRequest
   { bankTransferMigrateAccountRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -3115,7 +3124,7 @@ mkBankTransferMigrateAccountRequest bankTransferMigrateAccountRequestAccountNumb
 -- ** BankTransferMigrateAccountResponse
 -- | BankTransferMigrateAccountResponse
 -- BankTransferMigrateAccountResponse
---
+-- 
 -- BankTransferMigrateAccountResponse defines the response schema for `/bank_transfer/migrate_account`
 data BankTransferMigrateAccountResponse = BankTransferMigrateAccountResponse
   { bankTransferMigrateAccountResponseAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The Plaid &#x60;access_token&#x60; for the newly created Item.
@@ -3157,7 +3166,7 @@ mkBankTransferMigrateAccountResponse bankTransferMigrateAccountResponseAccessTok
 -- ** BankTransferReceiverDetails
 -- | BankTransferReceiverDetails
 -- BankTransferReceiverDetails
---
+-- 
 -- The receiver details if the type of this event is `reciever_pending` or `reciever_posted`. Null value otherwise.
 data BankTransferReceiverDetails = BankTransferReceiverDetails
   { bankTransferReceiverDetailsAvailableBalance :: !(Maybe E'AvailableBalance) -- ^ "available_balance" - The sign of the available balance for the receiver bank account associated with the receiver event at the time the matching transaction was found. Can be &#x60;positive&#x60;, &#x60;negative&#x60;, or null if the balance was not available at the time.
@@ -3188,7 +3197,7 @@ mkBankTransferReceiverDetails =
 -- ** BankTransferUser
 -- | BankTransferUser
 -- BankTransferUser
---
+-- 
 -- The legal name and other information for the account holder.
 data BankTransferUser = BankTransferUser
   { bankTransferUserLegalName :: !(Text) -- ^ /Required/ "legal_name" - The account holder’s full legal name.
@@ -3263,7 +3272,7 @@ mkCategoriesGetResponse categoriesGetResponseCategories categoriesGetResponseReq
 -- ** Category
 -- | Category
 -- Category
---
+-- 
 -- Information describing a transaction category
 data Category = Category
   { categoryCategoryId :: !(Text) -- ^ /Required/ "category_id" - An identifying number for the category. &#x60;category_id&#x60; is a Plaid-specific identifier and does not necessarily correspond to merchant category codes.
@@ -3305,7 +3314,7 @@ mkCategory categoryCategoryId categoryGroup categoryHierarchy =
 -- ** Cause
 -- | Cause
 -- Cause
---
+-- 
 -- An error object and associated `item_id` used to identify a specific Item and error when a batch operation operating on multiple Items has encountered an error in one of the Items.
 data Cause = Cause
   { causeItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
@@ -3331,7 +3340,7 @@ instance A.ToJSON Cause where
 -- | Construct a value of type 'Cause' (by applying it's required fields, if any)
 mkCause
   :: ItemId -- ^ 'causeItemId': The `item_id` of the Item associated with this webhook, warning, or error
-  -> Error -- ^ 'causeError'
+  -> Error -- ^ 'causeError' 
   -> Cause
 mkCause causeItemId causeError =
   Cause
@@ -3342,7 +3351,7 @@ mkCause causeItemId causeError =
 -- ** CreditCardLiability
 -- | CreditCardLiability
 -- CreditCardLiability
---
+-- 
 -- An object representing a credit card account.
 data CreditCardLiability = CreditCardLiability
   { creditCardLiabilityAccountId :: !(Maybe Text) -- ^ "account_id" - The ID of the account that this liability belongs to.
@@ -3412,10 +3421,10 @@ mkCreditCardLiability creditCardLiabilityAprs creditCardLiabilityLastPaymentAmou
 -- ** CreditFilter
 -- | CreditFilter
 -- CreditFilter
---
+-- 
 -- A filter to apply to `credit`-type accounts
 data CreditFilter = CreditFilter
-  { creditFilterAccountSubtypes :: !([AccountSubtype]) -- ^ /Required/ "account_subtypes" - An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).
+  { creditFilterAccountSubtypes :: !([AccountSubtype]) -- ^ /Required/ "account_subtypes" - An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema). 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON CreditFilter
@@ -3434,7 +3443,7 @@ instance A.ToJSON CreditFilter where
 
 -- | Construct a value of type 'CreditFilter' (by applying it's required fields, if any)
 mkCreditFilter
-  :: [AccountSubtype] -- ^ 'creditFilterAccountSubtypes': An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).
+  :: [AccountSubtype] -- ^ 'creditFilterAccountSubtypes': An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema). 
   -> CreditFilter
 mkCreditFilter creditFilterAccountSubtypes =
   CreditFilter
@@ -3443,7 +3452,7 @@ mkCreditFilter creditFilterAccountSubtypes =
 
 -- ** DefaultUpdateWebhook
 -- | DefaultUpdateWebhook
--- Fired when new transaction data is available for an Item. Plaid will typically check for new transaction data several times a day.
+-- Fired when new transaction data is available for an Item. Plaid will typically check for new transaction data several times a day. 
 data DefaultUpdateWebhook = DefaultUpdateWebhook
   { defaultUpdateWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;TRANSACTIONS&#x60;
   , defaultUpdateWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;DEFAULT_UPDATE&#x60;
@@ -3493,7 +3502,7 @@ mkDefaultUpdateWebhook defaultUpdateWebhookWebhookType defaultUpdateWebhookWebho
 -- ** DepositSwitchAddressData
 -- | DepositSwitchAddressData
 -- DepositSwitchAddressData
---
+-- 
 -- The user's address.
 data DepositSwitchAddressData = DepositSwitchAddressData
   { depositSwitchAddressDataCity :: !(Text) -- ^ /Required/ "city" - The full city name
@@ -3545,7 +3554,7 @@ mkDepositSwitchAddressData depositSwitchAddressDataCity depositSwitchAddressData
 -- ** DepositSwitchAltCreateRequest
 -- | DepositSwitchAltCreateRequest
 -- DepositSwitchAltCreateRequest
---
+-- 
 -- DepositSwitchAltCreateRequest defines the request schema for `/deposit_switch/alt/create`
 data DepositSwitchAltCreateRequest = DepositSwitchAltCreateRequest
   { depositSwitchAltCreateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -3576,8 +3585,8 @@ instance A.ToJSON DepositSwitchAltCreateRequest where
 
 -- | Construct a value of type 'DepositSwitchAltCreateRequest' (by applying it's required fields, if any)
 mkDepositSwitchAltCreateRequest
-  :: DepositSwitchTargetAccount -- ^ 'depositSwitchAltCreateRequestTargetAccount'
-  -> DepositSwitchTargetUser -- ^ 'depositSwitchAltCreateRequestTargetUser'
+  :: DepositSwitchTargetAccount -- ^ 'depositSwitchAltCreateRequestTargetAccount' 
+  -> DepositSwitchTargetUser -- ^ 'depositSwitchAltCreateRequestTargetUser' 
   -> DepositSwitchAltCreateRequest
 mkDepositSwitchAltCreateRequest depositSwitchAltCreateRequestTargetAccount depositSwitchAltCreateRequestTargetUser =
   DepositSwitchAltCreateRequest
@@ -3590,7 +3599,7 @@ mkDepositSwitchAltCreateRequest depositSwitchAltCreateRequestTargetAccount depos
 -- ** DepositSwitchAltCreateResponse
 -- | DepositSwitchAltCreateResponse
 -- DepositSwitchAltCreateResponse
---
+-- 
 -- DepositSwitchAltCreateResponse defines the response schema for `/deposit_switch/alt/create`
 data DepositSwitchAltCreateResponse = DepositSwitchAltCreateResponse
   { depositSwitchAltCreateResponseDepositSwitchId :: !(Text) -- ^ /Required/ "deposit_switch_id" - ID of the deposit switch. This ID is persisted throughout the lifetime of the deposit switch.
@@ -3705,7 +3714,7 @@ mkDepositSwitchCreateResponse depositSwitchCreateResponseDepositSwitchId deposit
 -- ** DepositSwitchGetRequest
 -- | DepositSwitchGetRequest
 -- DepositSwitchGetRequest
---
+-- 
 -- DepositSwitchGetRequest defines the request schema for `/deposit_switch/get`
 data DepositSwitchGetRequest = DepositSwitchGetRequest
   { depositSwitchGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -3745,7 +3754,7 @@ mkDepositSwitchGetRequest depositSwitchGetRequestDepositSwitchId =
 -- ** DepositSwitchGetResponse
 -- | DepositSwitchGetResponse
 -- DepositSwitchGetResponse
---
+-- 
 -- DepositSwitchGetResponse defines the response schema for `/deposit_switch/get`
 data DepositSwitchGetResponse = DepositSwitchGetResponse
   { depositSwitchGetResponseDepositSwitchId :: !(Text) -- ^ /Required/ "deposit_switch_id" - The ID of the deposit switch
@@ -3827,7 +3836,7 @@ mkDepositSwitchGetResponse depositSwitchGetResponseDepositSwitchId depositSwitch
 -- ** DepositSwitchTargetAccount
 -- | DepositSwitchTargetAccount
 -- DepositSwitchTargetAccount
---
+-- 
 data DepositSwitchTargetAccount = DepositSwitchTargetAccount
   { depositSwitchTargetAccountAccountNumber :: !(Text) -- ^ /Required/ "account_number" - Account number for deposit switch destination
   , depositSwitchTargetAccountRoutingNumber :: !(Text) -- ^ /Required/ "routing_number" - Routing number for deposit switch destination
@@ -3873,7 +3882,7 @@ mkDepositSwitchTargetAccount depositSwitchTargetAccountAccountNumber depositSwit
 -- ** DepositSwitchTargetUser
 -- | DepositSwitchTargetUser
 -- DepositSwitchTargetUser
---
+-- 
 data DepositSwitchTargetUser = DepositSwitchTargetUser
   { depositSwitchTargetUserGivenName :: !(Text) -- ^ /Required/ "given_name" - The given name (first name) of the user.
   , depositSwitchTargetUserFamilyName :: !(Text) -- ^ /Required/ "family_name" - The family name (last name) of the user.
@@ -4005,10 +4014,10 @@ mkDepositSwitchTokenCreateResponse depositSwitchTokenCreateResponseDepositSwitch
 -- ** DepositoryFilter
 -- | DepositoryFilter
 -- DepositoryFilter
---
+-- 
 -- A filter to apply to `depository`-type accounts
 data DepositoryFilter = DepositoryFilter
-  { depositoryFilterAccountSubtypes :: !([AccountSubtype]) -- ^ /Required/ "account_subtypes" - An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).
+  { depositoryFilterAccountSubtypes :: !([AccountSubtype]) -- ^ /Required/ "account_subtypes" - An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema). 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON DepositoryFilter
@@ -4027,7 +4036,7 @@ instance A.ToJSON DepositoryFilter where
 
 -- | Construct a value of type 'DepositoryFilter' (by applying it's required fields, if any)
 mkDepositoryFilter
-  :: [AccountSubtype] -- ^ 'depositoryFilterAccountSubtypes': An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).
+  :: [AccountSubtype] -- ^ 'depositoryFilterAccountSubtypes': An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema). 
   -> DepositoryFilter
 mkDepositoryFilter depositoryFilterAccountSubtypes =
   DepositoryFilter
@@ -4037,7 +4046,7 @@ mkDepositoryFilter depositoryFilterAccountSubtypes =
 -- ** Email
 -- | Email
 -- Email
---
+-- 
 -- An object representing an email address
 data Email = Email
   { emailData :: !(Text) -- ^ /Required/ "data" - The email address.
@@ -4079,7 +4088,7 @@ mkEmail emailData emailPrimary emailType =
 -- ** Employee
 -- | Employee
 -- Employee
---
+-- 
 -- Data about the employee.
 data Employee = Employee
   { employeeName :: !(Maybe Text) -- ^ "name" - The name of the employee.
@@ -4141,7 +4150,7 @@ instance A.ToJSON EmployeeIncomeSummaryFieldString where
 -- | Construct a value of type 'EmployeeIncomeSummaryFieldString' (by applying it's required fields, if any)
 mkEmployeeIncomeSummaryFieldString
   :: Text -- ^ 'employeeIncomeSummaryFieldStringValue': The value of the field.
-  -> VerificationStatus -- ^ 'employeeIncomeSummaryFieldStringVerificationStatus'
+  -> VerificationStatus -- ^ 'employeeIncomeSummaryFieldStringVerificationStatus' 
   -> EmployeeIncomeSummaryFieldString
 mkEmployeeIncomeSummaryFieldString employeeIncomeSummaryFieldStringValue employeeIncomeSummaryFieldStringVerificationStatus =
   EmployeeIncomeSummaryFieldString
@@ -4152,7 +4161,7 @@ mkEmployeeIncomeSummaryFieldString employeeIncomeSummaryFieldStringValue employe
 -- ** Employer
 -- | Employer
 -- Employer
---
+-- 
 -- Data about the employer.
 data Employer = Employer
   { employerEmployerId :: !(Text) -- ^ /Required/ "employer_id" - Plaid&#39;s unique identifier for the employer.
@@ -4220,7 +4229,7 @@ instance A.ToJSON EmployerIncomeSummaryFieldString where
 -- | Construct a value of type 'EmployerIncomeSummaryFieldString' (by applying it's required fields, if any)
 mkEmployerIncomeSummaryFieldString
   :: Text -- ^ 'employerIncomeSummaryFieldStringValue': The value of the field.
-  -> VerificationStatus -- ^ 'employerIncomeSummaryFieldStringVerificationStatus'
+  -> VerificationStatus -- ^ 'employerIncomeSummaryFieldStringVerificationStatus' 
   -> EmployerIncomeSummaryFieldString
 mkEmployerIncomeSummaryFieldString employerIncomeSummaryFieldStringValue employerIncomeSummaryFieldStringVerificationStatus =
   EmployerIncomeSummaryFieldString
@@ -4231,7 +4240,7 @@ mkEmployerIncomeSummaryFieldString employerIncomeSummaryFieldStringValue employe
 -- ** EmployersSearchRequest
 -- | EmployersSearchRequest
 -- EmployersSearchRequest
---
+-- 
 -- EmployersSearchRequest defines the request schema for `/employers/search`.
 data EmployersSearchRequest = EmployersSearchRequest
   { employersSearchRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -4276,7 +4285,7 @@ mkEmployersSearchRequest employersSearchRequestQuery employersSearchRequestProdu
 -- ** EmployersSearchResponse
 -- | EmployersSearchResponse
 -- EmployersSearchResponse
---
+-- 
 -- EmployersSearchResponse defines the response schema for `/employers/search`.
 data EmployersSearchResponse = EmployersSearchResponse
   { employersSearchResponseEmployers :: !([Employer]) -- ^ /Required/ "employers" - A list of employers matching the search criteria.
@@ -4313,7 +4322,7 @@ mkEmployersSearchResponse employersSearchResponseEmployers employersSearchRespon
 -- ** Error
 -- | Error
 -- Error
---
+-- 
 -- We use standard HTTP response codes for success and failure notifications, and our errors are further classified by `error_type`. In general, 200 HTTP codes correspond to success, 40X codes are for developer- or user-related failures, and 50X codes are for Plaid-related issues.  Error fields will be `null` if no error has occurred.
 data Error = Error
   { errorErrorType :: !(E'ErrorType) -- ^ /Required/ "error_type" - A broad categorization of the error. Safe for programatic use.
@@ -4380,7 +4389,7 @@ mkError errorErrorType errorErrorCode errorErrorMessage errorRequestId =
 -- ** ExternalPaymentSchedule
 -- | ExternalPaymentSchedule
 -- ExternalPaymentSchedule
---
+-- 
 -- The schedule that the payment will be executed on. If a schedule is provided, the payment is automatically set up as a standing order. If no schedule is specified, the payment will be executed only once.
 data ExternalPaymentSchedule = ExternalPaymentSchedule
   { externalPaymentScheduleInterval :: !(Text) -- ^ /Required/ "interval" - The frequency interval of the payment. Valid values are &#x60;\&quot;WEEKLY\&quot;&#x60; or &#x60;\&quot;MONTHLY\&quot;&#x60;.
@@ -4426,7 +4435,7 @@ mkExternalPaymentSchedule externalPaymentScheduleInterval externalPaymentSchedul
 -- ** ExternalPaymentScheduleGet
 -- | ExternalPaymentScheduleGet
 -- ExternalPaymentScheduleGet
---
+-- 
 -- The schedule that the payment will be executed on. If a schedule is provided, the payment is automatically set up as a standing order. If no schedule is specified, the payment will be executed only once.
 data ExternalPaymentScheduleGet = ExternalPaymentScheduleGet
   { externalPaymentScheduleGetAdjustedStartDate :: !(Maybe Date) -- ^ "adjusted_start_date" - The start date sent to the bank after adjusting for holidays or weekends.  Will be provided in ISO 8601 format (YYYY-MM-DD). If the start date did not require adjustment, this field will be &#x60;null&#x60;.
@@ -4476,7 +4485,7 @@ mkExternalPaymentScheduleGet externalPaymentScheduleGetInterval externalPaymentS
 -- ** HealthIncident
 -- | HealthIncident
 -- HealthIncident
---
+-- 
 data HealthIncident = HealthIncident
   { healthIncidentStartDate :: !(Maybe Text) -- ^ "start_date" - The start date of the incident, in ISO 8601 format, e.g. &#x60;\&quot;2020-10-30T15:26:48Z\&quot;&#x60;.
   , healthIncidentEndDate :: !(Maybe Text) -- ^ "end_date" - The end date of the incident, in ISO 8601 format, e.g. &#x60;\&quot;2020-10-30T15:26:48Z\&quot;&#x60;.
@@ -4518,7 +4527,7 @@ mkHealthIncident =
 -- ** HistoricalBalance
 -- | HistoricalBalance
 -- HistoricalBalance
---
+-- 
 -- An object representing a balance held by an account in the past
 data HistoricalBalance = HistoricalBalance
   { historicalBalanceDate :: !(Date) -- ^ /Required/ "date" - The date of the calculated historical balance, in an ISO 8601 format (YYYY-MM-DD)
@@ -4563,7 +4572,7 @@ mkHistoricalBalance historicalBalanceDate historicalBalanceCurrent =
 -- ** HistoricalUpdateWebhook
 -- | HistoricalUpdateWebhook
 -- HistoricalUpdateWebhook
---
+-- 
 -- Fired when an Item's historical transaction pull is completed and Plaid has prepared as much historical transaction data as possible for the Item. Once this webhook has been fired, transaction data beyond the most recent 30 days can be fetched for the Item.
 data HistoricalUpdateWebhook = HistoricalUpdateWebhook
   { historicalUpdateWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;TRANSACTIONS&#x60;
@@ -4614,7 +4623,7 @@ mkHistoricalUpdateWebhook historicalUpdateWebhookWebhookType historicalUpdateWeb
 -- ** Holding
 -- | Holding
 -- Holding
---
+-- 
 -- A securities holding at an institution.
 data Holding = Holding
   { holdingAccountId :: !(Text) -- ^ /Required/ "account_id" - The Plaid &#x60;account_id&#x60; associated with the holding.
@@ -4625,7 +4634,7 @@ data Holding = Holding
   , holdingCostBasis :: !(Maybe Double) -- ^ "cost_basis" - The cost basis of the holding.
   , holdingQuantity :: !(Double) -- ^ /Required/ "quantity" - The total quantity of the asset held, as reported by the financial institution.
   , holdingIsoCurrencyCode :: !(Maybe Text) -- ^ "iso_currency_code" - The ISO-4217 currency code of the holding. Always &#x60;null&#x60; if &#x60;unofficial_currency_code&#x60; is non-&#x60;null&#x60;.
-  , holdingUnofficialCurrencyCode :: !(Maybe Text) -- ^ "unofficial_currency_code" - The unofficial currency code associated with the holding. Always &#x60;null&#x60; if &#x60;iso_currency_code&#x60; is non-&#x60;null&#x60;. Unofficial currency codes are used for currencies that do not have official ISO currency codes, such as cryptocurrencies and the currencies of certain countries.  See the [currency code schema](/docs/api/accounts#currency-code-schema) for a full listing of supported &#x60;iso_currency_code&#x60;s.
+  , holdingUnofficialCurrencyCode :: !(Maybe Text) -- ^ "unofficial_currency_code" - The unofficial currency code associated with the holding. Always &#x60;null&#x60; if &#x60;iso_currency_code&#x60; is non-&#x60;null&#x60;. Unofficial currency codes are used for currencies that do not have official ISO currency codes, such as cryptocurrencies and the currencies of certain countries.  See the [currency code schema](/docs/api/accounts#currency-code-schema) for a full listing of supported &#x60;iso_currency_code&#x60;s. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON Holding
@@ -4682,7 +4691,7 @@ mkHolding holdingAccountId holdingSecurityId holdingInstitutionPrice holdingInst
 -- ** HoldingsDefaultUpdateWebhook
 -- | HoldingsDefaultUpdateWebhook
 -- HoldingsDefaultUpdateWebhook
---
+-- 
 -- Fired when new or updated holdings have been detected on an investment account. The webhook typically fires once per day, after market close, in response to any newly added holdings or price changes to existing holdings.
 data HoldingsDefaultUpdateWebhook = HoldingsDefaultUpdateWebhook
   { holdingsDefaultUpdateWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;HOLDINGS&#x60;
@@ -4836,7 +4845,7 @@ instance A.ToJSON IdentityGetResponse where
 -- | Construct a value of type 'IdentityGetResponse' (by applying it's required fields, if any)
 mkIdentityGetResponse
   :: [AccountIdentity] -- ^ 'identityGetResponseAccounts': The accounts for which Identity data has been requested
-  -> Item -- ^ 'identityGetResponseItem'
+  -> Item -- ^ 'identityGetResponseItem' 
   -> Text -- ^ 'identityGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> IdentityGetResponse
 mkIdentityGetResponse identityGetResponseAccounts identityGetResponseItem identityGetResponseRequestId =
@@ -4849,7 +4858,7 @@ mkIdentityGetResponse identityGetResponseAccounts identityGetResponseItem identi
 -- ** IncidentUpdate
 -- | IncidentUpdate
 -- IncidentUpdate
---
+-- 
 data IncidentUpdate = IncidentUpdate
   { incidentUpdateDescription :: !(Maybe Text) -- ^ "description" - The content of the update.
   , incidentUpdateStatus :: !(Maybe E'Status3) -- ^ "status" - The status of the incident.
@@ -4887,7 +4896,7 @@ mkIncidentUpdate =
 -- ** IncomeBreakdown
 -- | IncomeBreakdown
 -- IncomeBreakdown
---
+-- 
 data IncomeBreakdown = IncomeBreakdown
   { incomeBreakdownType :: !(Maybe Text) -- ^ "type" - The type of income. Possible values include &#x60;\&quot;regular\&quot;&#x60;, &#x60;\&quot;overtime\&quot;&#x60;, and &#x60;\&quot;bonus\&quot;&#x60;.
   , incomeBreakdownRate :: !(Maybe Double) -- ^ "rate" - The hourly rate at which the income is paid.
@@ -4929,7 +4938,7 @@ mkIncomeBreakdown =
 -- ** IncomeSummary
 -- | IncomeSummary
 -- IncomeSummary
---
+-- 
 -- The verified fields from a paystub verification. All fields are provided as reported on the paystub.
 data IncomeSummary = IncomeSummary
   { incomeSummaryEmployerName :: !(Maybe EmployerIncomeSummaryFieldString) -- ^ "employer_name"
@@ -4984,7 +4993,7 @@ mkIncomeSummary =
 -- ** IncomeSummaryFieldNumber
 -- | IncomeSummaryFieldNumber
 -- IncomeSummaryFieldNumber
---
+-- 
 data IncomeSummaryFieldNumber = IncomeSummaryFieldNumber
   { incomeSummaryFieldNumberValue :: !(Double) -- ^ /Required/ "value" - The value of the field.
   , incomeSummaryFieldNumberVerificationStatus :: !(VerificationStatus) -- ^ /Required/ "verification_status"
@@ -5009,7 +5018,7 @@ instance A.ToJSON IncomeSummaryFieldNumber where
 -- | Construct a value of type 'IncomeSummaryFieldNumber' (by applying it's required fields, if any)
 mkIncomeSummaryFieldNumber
   :: Double -- ^ 'incomeSummaryFieldNumberValue': The value of the field.
-  -> VerificationStatus -- ^ 'incomeSummaryFieldNumberVerificationStatus'
+  -> VerificationStatus -- ^ 'incomeSummaryFieldNumberVerificationStatus' 
   -> IncomeSummaryFieldNumber
 mkIncomeSummaryFieldNumber incomeSummaryFieldNumberValue incomeSummaryFieldNumberVerificationStatus =
   IncomeSummaryFieldNumber
@@ -5020,7 +5029,7 @@ mkIncomeSummaryFieldNumber incomeSummaryFieldNumberValue incomeSummaryFieldNumbe
 -- ** IncomeSummaryFieldString
 -- | IncomeSummaryFieldString
 -- IncomeSummaryFieldString
---
+-- 
 data IncomeSummaryFieldString = IncomeSummaryFieldString
   { incomeSummaryFieldStringValue :: !(Text) -- ^ /Required/ "value" - The value of the field.
   , incomeSummaryFieldStringVerificationStatus :: !(VerificationStatus) -- ^ /Required/ "verification_status"
@@ -5045,7 +5054,7 @@ instance A.ToJSON IncomeSummaryFieldString where
 -- | Construct a value of type 'IncomeSummaryFieldString' (by applying it's required fields, if any)
 mkIncomeSummaryFieldString
   :: Text -- ^ 'incomeSummaryFieldStringValue': The value of the field.
-  -> VerificationStatus -- ^ 'incomeSummaryFieldStringVerificationStatus'
+  -> VerificationStatus -- ^ 'incomeSummaryFieldStringVerificationStatus' 
   -> IncomeSummaryFieldString
 mkIncomeSummaryFieldString incomeSummaryFieldStringValue incomeSummaryFieldStringVerificationStatus =
   IncomeSummaryFieldString
@@ -5056,7 +5065,7 @@ mkIncomeSummaryFieldString incomeSummaryFieldStringValue incomeSummaryFieldStrin
 -- ** IncomeVerificationCreateRequest
 -- | IncomeVerificationCreateRequest
 -- IncomeVerificationCreateRequest
---
+-- 
 -- IncomeVerificationCreateRequest defines the request schema for `/income/verification/create`
 data IncomeVerificationCreateRequest = IncomeVerificationCreateRequest
   { incomeVerificationCreateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -5096,7 +5105,7 @@ mkIncomeVerificationCreateRequest incomeVerificationCreateRequestWebhook =
 -- ** IncomeVerificationCreateResponse
 -- | IncomeVerificationCreateResponse
 -- IncomeVerificationCreateResponse
---
+-- 
 -- IncomeVerificationCreateResponse defines the response schema for `/income/verification/create`.
 data IncomeVerificationCreateResponse = IncomeVerificationCreateResponse
   { incomeVerificationCreateResponseIncomeVerificationId :: !(Text) -- ^ /Required/ "income_verification_id" - ID of the verification. This ID is persisted throughout the lifetime of the verification.
@@ -5133,7 +5142,7 @@ mkIncomeVerificationCreateResponse incomeVerificationCreateResponseIncomeVerific
 -- ** IncomeVerificationDocumentsDownloadRequest
 -- | IncomeVerificationDocumentsDownloadRequest
 -- IncomeVerificationDocumentsDownloadRequest
---
+-- 
 -- IncomeVerificationDocumentsDownloadRequest defines the request schema for `/income/verification/documents/download`.
 data IncomeVerificationDocumentsDownloadRequest = IncomeVerificationDocumentsDownloadRequest
   { incomeVerificationDocumentsDownloadRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -5173,7 +5182,7 @@ mkIncomeVerificationDocumentsDownloadRequest incomeVerificationDocumentsDownload
 -- ** IncomeVerificationDocumentsDownloadResponse
 -- | IncomeVerificationDocumentsDownloadResponse
 -- IncomeVerificationDocumentsDownloadResponse
---
+-- 
 -- IncomeVerificationDocumentsDownloadResponse defines the response schema for `/income/verification/documents/download`.
 data IncomeVerificationDocumentsDownloadResponse = IncomeVerificationDocumentsDownloadResponse
   { incomeVerificationDocumentsDownloadResponseId :: !(Text) -- ^ /Required/ "id"
@@ -5195,7 +5204,7 @@ instance A.ToJSON IncomeVerificationDocumentsDownloadResponse where
 
 -- | Construct a value of type 'IncomeVerificationDocumentsDownloadResponse' (by applying it's required fields, if any)
 mkIncomeVerificationDocumentsDownloadResponse
-  :: Text -- ^ 'incomeVerificationDocumentsDownloadResponseId'
+  :: Text -- ^ 'incomeVerificationDocumentsDownloadResponseId' 
   -> IncomeVerificationDocumentsDownloadResponse
 mkIncomeVerificationDocumentsDownloadResponse incomeVerificationDocumentsDownloadResponseId =
   IncomeVerificationDocumentsDownloadResponse
@@ -5205,7 +5214,7 @@ mkIncomeVerificationDocumentsDownloadResponse incomeVerificationDocumentsDownloa
 -- ** IncomeVerificationPaystubGetRequest
 -- | IncomeVerificationPaystubGetRequest
 -- IncomeVerificationPaystubGetRequest
---
+-- 
 -- IncomeVerificationPaystubGetRequest defines the request schema for `/income/verification/paystub/get`.
 data IncomeVerificationPaystubGetRequest = IncomeVerificationPaystubGetRequest
   { incomeVerificationPaystubGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -5245,7 +5254,7 @@ mkIncomeVerificationPaystubGetRequest incomeVerificationPaystubGetRequestIncomeV
 -- ** IncomeVerificationPaystubGetResponse
 -- | IncomeVerificationPaystubGetResponse
 -- IncomeVerificationPaystubGetResponse
---
+-- 
 -- IncomeVerificationPaystubGetResponse defines the response schema for `/income/verification/paystub/get`.
 data IncomeVerificationPaystubGetResponse = IncomeVerificationPaystubGetResponse
   { incomeVerificationPaystubGetResponsePaystub :: !(Maybe Paystub) -- ^ "paystub"
@@ -5280,7 +5289,7 @@ mkIncomeVerificationPaystubGetResponse =
 -- ** IncomeVerificationStatusWebhook
 -- | IncomeVerificationStatusWebhook
 -- IncomeVerificationStatusWebhook
---
+-- 
 -- Fired when the status of an income verification instance has changed. It will typically take several minutes for this webhook to fire after the end user has uploaded their documents, and may take up to 15 minutes.
 data IncomeVerificationStatusWebhook = IncomeVerificationStatusWebhook
   { incomeVerificationStatusWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;\&quot;INCOME\&quot;&#x60;
@@ -5327,7 +5336,7 @@ mkIncomeVerificationStatusWebhook incomeVerificationStatusWebhookWebhookType inc
 -- ** IncomeVerificationSummaryGetRequest
 -- | IncomeVerificationSummaryGetRequest
 -- IncomeVerificationSummaryGetRequest
---
+-- 
 -- IncomeVerificationSummaryGetRequest defines the request schema for `/income/verification/summary/get`.
 data IncomeVerificationSummaryGetRequest = IncomeVerificationSummaryGetRequest
   { incomeVerificationSummaryGetRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
@@ -5367,7 +5376,7 @@ mkIncomeVerificationSummaryGetRequest incomeVerificationSummaryGetRequestIncomeV
 -- ** IncomeVerificationSummaryGetResponse
 -- | IncomeVerificationSummaryGetResponse
 -- IncomeVerificationSummaryGetResponse
---
+-- 
 -- IncomeVerificationSummaryGetResponse defines the response schema for `/income/verification/summary/get`.
 data IncomeVerificationSummaryGetResponse = IncomeVerificationSummaryGetResponse
   { incomeVerificationSummaryGetResponseIncomeSummaries :: !([IncomeSummary]) -- ^ /Required/ "income_summaries" - A list of income summaries.
@@ -5404,7 +5413,7 @@ mkIncomeVerificationSummaryGetResponse incomeVerificationSummaryGetResponseIncom
 -- ** IncomeVerificationWebhookStatus
 -- | IncomeVerificationWebhookStatus
 -- IncomeVerificationWebhookStatus
---
+-- 
 data IncomeVerificationWebhookStatus = IncomeVerificationWebhookStatus
   { incomeVerificationWebhookStatusId :: !(Text) -- ^ /Required/ "id"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -5425,7 +5434,7 @@ instance A.ToJSON IncomeVerificationWebhookStatus where
 
 -- | Construct a value of type 'IncomeVerificationWebhookStatus' (by applying it's required fields, if any)
 mkIncomeVerificationWebhookStatus
-  :: Text -- ^ 'incomeVerificationWebhookStatusId'
+  :: Text -- ^ 'incomeVerificationWebhookStatusId' 
   -> IncomeVerificationWebhookStatus
 mkIncomeVerificationWebhookStatus incomeVerificationWebhookStatusId =
   IncomeVerificationWebhookStatus
@@ -5435,7 +5444,7 @@ mkIncomeVerificationWebhookStatus incomeVerificationWebhookStatusId =
 -- ** InflowModel
 -- | InflowModel
 -- InflowModel
---
+-- 
 -- The `inflow_model` allows you to model a test account that receives regular income or make regular payments on a loan. Any transactions generated by the `inflow_model` will appear in addition to randomly generated test data or transactions specified by `override_accounts`.
 data InflowModel = InflowModel
   { inflowModelType :: !(Text) -- ^ /Required/ "type" - Inflow model. One of the following:  &#x60;none&#x60;: No income &#x60;monthly-income&#x60;: Income occurs once per month &#x60;monthly-balance-payment&#x60;: Pays off the balance on a liability account at the given statement day of month &#x60;monthly-interest-only-payment&#x60;: Makes an interest-only payment on a liability account at the given statement day of month. Note that account types supported by Liabilities will accrue interest in the Sandbox. The types are account type &#x60;credit&#x60; with subtype &#x60;credit&#x60; or &#x60;paypal&#x60;, and account type &#x60;loan&#x60; with subtype &#x60;student&#x60; or &#x60;mortgage&#x60;.
@@ -5487,7 +5496,7 @@ mkInflowModel inflowModelType inflowModelIncomeAmount inflowModelPaymentDayOfMon
 -- ** InitialUpdateWebhook
 -- | InitialUpdateWebhook
 -- InitialUpdateWebhook
---
+-- 
 -- Fired when an Item's initial transaction pull is completed. Once this webhook has been fired, transaction data for the most recent 30 days can be fetched for the Item.
 data InitialUpdateWebhook = InitialUpdateWebhook
   { initialUpdateWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;TRANSACTIONS&#x60;
@@ -5538,7 +5547,7 @@ mkInitialUpdateWebhook initialUpdateWebhookWebhookType initialUpdateWebhookWebho
 -- ** Institution
 -- | Institution
 -- Institution
---
+-- 
 -- Details relating to a specific financial institution
 data Institution = Institution
   { institutionInstitutionId :: !(Text) -- ^ /Required/ "institution_id" - Unique identifier for the institution
@@ -5610,8 +5619,8 @@ mkInstitution institutionInstitutionId institutionName institutionProducts insti
 -- ** InstitutionStatus
 -- | InstitutionStatus
 -- InstitutionStatus
---
--- The status of an institution is determined by the health of its Item logins, Transactions updates, Investments updates, Auth requests, Balance requests, and Identity requests. A login attempt is conducted during the initial Item add in Link. If there is not enough traffic to accurately calculate an institution's status, Plaid will return null rather than potentially inaccurate data.  Institution status is accessible in the Dashboard and via the API using the `/institutions/get_by_id` endpoint with the `include_status` option set to true. Note that institution status is not available in the Sandbox environment.
+-- 
+-- The status of an institution is determined by the health of its Item logins, Transactions updates, Investments updates, Auth requests, Balance requests, and Identity requests. A login attempt is conducted during the initial Item add in Link. If there is not enough traffic to accurately calculate an institution's status, Plaid will return null rather than potentially inaccurate data.  Institution status is accessible in the Dashboard and via the API using the `/institutions/get_by_id` endpoint with the `include_status` option set to true. Note that institution status is not available in the Sandbox environment. 
 data InstitutionStatus = InstitutionStatus
   { institutionStatusItemLogins :: !(ProductStatus) -- ^ /Required/ "item_logins"
   , institutionStatusTransactionsUpdates :: !(ProductStatus) -- ^ /Required/ "transactions_updates"
@@ -5650,12 +5659,12 @@ instance A.ToJSON InstitutionStatus where
 
 -- | Construct a value of type 'InstitutionStatus' (by applying it's required fields, if any)
 mkInstitutionStatus
-  :: ProductStatus -- ^ 'institutionStatusItemLogins'
-  -> ProductStatus -- ^ 'institutionStatusTransactionsUpdates'
-  -> ProductStatus -- ^ 'institutionStatusAuth'
-  -> ProductStatus -- ^ 'institutionStatusBalance'
-  -> ProductStatus -- ^ 'institutionStatusIdentity'
-  -> ProductStatus -- ^ 'institutionStatusInvestmentsUpdates'
+  :: ProductStatus -- ^ 'institutionStatusItemLogins' 
+  -> ProductStatus -- ^ 'institutionStatusTransactionsUpdates' 
+  -> ProductStatus -- ^ 'institutionStatusAuth' 
+  -> ProductStatus -- ^ 'institutionStatusBalance' 
+  -> ProductStatus -- ^ 'institutionStatusIdentity' 
+  -> ProductStatus -- ^ 'institutionStatusInvestmentsUpdates' 
   -> InstitutionStatus
 mkInstitutionStatus institutionStatusItemLogins institutionStatusTransactionsUpdates institutionStatusAuth institutionStatusBalance institutionStatusIdentity institutionStatusInvestmentsUpdates =
   InstitutionStatus
@@ -5675,7 +5684,7 @@ data InstitutionsGetByIdRequest = InstitutionsGetByIdRequest
   { institutionsGetByIdRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , institutionsGetByIdRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
   , institutionsGetByIdRequestInstitutionId :: !(Text) -- ^ /Required/ "institution_id" - The ID of the institution to get details about
-  , institutionsGetByIdRequestCountryCodes :: !([CountryCode]) -- ^ /Required/ "country_codes" - Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard.
+  , institutionsGetByIdRequestCountryCodes :: !([CountryCode]) -- ^ /Required/ "country_codes" - Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard. 
   , institutionsGetByIdRequestOptions :: !(Maybe InstitutionsGetByIdRequestOptions) -- ^ "options"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -5704,7 +5713,7 @@ instance A.ToJSON InstitutionsGetByIdRequest where
 -- | Construct a value of type 'InstitutionsGetByIdRequest' (by applying it's required fields, if any)
 mkInstitutionsGetByIdRequest
   :: Text -- ^ 'institutionsGetByIdRequestInstitutionId': The ID of the institution to get details about
-  -> [CountryCode] -- ^ 'institutionsGetByIdRequestCountryCodes': Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard.
+  -> [CountryCode] -- ^ 'institutionsGetByIdRequestCountryCodes': Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard. 
   -> InstitutionsGetByIdRequest
 mkInstitutionsGetByIdRequest institutionsGetByIdRequestInstitutionId institutionsGetByIdRequestCountryCodes =
   InstitutionsGetByIdRequest
@@ -5774,7 +5783,7 @@ instance A.ToJSON InstitutionsGetByIdResponse where
 
 -- | Construct a value of type 'InstitutionsGetByIdResponse' (by applying it's required fields, if any)
 mkInstitutionsGetByIdResponse
-  :: Institution -- ^ 'institutionsGetByIdResponseInstitution'
+  :: Institution -- ^ 'institutionsGetByIdResponseInstitution' 
   -> Text -- ^ 'institutionsGetByIdResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> InstitutionsGetByIdResponse
 mkInstitutionsGetByIdResponse institutionsGetByIdResponseInstitution institutionsGetByIdResponseRequestId =
@@ -5791,7 +5800,7 @@ data InstitutionsGetRequest = InstitutionsGetRequest
   , institutionsGetRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
   , institutionsGetRequestCount :: !(Int) -- ^ /Required/ "count" - The total number of Institutions to return.
   , institutionsGetRequestOffset :: !(Int) -- ^ /Required/ "offset" - The number of Institutions to skip.
-  , institutionsGetRequestCountryCodes :: !([CountryCode]) -- ^ /Required/ "country_codes" - Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard.
+  , institutionsGetRequestCountryCodes :: !([CountryCode]) -- ^ /Required/ "country_codes" - Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard. 
   , institutionsGetRequestOptions :: !(Maybe InstitutionsGetRequestOptions) -- ^ "options"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -5823,7 +5832,7 @@ instance A.ToJSON InstitutionsGetRequest where
 mkInstitutionsGetRequest
   :: Int -- ^ 'institutionsGetRequestCount': The total number of Institutions to return.
   -> Int -- ^ 'institutionsGetRequestOffset': The number of Institutions to skip.
-  -> [CountryCode] -- ^ 'institutionsGetRequestCountryCodes': Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard.
+  -> [CountryCode] -- ^ 'institutionsGetRequestCountryCodes': Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard. 
   -> InstitutionsGetRequest
 mkInstitutionsGetRequest institutionsGetRequestCount institutionsGetRequestOffset institutionsGetRequestCountryCodes =
   InstitutionsGetRequest
@@ -5839,7 +5848,7 @@ mkInstitutionsGetRequest institutionsGetRequestCount institutionsGetRequestOffse
 -- | InstitutionsGetRequestOptions
 -- An optional object to filter `/institutions/get` results.
 data InstitutionsGetRequestOptions = InstitutionsGetRequestOptions
-  { institutionsGetRequestOptionsProducts :: !(Maybe [Products]) -- ^ "products" - Filter the Institutions based on which products they support.
+  { institutionsGetRequestOptionsProducts :: !(Maybe [Products]) -- ^ "products" - Filter the Institutions based on which products they support. 
   , institutionsGetRequestOptionsRoutingNumbers :: !(Maybe [Text]) -- ^ "routing_numbers" - Specify an array of routing numbers to filter institutions.
   , institutionsGetRequestOptionsOauth :: !(Maybe Bool) -- ^ "oauth" - Limit results to institutions with or without OAuth login flows. This is primarily relevant to institutions with European country codes.
   , institutionsGetRequestOptionsIncludeOptionalMetadata :: !(Maybe Bool) -- ^ "include_optional_metadata" - When &#x60;true&#x60;, return the institution&#39;s homepage URL, logo and primary brand color.  Note that Plaid does not own any of the logos shared by the API, and that by accessing or using these logos, you agree that you are doing so at your own risk and will, if necessary, obtain all required permissions from the appropriate rights holders and adhere to any applicable usage guidelines. Plaid disclaims all express or implied warranties with respect to the logos.
@@ -5919,7 +5928,7 @@ mkInstitutionsGetResponse institutionsGetResponseInstitutions institutionsGetRes
 -- ** InstitutionsSearchAccountFilter
 -- | InstitutionsSearchAccountFilter
 -- InstitutionsSearchAccountFilter
---
+-- 
 data InstitutionsSearchAccountFilter = InstitutionsSearchAccountFilter
   { institutionsSearchAccountFilterLoan :: !(Maybe [AccountSubtype]) -- ^ "loan"
   , institutionsSearchAccountFilterDepository :: !(Maybe [AccountSubtype]) -- ^ "depository"
@@ -5966,7 +5975,7 @@ data InstitutionsSearchRequest = InstitutionsSearchRequest
   , institutionsSearchRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
   , institutionsSearchRequestQuery :: !(Text) -- ^ /Required/ "query" - The search query. Institutions with names matching the query are returned
   , institutionsSearchRequestProducts :: !([Products]) -- ^ /Required/ "products" - Filter the Institutions based on whether they support all products listed in products. Provide &#x60;null&#x60; to get institutions regardless of supported products
-  , institutionsSearchRequestCountryCodes :: !([CountryCode]) -- ^ /Required/ "country_codes" - Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard.
+  , institutionsSearchRequestCountryCodes :: !([CountryCode]) -- ^ /Required/ "country_codes" - Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard. 
   , institutionsSearchRequestOptions :: !(Maybe InstitutionsSearchRequestOptions) -- ^ "options"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -5998,7 +6007,7 @@ instance A.ToJSON InstitutionsSearchRequest where
 mkInstitutionsSearchRequest
   :: Text -- ^ 'institutionsSearchRequestQuery': The search query. Institutions with names matching the query are returned
   -> [Products] -- ^ 'institutionsSearchRequestProducts': Filter the Institutions based on whether they support all products listed in products. Provide `null` to get institutions regardless of supported products
-  -> [CountryCode] -- ^ 'institutionsSearchRequestCountryCodes': Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard.
+  -> [CountryCode] -- ^ 'institutionsSearchRequestCountryCodes': Specify an array of Plaid-supported country codes this institution supports, using the ISO-3166-1 alpha-2 country code standard. 
   -> InstitutionsSearchRequest
 mkInstitutionsSearchRequest institutionsSearchRequestQuery institutionsSearchRequestProducts institutionsSearchRequestCountryCodes =
   InstitutionsSearchRequest
@@ -6085,10 +6094,10 @@ mkInstitutionsSearchResponse institutionsSearchResponseInstitutions institutions
 -- ** InvestmentFilter
 -- | InvestmentFilter
 -- InvestmentFilter
---
+-- 
 -- A filter to apply to `investment`-type accounts
 data InvestmentFilter = InvestmentFilter
-  { investmentFilterAccountSubtypes :: !([AccountSubtype]) -- ^ /Required/ "account_subtypes" - An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).
+  { investmentFilterAccountSubtypes :: !([AccountSubtype]) -- ^ /Required/ "account_subtypes" - An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema). 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON InvestmentFilter
@@ -6107,7 +6116,7 @@ instance A.ToJSON InvestmentFilter where
 
 -- | Construct a value of type 'InvestmentFilter' (by applying it's required fields, if any)
 mkInvestmentFilter
-  :: [AccountSubtype] -- ^ 'investmentFilterAccountSubtypes': An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).
+  :: [AccountSubtype] -- ^ 'investmentFilterAccountSubtypes': An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema). 
   -> InvestmentFilter
 mkInvestmentFilter investmentFilterAccountSubtypes =
   InvestmentFilter
@@ -6146,7 +6155,7 @@ mkInvestmentHoldingsGetRequestOptions =
 -- ** InvestmentTransaction
 -- | InvestmentTransaction
 -- InvestmentTransaction
---
+-- 
 -- A transaction within an investment account.
 data InvestmentTransaction = InvestmentTransaction
   { investmentTransactionInvestmentTransactionId :: !(Text) -- ^ /Required/ "investment_transaction_id" - The ID of the Investment transaction, unique across all Plaid transactions. Like all Plaid identifiers, the &#x60;investment_transaction_id&#x60; is case sensitive.
@@ -6238,7 +6247,7 @@ mkInvestmentTransaction investmentTransactionInvestmentTransactionId investmentT
 -- ** InvestmentsDefaultUpdateWebhook
 -- | InvestmentsDefaultUpdateWebhook
 -- TransactionsUpdateInvestmentsWebhook
---
+-- 
 -- Fired when new or canceled transactions have been detected on an investment account.
 data InvestmentsDefaultUpdateWebhook = InvestmentsDefaultUpdateWebhook
   { investmentsDefaultUpdateWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;INVESTMENTS_TRANSACTIONS&#x60;
@@ -6338,8 +6347,8 @@ mkInvestmentsHoldingsGetRequest investmentsHoldingsGetRequestAccessToken =
 -- InvestmentsHoldingsGetResponse defines the response schema for `/investments/holdings/get`
 data InvestmentsHoldingsGetResponse = InvestmentsHoldingsGetResponse
   { investmentsHoldingsGetResponseAccounts :: !([AccountBase]) -- ^ /Required/ "accounts" - The accounts associated with the Item
-  , investmentsHoldingsGetResponseHoldings :: !([Holding]) -- ^ /Required/ "holdings" - The holdings belonging to investment accounts associated with the Item. Details of the securities in the holdings are provided in the &#x60;securities&#x60; field.
-  , investmentsHoldingsGetResponseSecurities :: !([Security]) -- ^ /Required/ "securities" - Objects describing the securities held in the accounts associated with the Item.
+  , investmentsHoldingsGetResponseHoldings :: !([Holding]) -- ^ /Required/ "holdings" - The holdings belonging to investment accounts associated with the Item. Details of the securities in the holdings are provided in the &#x60;securities&#x60; field. 
+  , investmentsHoldingsGetResponseSecurities :: !([Security]) -- ^ /Required/ "securities" - Objects describing the securities held in the accounts associated with the Item. 
   , investmentsHoldingsGetResponseItem :: !(Item) -- ^ /Required/ "item"
   , investmentsHoldingsGetResponseRequestId :: !(Text) -- ^ /Required/ "request_id" - A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -6369,9 +6378,9 @@ instance A.ToJSON InvestmentsHoldingsGetResponse where
 -- | Construct a value of type 'InvestmentsHoldingsGetResponse' (by applying it's required fields, if any)
 mkInvestmentsHoldingsGetResponse
   :: [AccountBase] -- ^ 'investmentsHoldingsGetResponseAccounts': The accounts associated with the Item
-  -> [Holding] -- ^ 'investmentsHoldingsGetResponseHoldings': The holdings belonging to investment accounts associated with the Item. Details of the securities in the holdings are provided in the `securities` field.
-  -> [Security] -- ^ 'investmentsHoldingsGetResponseSecurities': Objects describing the securities held in the accounts associated with the Item.
-  -> Item -- ^ 'investmentsHoldingsGetResponseItem'
+  -> [Holding] -- ^ 'investmentsHoldingsGetResponseHoldings': The holdings belonging to investment accounts associated with the Item. Details of the securities in the holdings are provided in the `securities` field. 
+  -> [Security] -- ^ 'investmentsHoldingsGetResponseSecurities': Objects describing the securities held in the accounts associated with the Item. 
+  -> Item -- ^ 'investmentsHoldingsGetResponseItem' 
   -> Text -- ^ 'investmentsHoldingsGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> InvestmentsHoldingsGetResponse
 mkInvestmentsHoldingsGetResponse investmentsHoldingsGetResponseAccounts investmentsHoldingsGetResponseHoldings investmentsHoldingsGetResponseSecurities investmentsHoldingsGetResponseItem investmentsHoldingsGetResponseRequestId =
@@ -6440,7 +6449,7 @@ mkInvestmentsTransactionsGetRequest investmentsTransactionsGetRequestAccessToken
 -- An optional object to filter `/investments/transactions/get` results. If provided, must be non-`null`.
 data InvestmentsTransactionsGetRequestOptions = InvestmentsTransactionsGetRequestOptions
   { investmentsTransactionsGetRequestOptionsAccountIds :: !(Maybe [Text]) -- ^ "account_ids" - An array of &#x60;account_ids&#x60; to retrieve for the Item.
-  , investmentsTransactionsGetRequestOptionsCount :: !(Maybe Int) -- ^ "count" - The number of transactions to fetch.
+  , investmentsTransactionsGetRequestOptionsCount :: !(Maybe Int) -- ^ "count" - The number of transactions to fetch. 
   , investmentsTransactionsGetRequestOptionsOffset :: !(Maybe Int) -- ^ "offset" - The number of transactions to skip when fetching transaction history
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -6510,7 +6519,7 @@ instance A.ToJSON InvestmentsTransactionsGetResponse where
 
 -- | Construct a value of type 'InvestmentsTransactionsGetResponse' (by applying it's required fields, if any)
 mkInvestmentsTransactionsGetResponse
-  :: Item -- ^ 'investmentsTransactionsGetResponseItem'
+  :: Item -- ^ 'investmentsTransactionsGetResponseItem' 
   -> [AccountBase] -- ^ 'investmentsTransactionsGetResponseAccounts': The accounts for which transaction history is being fetched.
   -> [Security] -- ^ 'investmentsTransactionsGetResponseSecurities': All securities for which there is a corresponding transaction being fetched.
   -> [InvestmentTransaction] -- ^ 'investmentsTransactionsGetResponseInvestmentTransactions': The transactions being fetched
@@ -6536,7 +6545,7 @@ data Item = Item
   , itemWebhook :: !(Maybe Text) -- ^ "webhook" - The URL registered to receive webhooks for the Item.
   , itemError :: !(Maybe Error) -- ^ "error"
   , itemAvailableProducts :: !([Products]) -- ^ /Required/ "available_products" - A list of products available for the Item that have not yet been accessed.
-  , itemBilledProducts :: !([Products]) -- ^ /Required/ "billed_products" - A list of products that have been billed for the Item. Note - &#x60;billed_products&#x60; is populated in all environments but only requests in Production are billed.
+  , itemBilledProducts :: !([Products]) -- ^ /Required/ "billed_products" - A list of products that have been billed for the Item. Note - &#x60;billed_products&#x60; is populated in all environments but only requests in Production are billed. 
   , itemConsentExpirationTime :: !(Maybe TI.UTCTime) -- ^ "consent_expiration_time" - The RFC 3339 timestamp after which the consent provided by the end user will expire. Upon consent expiration, the item will enter the &#x60;ITEM_LOGIN_REQUIRED&#x60; error state. To circumvent the &#x60;ITEM_LOGIN_REQUIRED&#x60; error and maintain continuous consent, the end user can reauthenticate via Link’s update mode in advance of the consent expiration time.  Note - This is only relevant for European institutions subject to PSD2 regulations mandating a 90-day consent window. For all other institutions, this field will be null.
   , itemUpdateType :: !(E'UpdateType) -- ^ /Required/ "update_type" - Indicates whether an Item requires user interaction to be updated, which can be the case for Items with some forms of two-factor authentication.  &#x60;background&#x60; - Item can be updated in the background  &#x60;requires_user_authentication&#x60; - Item requires user interaction to be updated
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -6573,7 +6582,7 @@ instance A.ToJSON Item where
 mkItem
   :: ItemId -- ^ 'itemItemId': The Plaid Item ID. The `item_id` is always unique; linking the same account at the same institution twice will result in two Items with different `item_id` values. Like all Plaid identifiers, the `item_id` is case-sensitive.
   -> [Products] -- ^ 'itemAvailableProducts': A list of products available for the Item that have not yet been accessed.
-  -> [Products] -- ^ 'itemBilledProducts': A list of products that have been billed for the Item. Note - `billed_products` is populated in all environments but only requests in Production are billed.
+  -> [Products] -- ^ 'itemBilledProducts': A list of products that have been billed for the Item. Note - `billed_products` is populated in all environments but only requests in Production are billed. 
   -> E'UpdateType -- ^ 'itemUpdateType': Indicates whether an Item requires user interaction to be updated, which can be the case for Items with some forms of two-factor authentication.  `background` - Item can be updated in the background  `requires_user_authentication` - Item requires user interaction to be updated
   -> Item
 mkItem itemItemId itemAvailableProducts itemBilledProducts itemUpdateType =
@@ -6664,7 +6673,7 @@ mkItemAccessTokenInvalidateResponse itemAccessTokenInvalidateResponseNewAccessTo
 -- ** ItemErrorWebhook
 -- | ItemErrorWebhook
 -- ItemErrorWebhook
---
+-- 
 -- Fired when an error is encountered with an Item. The error can be resolved by having the user go through Link’s update mode.
 data ItemErrorWebhook = ItemErrorWebhook
   { itemErrorWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;ITEM&#x60;
@@ -6698,7 +6707,7 @@ mkItemErrorWebhook
   :: Text -- ^ 'itemErrorWebhookWebhookType': `ITEM`
   -> Text -- ^ 'itemErrorWebhookWebhookCode': `ERROR`
   -> ItemId -- ^ 'itemErrorWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
-  -> Error -- ^ 'itemErrorWebhookError'
+  -> Error -- ^ 'itemErrorWebhookError' 
   -> ItemErrorWebhook
 mkItemErrorWebhook itemErrorWebhookWebhookType itemErrorWebhookWebhookCode itemErrorWebhookItemId itemErrorWebhookError =
   ItemErrorWebhook
@@ -6778,7 +6787,7 @@ instance A.ToJSON ItemGetResponse where
 
 -- | Construct a value of type 'ItemGetResponse' (by applying it's required fields, if any)
 mkItemGetResponse
-  :: Item -- ^ 'itemGetResponseItem'
+  :: Item -- ^ 'itemGetResponseItem' 
   -> Text -- ^ 'itemGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> ItemGetResponse
 mkItemGetResponse itemGetResponseItem itemGetResponseRequestId =
@@ -6825,7 +6834,7 @@ instance A.ToJSON ItemImportRequest where
 -- | Construct a value of type 'ItemImportRequest' (by applying it's required fields, if any)
 mkItemImportRequest
   :: [Products] -- ^ 'itemImportRequestProducts': Array of product strings
-  -> ItemImportRequestUserAuth -- ^ 'itemImportRequestUserAuth'
+  -> ItemImportRequestUserAuth -- ^ 'itemImportRequestUserAuth' 
   -> ItemImportRequest
 mkItemImportRequest itemImportRequestProducts itemImportRequestUserAuth =
   ItemImportRequest
@@ -6840,7 +6849,7 @@ mkItemImportRequest itemImportRequestProducts itemImportRequestUserAuth =
 -- | ItemImportRequestOptions
 -- An optional object to configure `/item/import` request.
 data ItemImportRequestOptions = ItemImportRequestOptions
-  { itemImportRequestOptionsWebhook :: !(Maybe Text) -- ^ "webhook" - Specifies a webhook URL to associate with an Item. Plaid fires a webhook if credentials fail.
+  { itemImportRequestOptionsWebhook :: !(Maybe Text) -- ^ "webhook" - Specifies a webhook URL to associate with an Item. Plaid fires a webhook if credentials fail. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ItemImportRequestOptions
@@ -6938,7 +6947,7 @@ mkItemImportResponse itemImportResponseAccessToken itemImportResponseRequestId =
 -- ** ItemProductReadyWebhook
 -- | ItemProductReadyWebhook
 -- ItemProductReadyWebhook
---
+-- 
 -- Fired once Plaid calculates income from an Item.
 data ItemProductReadyWebhook = ItemProductReadyWebhook
   { itemProductReadyWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;INCOME&#x60;
@@ -7207,7 +7216,7 @@ mkItemRemoveResponse itemRemoveResponseRequestId =
 -- ** ItemStatus
 -- | ItemStatus
 -- ItemStatus
---
+-- 
 -- An object with information about the status of the Item.
 data ItemStatus = ItemStatus
   { itemStatusInvestments :: !(Maybe (Map.Map String A.Value)) -- ^ "investments" - Information about the last successful and failed investments update for the Item.
@@ -7312,7 +7321,7 @@ instance A.ToJSON ItemWebhookUpdateResponse where
 
 -- | Construct a value of type 'ItemWebhookUpdateResponse' (by applying it's required fields, if any)
 mkItemWebhookUpdateResponse
-  :: Item -- ^ 'itemWebhookUpdateResponseItem'
+  :: Item -- ^ 'itemWebhookUpdateResponseItem' 
   -> Text -- ^ 'itemWebhookUpdateResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> ItemWebhookUpdateResponse
 mkItemWebhookUpdateResponse itemWebhookUpdateResponseItem itemWebhookUpdateResponseRequestId =
@@ -7385,7 +7394,7 @@ mkJWKPublicKey =
 -- ** JWTHeader
 -- | JWTHeader
 -- JWTHeader
---
+-- 
 -- A JWT Header, used for webhook validation
 data JWTHeader = JWTHeader
   { jWTHeaderId :: !(Text) -- ^ /Required/ "id"
@@ -7407,7 +7416,7 @@ instance A.ToJSON JWTHeader where
 
 -- | Construct a value of type 'JWTHeader' (by applying it's required fields, if any)
 mkJWTHeader
-  :: Text -- ^ 'jWTHeaderId'
+  :: Text -- ^ 'jWTHeaderId' 
   -> JWTHeader
 mkJWTHeader jWTHeaderId =
   JWTHeader
@@ -7518,8 +7527,8 @@ instance A.ToJSON LiabilitiesGetResponse where
 -- | Construct a value of type 'LiabilitiesGetResponse' (by applying it's required fields, if any)
 mkLiabilitiesGetResponse
   :: [AccountBase] -- ^ 'liabilitiesGetResponseAccounts': An array of accounts associated with the Item
-  -> Item -- ^ 'liabilitiesGetResponseItem'
-  -> LiabilitiesObject -- ^ 'liabilitiesGetResponseLiabilities'
+  -> Item -- ^ 'liabilitiesGetResponseItem' 
+  -> LiabilitiesObject -- ^ 'liabilitiesGetResponseLiabilities' 
   -> Text -- ^ 'liabilitiesGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> LiabilitiesGetResponse
 mkLiabilitiesGetResponse liabilitiesGetResponseAccounts liabilitiesGetResponseItem liabilitiesGetResponseLiabilities liabilitiesGetResponseRequestId =
@@ -7533,7 +7542,7 @@ mkLiabilitiesGetResponse liabilitiesGetResponseAccounts liabilitiesGetResponseIt
 -- ** LiabilitiesObject
 -- | LiabilitiesObject
 -- LiabilitiesObject
---
+-- 
 -- An object containing liability accounts
 data LiabilitiesObject = LiabilitiesObject
   { liabilitiesObjectCredit :: !(Maybe [CreditCardLiability]) -- ^ "credit" - The credit accounts returned. If no credit accounts are returned, &#x60;credit&#x60; will not be present in the schema.
@@ -7677,7 +7686,7 @@ mkLiabilityOverride
   -> Double -- ^ 'liabilityOverridePrincipal': The original loan principal. Can only be set if `type` is `student`.
   -> Double -- ^ 'liabilityOverrideNominalApr': The interest rate on the loan as a percentage. Can only be set if `type` is `student`.
   -> Double -- ^ 'liabilityOverrideInterestCapitalizationGracePeriodMonths': If set, interest capitalization begins at the given number of months after loan origination. By default interest is never capitalized. Can only be set if `type` is `student`.
-  -> StudentLoanRepaymentModel -- ^ 'liabilityOverrideRepaymentModel'
+  -> StudentLoanRepaymentModel -- ^ 'liabilityOverrideRepaymentModel' 
   -> Text -- ^ 'liabilityOverrideExpectedPayoffDate': Override the `expected_payoff_date` field. Can only be set if `type` is `student`.
   -> Text -- ^ 'liabilityOverrideGuarantor': Override the `guarantor` field. Can only be set if `type` is `student`.
   -> Bool -- ^ 'liabilityOverrideIsFederal': Override the `is_federal` field. Can only be set if `type` is `student`.
@@ -7688,7 +7697,7 @@ mkLiabilityOverride
   -> Text -- ^ 'liabilityOverrideRepaymentPlanDescription': Override the `repayment_plan.description` field. Can only be set if `type` is `student`.
   -> Text -- ^ 'liabilityOverrideRepaymentPlanType': Override the `repayment_plan.type` field. Can only be set if `type` is `student`. Possible values are: `\"extended graduated\"`, `\"extended standard\"`, `\"graduated\"`, `\"income-contingent repayment\"`, `\"income-based repayment\"`, `\"interest only\"`, `\"other\"`, `\"pay as you earn\"`, `\"revised pay as you earn\"`, or `\"standard\"`.
   -> Text -- ^ 'liabilityOverrideSequenceNumber': Override the `sequence_number` field. Can only be set if `type` is `student`.
-  -> Address -- ^ 'liabilityOverrideServicerAddress'
+  -> Address -- ^ 'liabilityOverrideServicerAddress' 
   -> LiabilityOverride
 mkLiabilityOverride liabilityOverrideType liabilityOverridePurchaseApr liabilityOverrideCashApr liabilityOverrideBalanceTransferApr liabilityOverrideSpecialApr liabilityOverrideLastPaymentAmount liabilityOverrideLastStatementBalance liabilityOverrideMinimumPaymentAmount liabilityOverrideIsOverdue liabilityOverrideOriginationDate liabilityOverridePrincipal liabilityOverrideNominalApr liabilityOverrideInterestCapitalizationGracePeriodMonths liabilityOverrideRepaymentModel liabilityOverrideExpectedPayoffDate liabilityOverrideGuarantor liabilityOverrideIsFederal liabilityOverrideLoanName liabilityOverrideLoanStatus liabilityOverridePaymentReferenceNumber liabilityOverridePslfStatus liabilityOverrideRepaymentPlanDescription liabilityOverrideRepaymentPlanType liabilityOverrideSequenceNumber liabilityOverrideServicerAddress =
   LiabilityOverride
@@ -7721,7 +7730,7 @@ mkLiabilityOverride liabilityOverrideType liabilityOverridePurchaseApr liability
 
 -- ** LinkTokenAccountFilters
 -- | LinkTokenAccountFilters
--- By default, Link will only display account types that are compatible with all products supplied in the `products` parameter of `/link/token/create`. You can further limit the accounts shown in Link by using `account_filters` to specify the account subtypes to be shown in Link. Only the specified subtypes will be shown. This filtering applies to both the Account Select view (if enabled) and the Institution Select view. Institutions that do not support the selected subtypes will be omitted from Link. To indicate that all subtypes should be shown, use the value `\"all\"`. If the `account_filters` filter is used, any account type for which a filter is not specified will be entirely omitted from Link. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).  For institutions using OAuth, the filter will not affect the list of institutions or accounts shown by the bank in the OAuth window.
+-- By default, Link will only display account types that are compatible with all products supplied in the `products` parameter of `/link/token/create`. You can further limit the accounts shown in Link by using `account_filters` to specify the account subtypes to be shown in Link. Only the specified subtypes will be shown. This filtering applies to both the Account Select view (if enabled) and the Institution Select view. Institutions that do not support the selected subtypes will be omitted from Link. To indicate that all subtypes should be shown, use the value `\"all\"`. If the `account_filters` filter is used, any account type for which a filter is not specified will be entirely omitted from Link. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).  For institutions using OAuth, the filter will not affect the list of institutions or accounts shown by the bank in the OAuth window. 
 data LinkTokenAccountFilters = LinkTokenAccountFilters
   { linkTokenAccountFiltersDepository :: !(Maybe DepositoryFilter) -- ^ "depository"
   , linkTokenAccountFiltersCredit :: !(Maybe CreditFilter) -- ^ "credit"
@@ -7775,7 +7784,7 @@ data LinkTokenCreateRequest = LinkTokenCreateRequest
   , linkTokenCreateRequestAccessToken :: !(Maybe AccessToken) -- ^ "access_token" - The &#x60;access_token&#x60; associated with the Item to update, used when updating or modifying an existing &#x60;access_token&#x60;. Used when launching Link in update mode, when completing the Same-day (manual) Micro-deposit flow, or (optionally) when initializing Link as part of the Payment Initiation (UK and Europe) flow.
   , linkTokenCreateRequestLinkCustomizationName :: !(Maybe Text) -- ^ "link_customization_name" - The name of the Link customization from the Plaid Dashboard to be applied to Link. If not specified, the &#x60;default&#x60; customization will be used. When using a Link customization, the language in the customization must match the language selected via the &#x60;language&#x60; parameter, and the countries in the customization should match the country codes selected via &#x60;country_codes&#x60;.
   , linkTokenCreateRequestRedirectUri :: !(Maybe Text) -- ^ "redirect_uri" - A URI indicating the destination where a user should be forwarded after completing the Link flow; used to support OAuth authentication flows when launching Link in the browser or via a webview. The &#x60;redirect_uri&#x60; should not contain any query parameters. If &#x60;android_package_name&#x60; is specified, this field should be left blank. Any redirect URI specified here must also be added under the \&quot;Allowed redirect URIs\&quot; configuration on the [developer dashboard](https://dashboard.plaid.com/team/api). In non-Sandbox (Production and Development) environments, the &#x60;redirect_uri&#x60; must begin with https.
-  , linkTokenCreateRequestAndroidPackageName :: !(Maybe Text) -- ^ "android_package_name" - The name of your app&#39;s Android package. Required if using the &#x60;link_token&#x60; to initialize Link on Android. When creating a &#x60;link_token&#x60; for initializing Link on other platforms, this field must be left blank. Any package name specified here must also be added to the Allowed Android package names setting on the [developer dashboard](https://dashboard.plaid.com/team/api).
+  , linkTokenCreateRequestAndroidPackageName :: !(Maybe Text) -- ^ "android_package_name" - The name of your app&#39;s Android package. Required if using the &#x60;link_token&#x60; to initialize Link on Android. When creating a &#x60;link_token&#x60; for initializing Link on other platforms, this field must be left blank. Any package name specified here must also be added to the Allowed Android package names setting on the [developer dashboard](https://dashboard.plaid.com/team/api). 
   , linkTokenCreateRequestAccountFilters :: !(Maybe LinkTokenAccountFilters) -- ^ "account_filters"
   , linkTokenCreateRequestInstitutionId :: !(Maybe Text) -- ^ "institution_id" - Used for certain legacy use cases
   , linkTokenCreateRequestPaymentInitiation :: !(Maybe LinkTokenCreateRequestPaymentInitiation) -- ^ "payment_initiation"
@@ -7834,7 +7843,7 @@ mkLinkTokenCreateRequest
   :: Text -- ^ 'linkTokenCreateRequestClientName': The name of your application, as it should be displayed in Link.
   -> Text -- ^ 'linkTokenCreateRequestLanguage': The language that Link should be displayed in.  Supported languages are: - English (`'en'`) - French (`'fr'`) - Spanish (`'es'`) - Dutch (`'nl'`)  When using a Link customization, the language configured here must match the setting in the customization, or the customization will not be applied.
   -> [CountryCode] -- ^ 'linkTokenCreateRequestCountryCodes': Specify an array of Plaid-supported country codes using the ISO-3166-1 alpha-2 country code standard. Institutions from all listed countries will be shown.  Supported country codes are: `US`, `CA`, `ES`, `FR`, `GB`, `IE`, `NL`. Example value: `['US', 'CA']`.  If Link is launched with multiple country codes, only products that you are enabled for in all countries will be used by Link. Note that while all countries are enabled by default in Sandbox and Development, in Production only US and Canada are enabled by default. To gain access to European institutions in the Production environment, [file a product access Support ticket](https://dashboard.plaid.com/support/new/product-and-development/product-troubleshooting/request-product-access) via the Plaid dashboard. If you initialize with a European country code, your users will see the European consent panel during the Link flow.  If using a Link customization, make sure the country codes in the customization match those specified in `country_codes`. If both `country_codes` and a Link customization are used, the value in `country_codes` may override the value in the customization.  If using the Auth features Instant Match, Same-day Micro-deposits, or Automated Micro-deposits, `country_codes` must be set to `['US']`.
-  -> LinkTokenCreateRequestUser -- ^ 'linkTokenCreateRequestUser'
+  -> LinkTokenCreateRequestUser -- ^ 'linkTokenCreateRequestUser' 
   -> LinkTokenCreateRequest
 mkLinkTokenCreateRequest linkTokenCreateRequestClientName linkTokenCreateRequestLanguage linkTokenCreateRequestCountryCodes linkTokenCreateRequestUser =
   LinkTokenCreateRequest
@@ -7859,7 +7868,7 @@ mkLinkTokenCreateRequest linkTokenCreateRequestClientName linkTokenCreateRequest
 
 -- ** LinkTokenCreateRequestAccountSubtypes
 -- | LinkTokenCreateRequestAccountSubtypes
--- By default, Link will only display account types that are compatible with all products supplied in the `products` parameter of `/link/token/create`. You can further limit the accounts shown in Link by using `account_filters` to specify the account subtypes to be shown in Link. Only the specified subtypes will be shown. This filtering applies to both the Account Select view (if enabled) and the Institution Select view. Institutions that do not support the selected subtypes will be omitted from Link. To indicate that all subtypes should be shown, use the value `\"all\"`. If the `account_filters` filter is used, any account type for which a filter is not specified will be entirely omitted from Link.  For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).  For institutions using OAuth, the filter will not affect the list of institutions or accounts shown by the bank in the OAuth window.
+-- By default, Link will only display account types that are compatible with all products supplied in the `products` parameter of `/link/token/create`. You can further limit the accounts shown in Link by using `account_filters` to specify the account subtypes to be shown in Link. Only the specified subtypes will be shown. This filtering applies to both the Account Select view (if enabled) and the Institution Select view. Institutions that do not support the selected subtypes will be omitted from Link. To indicate that all subtypes should be shown, use the value `\"all\"`. If the `account_filters` filter is used, any account type for which a filter is not specified will be entirely omitted from Link.  For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).  For institutions using OAuth, the filter will not affect the list of institutions or accounts shown by the bank in the OAuth window. 
 data LinkTokenCreateRequestAccountSubtypes = LinkTokenCreateRequestAccountSubtypes
   { linkTokenCreateRequestAccountSubtypesDepository :: !(Maybe (Map.Map String A.Value)) -- ^ "depository" - A filter to apply to &#x60;depository&#x60;-type accounts
   , linkTokenCreateRequestAccountSubtypesCredit :: !(Maybe (Map.Map String A.Value)) -- ^ "credit" - A filter to apply to &#x60;credit&#x60;-type accounts
@@ -7904,7 +7913,7 @@ mkLinkTokenCreateRequestAccountSubtypes =
 newtype LinkTokenCreateRequestUpdateDict =
   LinkTokenCreateRequestUpdateDict
     { linkTokenCreateRequestUpdateDictAccountSelectionEnabled :: Bool
-    } deriving (P.Show, P.Eq, P.Typeable)
+  } deriving (P.Show, P.Eq, P.Typeable)
 
 
 -- | FromJSON LinkTokenCreateRequestUpdateDict
@@ -7961,7 +7970,7 @@ mkLinkTokenCreateRequestDepositSwitch linkTokenCreateRequestDepositSwitchDeposit
 -- ** LinkTokenCreateRequestIncomeVerification
 -- | LinkTokenCreateRequestIncomeVerification
 -- LinkTokenCreateRequestIncomeVerification
---
+-- 
 -- Specifies options for initializing Link for use with the Income Verification (beta) product. This field is required if `income_verification` is included in the `products` array.
 data LinkTokenCreateRequestIncomeVerification = LinkTokenCreateRequestIncomeVerification
   { linkTokenCreateRequestIncomeVerificationIncomeVerificationId :: !(Text) -- ^ /Required/ "income_verification_id" - The &#x60;income_verification_id&#x60; of the verification instance, as provided by &#x60;/income/verification/create&#x60;.
@@ -8031,7 +8040,7 @@ data LinkTokenCreateRequestUser = LinkTokenCreateRequestUser
   { linkTokenCreateRequestUserClientUserId :: !(Text) -- ^ /Required/ "client_user_id" - A unique ID representing the end user. Typically this will be a user ID number from your application. Personally identifiable information, such as an email address or phone number, should not be used in the &#x60;client_user_id&#x60;. It is currently used as a means of searching logs for the given user in the Plaid Dashboard.
   , linkTokenCreateRequestUserLegalName :: !(Maybe Text) -- ^ "legal_name" - The user&#39;s full legal name. This is an optional field used in the [returning user experience](/docs/link/returning-user) to associate Items to the user.
   , linkTokenCreateRequestUserPhoneNumber :: !(Maybe Text) -- ^ "phone_number" - The user&#39;s phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format. This field is optional, but required to enable the [returning user experience](/docs/link/returning-user).
-  , linkTokenCreateRequestUserPhoneNumberVerifiedTime :: !(Maybe Text) -- ^ "phone_number_verified_time" - The date and time the phone number was verified in ISO 8601 format (&#x60;YYYY-MM-DDThh:mm:ssZ&#x60;). This field is optional, but required to enable any [returning user experience](/docs/link/returning-user).   Only pass a verification time for a phone number that you have verified. If you have performed verification but don’t have the time, you may supply a signal value of the start of the UNIX epoch.   Example: &#x60;2020-01-01T00:00:00Z&#x60;
+  , linkTokenCreateRequestUserPhoneNumberVerifiedTime :: !(Maybe Text) -- ^ "phone_number_verified_time" - The date and time the phone number was verified in ISO 8601 format (&#x60;YYYY-MM-DDThh:mm:ssZ&#x60;). This field is optional, but required to enable any [returning user experience](/docs/link/returning-user).   Only pass a verification time for a phone number that you have verified. If you have performed verification but don’t have the time, you may supply a signal value of the start of the UNIX epoch.   Example: &#x60;2020-01-01T00:00:00Z&#x60; 
   , linkTokenCreateRequestUserEmailAddress :: !(Maybe Text) -- ^ "email_address" - The user&#39;s email address. This field is optional, but required to enable the [pre-authenticated returning user flow](/docs/link/returning-user/#enabling-the-returning-user-experience).
   , linkTokenCreateRequestUserEmailAddressVerifiedTime :: !(Maybe Text) -- ^ "email_address_verified_time" - The date and time the email address was verified in ISO 8601 format (&#x60;YYYY-MM-DDThh:mm:ssZ&#x60;). This is an optional field used in the [returning user experience](/docs/link/returning-user).   Only pass a verification time for an email address that you have verified. If you have performed verification but don’t have the time, you may supply a signal value of the start of the UNIX epoch.   Example: &#x60;2020-01-01T00:00:00Z&#x60;
   , linkTokenCreateRequestUserSsn :: !(Maybe Text) -- ^ "ssn" - To be provided in the format \&quot;ddd-dd-dddd\&quot;. This field is optional and will support not-yet-implemented functionality for new products.
@@ -8262,10 +8271,10 @@ mkLinkTokenGetResponse linkTokenGetResponseRequestId =
 -- ** LoanFilter
 -- | LoanFilter
 -- LoanFilter
---
+-- 
 -- A filter to apply to `loan`-type accounts
 data LoanFilter = LoanFilter
-  { loanFilterAccountSubtypes :: !([AccountSubtype]) -- ^ /Required/ "account_subtypes" - An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).
+  { loanFilterAccountSubtypes :: !([AccountSubtype]) -- ^ /Required/ "account_subtypes" - An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema). 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON LoanFilter
@@ -8284,7 +8293,7 @@ instance A.ToJSON LoanFilter where
 
 -- | Construct a value of type 'LoanFilter' (by applying it's required fields, if any)
 mkLoanFilter
-  :: [AccountSubtype] -- ^ 'loanFilterAccountSubtypes': An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema).
+  :: [AccountSubtype] -- ^ 'loanFilterAccountSubtypes': An array of account subtypes to display in Link. If not specified, all account subtypes will be shown. For a full list of valid types and subtypes, see the [Account schema](/docs/api/accounts#accounts-schema). 
   -> LoanFilter
 mkLoanFilter loanFilterAccountSubtypes =
   LoanFilter
@@ -8294,7 +8303,7 @@ mkLoanFilter loanFilterAccountSubtypes =
 -- ** Location
 -- | Location
 -- Transaction Location
---
+-- 
 -- A representation of where a transaction took place
 data Location = Location
   { locationAddress :: !(Maybe Text) -- ^ "address" - The street address where the transaction occurred.
@@ -8353,14 +8362,14 @@ mkLocation =
 -- ** MFA
 -- | MFA
 -- MFA
---
+-- 
 -- Specifies the multi-factor authentication settings to use with this test account
 data MFA = MFA
   { mFAType :: !(Text) -- ^ /Required/ "type" - Possible values are &#x60;device&#x60;, &#x60;selections&#x60;, or &#x60;questions&#x60;.  If value is &#x60;device&#x60;, the MFA answer is &#x60;1234&#x60;.  If value is &#x60;selections&#x60;, the MFA answer is always the first option.  If value is &#x60;questions&#x60;, the MFA answer is  &#x60;answer_&lt;i&gt;_&lt;j&gt;&#x60; for the j-th question in the i-th round, starting from 0. For example, the answer to the first question in the second round is &#x60;answer_1_0&#x60;.
-  , mFAQuestionRounds :: !(Double) -- ^ /Required/ "question_rounds" - Number of rounds of questions. Required if value of &#x60;type&#x60; is &#x60;questions&#x60;.
+  , mFAQuestionRounds :: !(Double) -- ^ /Required/ "question_rounds" - Number of rounds of questions. Required if value of &#x60;type&#x60; is &#x60;questions&#x60;. 
   , mFAQuestionsPerRound :: !(Double) -- ^ /Required/ "questions_per_round" - Number of questions per round. Required if value of &#x60;type&#x60; is &#x60;questions&#x60;. If value of type is &#x60;selections&#x60;, default value is 2.
   , mFASelectionRounds :: !(Double) -- ^ /Required/ "selection_rounds" - Number of rounds of selections, used if &#x60;type&#x60; is &#x60;selections&#x60;. Defaults to 1.
-  , mFASelectionsPerQuestion :: !(Double) -- ^ /Required/ "selections_per_question" - Number of available answers per question, used if &#x60;type&#x60; is &#x60;selection&#x60;. Defaults to 2.
+  , mFASelectionsPerQuestion :: !(Double) -- ^ /Required/ "selections_per_question" - Number of available answers per question, used if &#x60;type&#x60; is &#x60;selection&#x60;. Defaults to 2. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON MFA
@@ -8388,10 +8397,10 @@ instance A.ToJSON MFA where
 -- | Construct a value of type 'MFA' (by applying it's required fields, if any)
 mkMFA
   :: Text -- ^ 'mFAType': Possible values are `device`, `selections`, or `questions`.  If value is `device`, the MFA answer is `1234`.  If value is `selections`, the MFA answer is always the first option.  If value is `questions`, the MFA answer is  `answer_<i>_<j>` for the j-th question in the i-th round, starting from 0. For example, the answer to the first question in the second round is `answer_1_0`.
-  -> Double -- ^ 'mFAQuestionRounds': Number of rounds of questions. Required if value of `type` is `questions`.
+  -> Double -- ^ 'mFAQuestionRounds': Number of rounds of questions. Required if value of `type` is `questions`. 
   -> Double -- ^ 'mFAQuestionsPerRound': Number of questions per round. Required if value of `type` is `questions`. If value of type is `selections`, default value is 2.
   -> Double -- ^ 'mFASelectionRounds': Number of rounds of selections, used if `type` is `selections`. Defaults to 1.
-  -> Double -- ^ 'mFASelectionsPerQuestion': Number of available answers per question, used if `type` is `selection`. Defaults to 2.
+  -> Double -- ^ 'mFASelectionsPerQuestion': Number of available answers per question, used if `type` is `selection`. Defaults to 2. 
   -> MFA
 mkMFA mFAType mFAQuestionRounds mFAQuestionsPerRound mFASelectionRounds mFASelectionsPerQuestion =
   MFA
@@ -8405,7 +8414,7 @@ mkMFA mFAType mFAQuestionRounds mFAQuestionsPerRound mFASelectionRounds mFASelec
 -- ** Meta
 -- | Meta
 -- Meta
---
+-- 
 -- Allows specifying the metadata of the test account
 data Meta = Meta
   { metaName :: !(Text) -- ^ /Required/ "name" - The account&#39;s name
@@ -8447,7 +8456,7 @@ mkMeta metaName metaOfficialName metaLimit =
 -- ** MortgageInterestRate
 -- | MortgageInterestRate
 -- MortgageInterestRate
---
+-- 
 -- Object containing metadata about the interest rate for the mortgage.
 data MortgageInterestRate = MortgageInterestRate
   { mortgageInterestRatePercentage :: !(Maybe Double) -- ^ "percentage" - Percentage value (interest rate of current mortgage, not APR) of interest payable on a loan.
@@ -8482,7 +8491,7 @@ mkMortgageInterestRate =
 -- ** MortgageLiability
 -- | MortgageLiability
 -- MortgageLiability
---
+-- 
 -- Contains details about a mortgage account.
 data MortgageLiability = MortgageLiability
   { mortgageLiabilityAccountId :: !(Maybe Text) -- ^ "account_id" - The ID of the account that this liability belongs to.
@@ -8590,7 +8599,7 @@ mkMortgageLiability mortgageLiabilityAccountNumber =
 -- ** MortgagePropertyAddress
 -- | MortgagePropertyAddress
 -- MortgagePropertyAddress
---
+-- 
 -- Object containing fields describing property address.
 data MortgagePropertyAddress = MortgagePropertyAddress
   { mortgagePropertyAddressCity :: !(Maybe Text) -- ^ "city" - The city name.
@@ -8637,20 +8646,20 @@ mkMortgagePropertyAddress =
 -- ** NullableAccessToken
 -- | NullableAccessToken
 data NullableAccessToken = NullableAccessToken
-  {
+  { 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON NullableAccessToken
 instance A.FromJSON NullableAccessToken where
   parseJSON = A.withObject "NullableAccessToken" $ \o ->
     pure NullableAccessToken
-
+      
 
 -- | ToJSON NullableAccessToken
 instance A.ToJSON NullableAccessToken where
   toJSON NullableAccessToken  =
    _omitNulls
-      [
+      [ 
       ]
 
 
@@ -8659,7 +8668,7 @@ mkNullableAccessToken
   :: NullableAccessToken
 mkNullableAccessToken =
   NullableAccessToken
-  {
+  { 
   }
 
 -- ** NullableAddress
@@ -8687,7 +8696,7 @@ instance A.ToJSON NullableAddress where
 
 -- | Construct a value of type 'NullableAddress' (by applying it's required fields, if any)
 mkNullableAddress
-  :: AddressData -- ^ 'nullableAddressData'
+  :: AddressData -- ^ 'nullableAddressData' 
   -> NullableAddress
 mkNullableAddress nullableAddressData =
   NullableAddress
@@ -8978,7 +8987,7 @@ mkNullableRecipientBACS =
 -- ** Numbers
 -- | Numbers
 -- Numbers
---
+-- 
 -- Account and bank identifier number data used to configure the test account. All values are optional.
 data Numbers = Numbers
   { numbersAccount :: !(Text) -- ^ /Required/ "account" - Will be used for the account number.
@@ -9045,7 +9054,7 @@ mkNumbers numbersAccount numbersAchRouting numbersAchWireRouting numbersEftInsti
 -- ** NumbersACH
 -- | NumbersACH
 -- NumbersACH
---
+-- 
 -- Identifying information for transferring money to or from a US account via ACH or wire transfer.
 data NumbersACH = NumbersACH
   { numbersACHAccountId :: !(Text) -- ^ /Required/ "account_id" - The Plaid account ID associated with the account numbers
@@ -9091,7 +9100,7 @@ mkNumbersACH numbersACHAccountId numbersACHAccount numbersACHRouting =
 -- ** NumbersBACS
 -- | NumbersBACS
 -- NumbersBACS
---
+-- 
 -- Identifying information for transferring money to or from a UK bank account via BACS.
 data NumbersBACS = NumbersBACS
   { numbersBACSAccountId :: !(Text) -- ^ /Required/ "account_id" - The Plaid account ID associated with the account numbers
@@ -9133,7 +9142,7 @@ mkNumbersBACS numbersBACSAccountId numbersBACSAccount numbersBACSSortCode =
 -- ** NumbersEFT
 -- | NumbersEFT
 -- NumbersEFT
---
+-- 
 -- Identifying information for transferring money to or from a Canadian bank account via EFT.
 data NumbersEFT = NumbersEFT
   { numbersEFTAccountId :: !(Text) -- ^ /Required/ "account_id" - The Plaid account ID associated with the account numbers
@@ -9180,7 +9189,7 @@ mkNumbersEFT numbersEFTAccountId numbersEFTAccount numbersEFTInstitution numbers
 -- ** NumbersInternationals
 -- | NumbersInternationals
 -- NumbersInternationals
---
+-- 
 -- Identifying information for transferring money to or from an international bank account via wire transfer.
 data NumbersInternationals = NumbersInternationals
   { numbersInternationalsAccountId :: !(Text) -- ^ /Required/ "account_id" - The Plaid account ID associated with the account numbers
@@ -9222,12 +9231,12 @@ mkNumbersInternationals numbersInternationalsAccountId numbersInternationalsIban
 -- ** OverrideAccounts
 -- | OverrideAccounts
 -- OverrideAccounts
---
+-- 
 -- Data to use to set values of test accounts. Some values cannot be specified in the schema and will instead will be calculated from other test data in order to achieve more consistent, realistic test data.
 data OverrideAccounts = OverrideAccounts
   { overrideAccountsType :: !(AccountType) -- ^ /Required/ "type"
   , overrideAccountsSubtype :: !(AccountSubtype) -- ^ /Required/ "subtype"
-  , overrideAccountsStartingBalance :: !(Double) -- ^ /Required/ "starting_balance" - If provided, the account will start with this amount as the current balance.
+  , overrideAccountsStartingBalance :: !(Double) -- ^ /Required/ "starting_balance" - If provided, the account will start with this amount as the current balance. 
   , overrideAccountsForceAvailableBalance :: !(Double) -- ^ /Required/ "force_available_balance" - If provided, the account will always have this amount as its  available balance, regardless of current balance or changes in transactions over time.
   , overrideAccountsCurrency :: !(Text) -- ^ /Required/ "currency" - ISO-4217 currency code. If provided, the account will be denominated in the given currency. Transactions will also be in this currency by default.
   , overrideAccountsMeta :: !(Meta) -- ^ /Required/ "meta"
@@ -9274,17 +9283,17 @@ instance A.ToJSON OverrideAccounts where
 
 -- | Construct a value of type 'OverrideAccounts' (by applying it's required fields, if any)
 mkOverrideAccounts
-  :: AccountType -- ^ 'overrideAccountsType'
-  -> AccountSubtype -- ^ 'overrideAccountsSubtype'
-  -> Double -- ^ 'overrideAccountsStartingBalance': If provided, the account will start with this amount as the current balance.
+  :: AccountType -- ^ 'overrideAccountsType' 
+  -> AccountSubtype -- ^ 'overrideAccountsSubtype' 
+  -> Double -- ^ 'overrideAccountsStartingBalance': If provided, the account will start with this amount as the current balance. 
   -> Double -- ^ 'overrideAccountsForceAvailableBalance': If provided, the account will always have this amount as its  available balance, regardless of current balance or changes in transactions over time.
   -> Text -- ^ 'overrideAccountsCurrency': ISO-4217 currency code. If provided, the account will be denominated in the given currency. Transactions will also be in this currency by default.
-  -> Meta -- ^ 'overrideAccountsMeta'
-  -> Numbers -- ^ 'overrideAccountsNumbers'
+  -> Meta -- ^ 'overrideAccountsMeta' 
+  -> Numbers -- ^ 'overrideAccountsNumbers' 
   -> [TransactionOverride] -- ^ 'overrideAccountsTransactions': Specify the list of transactions on the account.
-  -> OwnerOverride -- ^ 'overrideAccountsIdentity'
-  -> LiabilityOverride -- ^ 'overrideAccountsLiability'
-  -> InflowModel -- ^ 'overrideAccountsInflowModel'
+  -> OwnerOverride -- ^ 'overrideAccountsIdentity' 
+  -> LiabilityOverride -- ^ 'overrideAccountsLiability' 
+  -> InflowModel -- ^ 'overrideAccountsInflowModel' 
   -> OverrideAccounts
 mkOverrideAccounts overrideAccountsType overrideAccountsSubtype overrideAccountsStartingBalance overrideAccountsForceAvailableBalance overrideAccountsCurrency overrideAccountsMeta overrideAccountsNumbers overrideAccountsTransactions overrideAccountsIdentity overrideAccountsLiability overrideAccountsInflowModel =
   OverrideAccounts
@@ -9304,7 +9313,7 @@ mkOverrideAccounts overrideAccountsType overrideAccountsSubtype overrideAccounts
 -- ** Owner
 -- | Owner
 -- Owner
---
+-- 
 -- Data returned from the financial institution about the owner or owners of an account. Only the `names` array must be non-empty.
 data Owner = Owner
   { ownerNames :: !([Text]) -- ^ /Required/ "names" - A list of names associated with the account by the financial institution. These should always be the names of individuals, even for business accounts. If the name of a business is reported, please contact Plaid Support.  In the case of a joint account, the names of all account holders will be reported.  If an Item contains multiple accounts with different owner names, some institutions will report all names associated with the Item in each account&#39;s &#x60;names&#x60; array.
@@ -9351,7 +9360,7 @@ mkOwner ownerNames ownerPhoneNumbers ownerEmails ownerAddresses =
 -- ** OwnerOverride
 -- | OwnerOverride
 -- OwnerOverride
---
+-- 
 -- Data about the owner or owners of an account. Any fields not specified will be filled in with default Sandbox information.
 data OwnerOverride = OwnerOverride
   { ownerOverrideNames :: !([Text]) -- ^ /Required/ "names" - A list of names associated with the account by the financial institution. These should always be the names of individuals, even for business accounts. Note that the same name data will be used for all accounts associated with an Item.
@@ -9398,8 +9407,8 @@ mkOwnerOverride ownerOverrideNames ownerOverridePhoneNumbers ownerOverrideEmails
 -- ** PSLFStatus
 -- | PSLFStatus
 -- PSLFStatus
---
--- Information about the student's eligibility in the Public Service Loan Forgiveness program. This is only returned if the institution is Fedloan (`ins_116527`).
+-- 
+-- Information about the student's eligibility in the Public Service Loan Forgiveness program. This is only returned if the institution is Fedloan (`ins_116527`). 
 data PSLFStatus = PSLFStatus
   { pSLFStatusEstimatedEligibilityDate :: !(Maybe Text) -- ^ "estimated_eligibility_date" - The estimated date borrower will have completed 120 qualifying monthly payments. Returned in ISO 8601 format (YYYY-MM-DD).
   , pSLFStatusPaymentsMade :: !(Maybe Double) -- ^ "payments_made" - The number of qualifying payments that have been made.
@@ -9437,7 +9446,7 @@ mkPSLFStatus =
 -- ** PayFrequency
 -- | PayFrequency
 -- PayFrequency
---
+-- 
 data PayFrequency = PayFrequency
   { payFrequencyValue :: !(E'Value) -- ^ /Required/ "value" - The frequency of the pay period.
   , payFrequencyVerificationStatus :: !(VerificationStatus) -- ^ /Required/ "verification_status"
@@ -9462,7 +9471,7 @@ instance A.ToJSON PayFrequency where
 -- | Construct a value of type 'PayFrequency' (by applying it's required fields, if any)
 mkPayFrequency
   :: E'Value -- ^ 'payFrequencyValue': The frequency of the pay period.
-  -> VerificationStatus -- ^ 'payFrequencyVerificationStatus'
+  -> VerificationStatus -- ^ 'payFrequencyVerificationStatus' 
   -> PayFrequency
 mkPayFrequency payFrequencyValue payFrequencyVerificationStatus =
   PayFrequency
@@ -9473,7 +9482,7 @@ mkPayFrequency payFrequencyValue payFrequencyVerificationStatus =
 -- ** PayPeriodDetails
 -- | PayPeriodDetails
 -- PayPeriodDetails
---
+-- 
 -- Details about the pay period.
 data PayPeriodDetails = PayPeriodDetails
   { payPeriodDetailsStartDate :: !(Maybe Text) -- ^ "start_date" - The pay period start date, in ISO 8601 format: \&quot;yyyy-mm-dd\&quot;.
@@ -9520,7 +9529,7 @@ mkPayPeriodDetails =
 -- ** PaymentAmount
 -- | PaymentAmount
 -- PaymentAmount
---
+-- 
 -- The amount and currency of a payment
 data PaymentAmount = PaymentAmount
   { paymentAmountCurrency :: !(Text) -- ^ /Required/ "currency" - The ISO-4217 currency code of the payment amount
@@ -9557,7 +9566,7 @@ mkPaymentAmount paymentAmountCurrency paymentAmountValue =
 -- ** PaymentInitiationAddress
 -- | PaymentInitiationAddress
 -- PaymentInitiationAddress
---
+-- 
 -- The optional address of the payment recipient. This object is not currently required to make payments from UK institutions and should not be populated, though may be necessary for future European expansion.
 data PaymentInitiationAddress = PaymentInitiationAddress
   { paymentInitiationAddressStreet :: !(Maybe [Text]) -- ^ "street" - An array of length 1-2 representing the street address where the recipient is located. Maximum of 70 characters.
@@ -9637,7 +9646,7 @@ instance A.ToJSON PaymentInitiationPaymentCreateRequest where
 mkPaymentInitiationPaymentCreateRequest
   :: Text -- ^ 'paymentInitiationPaymentCreateRequestRecipientId': The ID of the recipient the payment is for.
   -> Text -- ^ 'paymentInitiationPaymentCreateRequestReference': A reference for the payment. This must be an alphanumeric string with at most 18 characters and must not contain any special characters (since not all institutions support them).
-  -> Amount -- ^ 'paymentInitiationPaymentCreateRequestAmount'
+  -> Amount -- ^ 'paymentInitiationPaymentCreateRequestAmount' 
   -> PaymentInitiationPaymentCreateRequest
 mkPaymentInitiationPaymentCreateRequest paymentInitiationPaymentCreateRequestRecipientId paymentInitiationPaymentCreateRequestReference paymentInitiationPaymentCreateRequestAmount =
   PaymentInitiationPaymentCreateRequest
@@ -9775,7 +9784,7 @@ instance A.ToJSON PaymentInitiationPaymentGetResponse where
 -- | Construct a value of type 'PaymentInitiationPaymentGetResponse' (by applying it's required fields, if any)
 mkPaymentInitiationPaymentGetResponse
   :: Text -- ^ 'paymentInitiationPaymentGetResponsePaymentId': The ID of the payment. Like all Plaid identifiers, the `payment_id` is case sensitive.
-  -> PaymentAmount -- ^ 'paymentInitiationPaymentGetResponseAmount'
+  -> PaymentAmount -- ^ 'paymentInitiationPaymentGetResponseAmount' 
   -> E'Status -- ^ 'paymentInitiationPaymentGetResponseStatus': The status of the payment.  `PAYMENT_STATUS_INPUT_NEEDED`: This is the initial state of all payments. It indicates that the payment is waiting on user input to continue processing. A payment may re-enter this state later on if further input is needed.  `PAYMENT_STATUS_PROCESSING`: The payment is currently being processed. The payment will automatically exit this state when processing is complete.  `PAYMENT_STATUS_INITIATED`: The payment has been successfully initiated and is considered complete.  `PAYMENT_STATUS_COMPLETED`: Indicates that the standing order has been successfully established. This state is only used for standing orders.  `PAYMENT_STATUS_INSUFFICIENT_FUNDS`: The payment has failed due to insufficient funds.  `PAYMENT_STATUS_FAILED`: The payment has failed to be initiated. This error is retryable once the root cause is resolved.  `PAYMENT_STATUS_BLOCKED`: The payment has been blocked. This is a retryable error.  `PAYMENT_STATUS_UNKNOWN`: The payment status is unknown.
   -> Text -- ^ 'paymentInitiationPaymentGetResponseRecipientId': The ID of the recipient
   -> Text -- ^ 'paymentInitiationPaymentGetResponseReference': A reference for the payment.
@@ -9956,7 +9965,7 @@ mkPaymentInitiationPaymentTokenCreateResponse paymentInitiationPaymentTokenCreat
 -- ** PaymentInitiationRecipient
 -- | PaymentInitiationRecipient
 -- PaymentInitiationRecipient
---
+-- 
 -- Information about a payment recipient configured for the Payment Initiation product
 data PaymentInitiationRecipient = PaymentInitiationRecipient
   { paymentInitiationRecipientRecipientId :: !(Text) -- ^ /Required/ "recipient_id" - The ID of the recipient. Like all Plaid identifiers, the &#x60;recipient_id&#x60; is case sensitive.
@@ -9992,7 +10001,7 @@ instance A.ToJSON PaymentInitiationRecipient where
 mkPaymentInitiationRecipient
   :: Text -- ^ 'paymentInitiationRecipientRecipientId': The ID of the recipient. Like all Plaid identifiers, the `recipient_id` is case sensitive.
   -> Text -- ^ 'paymentInitiationRecipientName': The name of the recipient
-  -> PaymentInitiationAddress -- ^ 'paymentInitiationRecipientAddress'
+  -> PaymentInitiationAddress -- ^ 'paymentInitiationRecipientAddress' 
   -> PaymentInitiationRecipient
 mkPaymentInitiationRecipient paymentInitiationRecipientRecipientId paymentInitiationRecipientName paymentInitiationRecipientAddress =
   PaymentInitiationRecipient
@@ -10250,7 +10259,7 @@ mkPaymentInitiationRecipientListResponse paymentInitiationRecipientListResponseR
 -- ** PaymentMeta
 -- | PaymentMeta
 -- payment_meta
---
+-- 
 -- Transaction information specific to inter-bank transfers. If the transaction was not an inter-bank transfer, all fields will be `null`.  If the `transaction` object was returned by a Transactions endpoint such as `/transactions/get`, the `payment_meta` key will always appear, but no data elements are guaranteed. If the `transaction` object was returned by an Assets endpoint such as `/asset_report/get/` or `/asset_report/pdf/get`, this field will only appear in an Asset Report with Insights.
 data PaymentMeta = PaymentMeta
   { paymentMetaReferenceNumber :: !(Maybe Text) -- ^ "reference_number" - The transaction reference number supplied by the financial institution.
@@ -10309,7 +10318,7 @@ mkPaymentMeta =
 -- ** PaymentStatusUpdateWebhook
 -- | PaymentStatusUpdateWebhook
 -- PaymentStatusUpdateWebhook
---
+-- 
 -- Fired when the status of a payment has changed.
 data PaymentStatusUpdateWebhook = PaymentStatusUpdateWebhook
   { paymentStatusUpdateWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;PAYMENT_INITIATION&#x60;
@@ -10386,7 +10395,7 @@ mkPaymentStatusUpdateWebhook paymentStatusUpdateWebhookWebhookType paymentStatus
 -- ** Paystub
 -- | Paystub
 -- Paystub
---
+-- 
 -- An object representing data extracted from the end user's paystub.
 data Paystub = Paystub
   { paystubPaystubId :: !(Text) -- ^ /Required/ "paystub_id" - The unique identifier for this paystub.
@@ -10427,11 +10436,11 @@ instance A.ToJSON Paystub where
 -- | Construct a value of type 'Paystub' (by applying it's required fields, if any)
 mkPaystub
   :: Text -- ^ 'paystubPaystubId': The unique identifier for this paystub.
-  -> Employer -- ^ 'paystubEmployer'
-  -> Employee -- ^ 'paystubEmployee'
-  -> PayPeriodDetails -- ^ 'paystubPayPeriodDetails'
-  -> IncomeBreakdown -- ^ 'paystubIncomeBreakdown'
-  -> PaystubYTDDetails -- ^ 'paystubYtdEarnings'
+  -> Employer -- ^ 'paystubEmployer' 
+  -> Employee -- ^ 'paystubEmployee' 
+  -> PayPeriodDetails -- ^ 'paystubPayPeriodDetails' 
+  -> IncomeBreakdown -- ^ 'paystubIncomeBreakdown' 
+  -> PaystubYTDDetails -- ^ 'paystubYtdEarnings' 
   -> Paystub
 mkPaystub paystubPaystubId paystubEmployer paystubEmployee paystubPayPeriodDetails paystubIncomeBreakdown paystubYtdEarnings =
   Paystub
@@ -10447,7 +10456,7 @@ mkPaystub paystubPaystubId paystubEmployer paystubEmployee paystubPayPeriodDetai
 -- ** PaystubDeduction
 -- | PaystubDeduction
 -- PaystubDeduction
---
+-- 
 data PaystubDeduction = PaystubDeduction
   { paystubDeductionType :: !(Maybe Text) -- ^ "type" - The description of the deduction, as provided on the paystub. For example: &#x60;\&quot;401(k)\&quot;&#x60;, &#x60;\&quot;FICA MED TAX\&quot;&#x60;.
   , paystubDeductionIsPretax :: !(Maybe Bool) -- ^ "is_pretax" - &#x60;true&#x60; if the deduction is pre-tax; &#x60;false&#x60; otherwise.
@@ -10485,7 +10494,7 @@ mkPaystubDeduction =
 -- ** PaystubYTDDetails
 -- | PaystubYTDDetails
 -- PaystubYTDDetails
---
+-- 
 data PaystubYTDDetails = PaystubYTDDetails
   { paystubYTDDetailsGrossEarnings :: !(Double) -- ^ /Required/ "gross_earnings" - Year-to-date gross earnings.
   , paystubYTDDetailsNetEarnings :: !(Double) -- ^ /Required/ "net_earnings" - Year-to-date net (take home) earnings.
@@ -10521,7 +10530,7 @@ mkPaystubYTDDetails paystubYTDDetailsGrossEarnings paystubYTDDetailsNetEarnings 
 -- ** PendingExpirationWebhook
 -- | PendingExpirationWebhook
 -- PendingExpirationWebhook
---
+-- 
 -- Fired when an Item’s access consent is expiring in 7 days. Some Items have explicit expiration times and we try to relay this when possible to reduce service disruption. This can be resolved by having the user go through Link’s update mode.
 data PendingExpirationWebhook = PendingExpirationWebhook
   { pendingExpirationWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;ITEM&#x60;
@@ -10568,7 +10577,7 @@ mkPendingExpirationWebhook pendingExpirationWebhookWebhookType pendingExpiration
 -- ** PhoneNumber
 -- | PhoneNumber
 -- PhoneNumber
---
+-- 
 -- A phone number
 data PhoneNumber = PhoneNumber
   { phoneNumberData :: !(Text) -- ^ /Required/ "data" - The phone number.
@@ -10716,8 +10725,8 @@ instance A.ToJSON ProcessorAuthGetResponse where
 -- | Construct a value of type 'ProcessorAuthGetResponse' (by applying it's required fields, if any)
 mkProcessorAuthGetResponse
   :: Text -- ^ 'processorAuthGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
-  -> ProcessorNumber -- ^ 'processorAuthGetResponseNumbers'
-  -> AccountBase -- ^ 'processorAuthGetResponseAccount'
+  -> ProcessorNumber -- ^ 'processorAuthGetResponseNumbers' 
+  -> AccountBase -- ^ 'processorAuthGetResponseAccount' 
   -> ProcessorAuthGetResponse
 mkProcessorAuthGetResponse processorAuthGetResponseRequestId processorAuthGetResponseNumbers processorAuthGetResponseAccount =
   ProcessorAuthGetResponse
@@ -10790,7 +10799,7 @@ instance A.ToJSON ProcessorBalanceGetResponse where
 
 -- | Construct a value of type 'ProcessorBalanceGetResponse' (by applying it's required fields, if any)
 mkProcessorBalanceGetResponse
-  :: AccountBase -- ^ 'processorBalanceGetResponseAccount'
+  :: AccountBase -- ^ 'processorBalanceGetResponseAccount' 
   -> Text -- ^ 'processorBalanceGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> ProcessorBalanceGetResponse
 mkProcessorBalanceGetResponse processorBalanceGetResponseAccount processorBalanceGetResponseRequestId =
@@ -10863,7 +10872,7 @@ instance A.ToJSON ProcessorIdentityGetResponse where
 
 -- | Construct a value of type 'ProcessorIdentityGetResponse' (by applying it's required fields, if any)
 mkProcessorIdentityGetResponse
-  :: AccountIdentity -- ^ 'processorIdentityGetResponseAccount'
+  :: AccountIdentity -- ^ 'processorIdentityGetResponseAccount' 
   -> Text -- ^ 'processorIdentityGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> ProcessorIdentityGetResponse
 mkProcessorIdentityGetResponse processorIdentityGetResponseAccount processorIdentityGetResponseRequestId =
@@ -11077,7 +11086,7 @@ mkProcessorTokenCreateResponse processorTokenCreateResponseProcessorToken proces
 -- ** ProductStatus
 -- | ProductStatus
 -- ProductStatus
---
+-- 
 -- A representation of the status health of a request type. Auth requests, Balance requests, Identity requests, Transactions updates, Investments updates, and Item logins each have their own status object.
 data ProductStatus = ProductStatus
   { productStatusStatus :: !(E'Status2) -- ^ /Required/ "status" - &#x60;HEALTHY&#x60;: the majority of requests are successful &#x60;DEGRADED&#x60;: only some requests are successful &#x60;DOWN&#x60;: all requests are failing
@@ -11119,11 +11128,11 @@ mkProductStatus productStatusStatus productStatusLastStatusChange productStatusB
 -- ** ProductStatusBreakdown
 -- | ProductStatusBreakdown
 -- StatusBreakdown
---
+-- 
 -- A detailed breakdown of the institution's performance for a request type. The values for `success`, `error_plaid`, and `error_institution` sum to 1.
 data ProductStatusBreakdown = ProductStatusBreakdown
   { productStatusBreakdownSuccess :: !(Double) -- ^ /Required/ "success" - The percentage of login attempts that are successful, expressed as a decimal.
-  , productStatusBreakdownErrorPlaid :: !(Double) -- ^ /Required/ "error_plaid" - The percentage of logins that are failing due to an internal Plaid issue, expressed as a decimal.
+  , productStatusBreakdownErrorPlaid :: !(Double) -- ^ /Required/ "error_plaid" - The percentage of logins that are failing due to an internal Plaid issue, expressed as a decimal. 
   , productStatusBreakdownErrorInstitution :: !(Double) -- ^ /Required/ "error_institution" - The percentage of logins that are failing due to an issue in the institution&#39;s system, expressed as a decimal.
   , productStatusBreakdownRefreshInterval :: !(Maybe E'RefreshInterval) -- ^ "refresh_interval" - The &#x60;refresh_interval&#x60; may be &#x60;DELAYED&#x60; or &#x60;STOPPED&#x60; even when the success rate is high. This value is only returned for Transactions status breakdowns.
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -11151,7 +11160,7 @@ instance A.ToJSON ProductStatusBreakdown where
 -- | Construct a value of type 'ProductStatusBreakdown' (by applying it's required fields, if any)
 mkProductStatusBreakdown
   :: Double -- ^ 'productStatusBreakdownSuccess': The percentage of login attempts that are successful, expressed as a decimal.
-  -> Double -- ^ 'productStatusBreakdownErrorPlaid': The percentage of logins that are failing due to an internal Plaid issue, expressed as a decimal.
+  -> Double -- ^ 'productStatusBreakdownErrorPlaid': The percentage of logins that are failing due to an internal Plaid issue, expressed as a decimal. 
   -> Double -- ^ 'productStatusBreakdownErrorInstitution': The percentage of logins that are failing due to an issue in the institution's system, expressed as a decimal.
   -> ProductStatusBreakdown
 mkProductStatusBreakdown productStatusBreakdownSuccess productStatusBreakdownErrorPlaid productStatusBreakdownErrorInstitution =
@@ -11199,7 +11208,7 @@ mkProjectedIncomeSummaryFieldNumber projectedIncomeSummaryFieldNumberValue proje
 -- ** RecaptchaRequiredError
 -- | RecaptchaRequiredError
 -- Recaptcha_RequiredError
---
+-- 
 -- The request was flagged by Plaid's fraud system, and requires additional verification to ensure they are not a bot.
 data RecaptchaRequiredError = RecaptchaRequiredError
   { recaptchaRequiredErrorErrorType :: !(Text) -- ^ /Required/ "error_type" - RECAPTCHA_ERROR
@@ -11241,7 +11250,7 @@ instance A.ToJSON RecaptchaRequiredError where
 mkRecaptchaRequiredError
   :: Text -- ^ 'recaptchaRequiredErrorErrorType': RECAPTCHA_ERROR
   -> Text -- ^ 'recaptchaRequiredErrorErrorCode': RECAPTCHA_REQUIRED
-  -> Text -- ^ 'recaptchaRequiredErrorDisplayMessage'
+  -> Text -- ^ 'recaptchaRequiredErrorDisplayMessage' 
   -> Text -- ^ 'recaptchaRequiredErrorHttpCode': 400
   -> Text -- ^ 'recaptchaRequiredErrorLinkUserExperience': Your user will be prompted to solve a Google reCAPTCHA challenge in the Link Recaptcha pane. If they solve the challenge successfully, the user's request is resubmitted and they are directed to the next Item creation step.
   -> Text -- ^ 'recaptchaRequiredErrorCommonCauses': Plaid's fraud system detects abusive traffic and considers a variety of parameters throughout Item creation requests. When a request is considered risky or possibly fraudulent, Link presents a reCAPTCHA for the user to solve.
@@ -11261,7 +11270,7 @@ mkRecaptchaRequiredError recaptchaRequiredErrorErrorType recaptchaRequiredErrorE
 -- ** RecipientBACS
 -- | RecipientBACS
 -- RecipientBACS
---
+-- 
 -- An object containing a BACS account number and sort code. If an IBAN is not provided or if this recipient needs to accept domestic GBP-denominated payments, BACS data is required.
 data RecipientBACS = RecipientBACS
   { recipientBACSAccount :: !(Maybe Text) -- ^ "account" - The account number of the account. Maximum of 10 characters.
@@ -11293,16 +11302,47 @@ mkRecipientBACS =
   , recipientBACSSortCode = Nothing
   }
 
+-- ** RemovedTransaction
+-- | RemovedTransaction
+-- RemovedTransaction
+-- 
+-- A representation of a removed transaction
+data RemovedTransaction = RemovedTransaction
+  { removedTransactionTransactionId :: !(Maybe Text) -- ^ "transaction_id" - The ID of the removed transaction.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON RemovedTransaction
+instance A.FromJSON RemovedTransaction where
+  parseJSON = A.withObject "RemovedTransaction" $ \o ->
+    RemovedTransaction
+      <$> (o .:? "transaction_id")
+
+-- | ToJSON RemovedTransaction
+instance A.ToJSON RemovedTransaction where
+  toJSON RemovedTransaction {..} =
+   _omitNulls
+      [ "transaction_id" .= removedTransactionTransactionId
+      ]
+
+
+-- | Construct a value of type 'RemovedTransaction' (by applying it's required fields, if any)
+mkRemovedTransaction
+  :: RemovedTransaction
+mkRemovedTransaction =
+  RemovedTransaction
+  { removedTransactionTransactionId = Nothing
+  }
+
 -- ** SandboxBankTransferSimulateRequest
 -- | SandboxBankTransferSimulateRequest
 -- SandboxBankTransferSimulateRequest
---
+-- 
 -- SandboxBankTransferSimulateRequest defines the request schema for `/sandbox/bank_transfer/simulate`
 data SandboxBankTransferSimulateRequest = SandboxBankTransferSimulateRequest
   { sandboxBankTransferSimulateRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
   , sandboxBankTransferSimulateRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
   , sandboxBankTransferSimulateRequestBankTransferId :: !(Text) -- ^ /Required/ "bank_transfer_id" - Plaid’s unique identifier for a bank transfer.
-  , sandboxBankTransferSimulateRequestEventType :: !(Text) -- ^ /Required/ "event_type" - The asynchronous event to be simulated. May be: &#x60;posted&#x60;, &#x60;failed&#x60;, or &#x60;reversed&#x60;.  An error will be returned if the event type is incompatible with the current transfer status. Compatible status --&gt; event type transitions include:  &#x60;pending&#x60; --&gt; &#x60;failed&#x60;  &#x60;pending&#x60; --&gt; &#x60;posted&#x60;  &#x60;posted&#x60; --&gt; &#x60;reversed&#x60;
+  , sandboxBankTransferSimulateRequestEventType :: !(Text) -- ^ /Required/ "event_type" - The asynchronous event to be simulated. May be: &#x60;posted&#x60;, &#x60;failed&#x60;, or &#x60;reversed&#x60;.  An error will be returned if the event type is incompatible with the current transfer status. Compatible status --&gt; event type transitions include:  &#x60;pending&#x60; --&gt; &#x60;failed&#x60;  &#x60;pending&#x60; --&gt; &#x60;posted&#x60;  &#x60;posted&#x60; --&gt; &#x60;reversed&#x60; 
   , sandboxBankTransferSimulateRequestFailureReason :: !(Maybe BankTransferFailure) -- ^ "failure_reason"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -11331,7 +11371,7 @@ instance A.ToJSON SandboxBankTransferSimulateRequest where
 -- | Construct a value of type 'SandboxBankTransferSimulateRequest' (by applying it's required fields, if any)
 mkSandboxBankTransferSimulateRequest
   :: Text -- ^ 'sandboxBankTransferSimulateRequestBankTransferId': Plaid’s unique identifier for a bank transfer.
-  -> Text -- ^ 'sandboxBankTransferSimulateRequestEventType': The asynchronous event to be simulated. May be: `posted`, `failed`, or `reversed`.  An error will be returned if the event type is incompatible with the current transfer status. Compatible status --> event type transitions include:  `pending` --> `failed`  `pending` --> `posted`  `posted` --> `reversed`
+  -> Text -- ^ 'sandboxBankTransferSimulateRequestEventType': The asynchronous event to be simulated. May be: `posted`, `failed`, or `reversed`.  An error will be returned if the event type is incompatible with the current transfer status. Compatible status --> event type transitions include:  `pending` --> `failed`  `pending` --> `posted`  `posted` --> `reversed` 
   -> SandboxBankTransferSimulateRequest
 mkSandboxBankTransferSimulateRequest sandboxBankTransferSimulateRequestBankTransferId sandboxBankTransferSimulateRequestEventType =
   SandboxBankTransferSimulateRequest
@@ -11345,7 +11385,7 @@ mkSandboxBankTransferSimulateRequest sandboxBankTransferSimulateRequestBankTrans
 -- ** SandboxBankTransferSimulateResponse
 -- | SandboxBankTransferSimulateResponse
 -- SandboxBankTransferSimulateResponse
---
+-- 
 -- SandboxBankTransferSimulateResponse defines the response schema for `/sandbox/bank_transfer/simulate`
 data SandboxBankTransferSimulateResponse = SandboxBankTransferSimulateResponse
   { sandboxBankTransferSimulateResponseRequestId :: !(Text) -- ^ /Required/ "request_id" - A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
@@ -11869,7 +11909,7 @@ mkSandboxPublicTokenCreateResponse sandboxPublicTokenCreateResponsePublicToken s
 -- ** Security
 -- | Security
 -- Security
---
+-- 
 -- Contains details about a security
 data Security = Security
   { securitySecurityId :: !(Text) -- ^ /Required/ "security_id" - A unique, Plaid-specific identifier for the security, used to associate securities with holdings. Like all Plaid identifiers, the &#x60;security_id&#x60; is case sensitive.
@@ -11958,7 +11998,7 @@ mkSecurity securitySecurityId securityType =
 -- ** ServicerAddressData
 -- | ServicerAddressData
 -- ServicerAddressData
---
+-- 
 -- The address of the student loan servicer. This is generally the remittance address to which payments should be sent.
 data ServicerAddressData = ServicerAddressData
   { servicerAddressDataCity :: !(Maybe Text) -- ^ "city" - The full city name
@@ -12005,7 +12045,7 @@ mkServicerAddressData =
 -- ** StandaloneAccountType
 -- | StandaloneAccountType
 -- StandaloneAccountType
---
+-- 
 -- The schema below describes the various `types` and corresponding `subtypes` that Plaid recognizes and reports for financial institution accounts.
 data StandaloneAccountType = StandaloneAccountType
   { standaloneAccountTypeDepository :: !(Text) -- ^ /Required/ "depository" - An account type holding cash, in which funds are deposited. Supported products for &#x60;depository&#x60; accounts are: Auth, Balance, Transactions, Identity, Payment Initiation, and Assets.
@@ -12057,7 +12097,7 @@ mkStandaloneAccountType standaloneAccountTypeDepository standaloneAccountTypeCre
 -- ** StandaloneCurrencyCodeList
 -- | StandaloneCurrencyCodeList
 -- StandaloneCurrencyCodeList
---
+-- 
 -- The following currency codes are supported by Plaid.
 data StandaloneCurrencyCodeList = StandaloneCurrencyCodeList
   { standaloneCurrencyCodeListIsoCurrencyCode :: !(Text) -- ^ /Required/ "iso_currency_code" - Plaid supports all ISO 4217 currency codes.
@@ -12094,7 +12134,7 @@ mkStandaloneCurrencyCodeList standaloneCurrencyCodeListIsoCurrencyCode standalon
 -- ** StandaloneInvestmentTransactionSubtype
 -- | StandaloneInvestmentTransactionSubtype
 -- StandaloneInvestmentTransactionSubtype
---
+-- 
 -- Valid subtypes for Investment transaction subtypes. Note that transactions representing inflow of cash will appear as negative amounts, outflow of cash will appear as positive amounts.
 data StandaloneInvestmentTransactionSubtype = StandaloneInvestmentTransactionSubtype
   { standaloneInvestmentTransactionSubtypeAccountFee :: !(Maybe Text) -- ^ "account fee" - Fees paid for account maintenance
@@ -12107,7 +12147,7 @@ data StandaloneInvestmentTransactionSubtype = StandaloneInvestmentTransactionSub
   , standaloneInvestmentTransactionSubtypeDividend :: !(Maybe Text) -- ^ "dividend" - Inflow of cash from a dividend
   , standaloneInvestmentTransactionSubtypeDividendReinvestment :: !(Maybe Text) -- ^ "dividend reinvestment" - Purchase using proceeds from a cash dividend
   , standaloneInvestmentTransactionSubtypeExercise :: !(Maybe Text) -- ^ "exercise" - Exercise of an option or warrant contract
-  , standaloneInvestmentTransactionSubtypeExpire :: !(Maybe Text) -- ^ "expire" - Expiration of an option or warrant contract
+  , standaloneInvestmentTransactionSubtypeExpire :: !(Maybe Text) -- ^ "expire" - Expiration of an option or warrant contract 
   , standaloneInvestmentTransactionSubtypeFundFee :: !(Maybe Text) -- ^ "fund fee" - Fees paid for administration of a mutual fund or other pooled investment vehicle
   , standaloneInvestmentTransactionSubtypeInterest :: !(Maybe Text) -- ^ "interest" - Inflow of cash from interest
   , standaloneInvestmentTransactionSubtypeInterestReceivable :: !(Maybe Text) -- ^ "interest receivable" - Inflow of cash from interest receivable
@@ -12297,7 +12337,7 @@ mkStandaloneInvestmentTransactionSubtype =
 -- ** StandaloneInvestmentTransactionType
 -- | StandaloneInvestmentTransactionType
 -- StandaloneInvestmentTransactionType
---
+-- 
 -- Valid values for investment transaction types
 data StandaloneInvestmentTransactionType = StandaloneInvestmentTransactionType
   { standaloneInvestmentTransactionTypeBuy :: !(Text) -- ^ /Required/ "buy" - Buying an investment
@@ -12354,7 +12394,7 @@ mkStandaloneInvestmentTransactionType standaloneInvestmentTransactionTypeBuy sta
 -- ** StudentLoan
 -- | StudentLoan
 -- StudentLoan
---
+-- 
 -- Contains details about a student loan account
 data StudentLoan = StudentLoan
   { studentLoanAccountId :: !(Maybe Text) -- ^ "account_id" - The ID of the account that this liability belongs to.
@@ -12366,13 +12406,13 @@ data StudentLoan = StudentLoan
   , studentLoanIsOverdue :: !(Maybe Bool) -- ^ "is_overdue" - &#x60;true&#x60; if a payment is currently overdue. Availability for this field is limited.
   , studentLoanLastPaymentAmount :: !(Maybe Double) -- ^ "last_payment_amount" - The amount of the last payment.
   , studentLoanLastPaymentDate :: !(Maybe Text) -- ^ "last_payment_date" - The date of the last payment. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
-  , studentLoanLastStatementBalance :: !(Maybe Double) -- ^ "last_statement_balance" - The outstanding balance on the last statement. This field could also be interpreted as the next payment due. Availability for this field is limited.
+  , studentLoanLastStatementBalance :: !(Maybe Double) -- ^ "last_statement_balance" - The outstanding balance on the last statement. This field could also be interpreted as the next payment due. Availability for this field is limited. 
   , studentLoanLastStatementIssueDate :: !(Maybe Text) -- ^ "last_statement_issue_date" - The date of the last statement. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
   , studentLoanLoanName :: !(Maybe Text) -- ^ "loan_name" - The type of loan, e.g., \&quot;Consolidation Loans\&quot;.
   , studentLoanLoanStatus :: !(Maybe StudentLoanStatus) -- ^ "loan_status"
   , studentLoanMinimumPaymentAmount :: !(Maybe Double) -- ^ "minimum_payment_amount" - The minimum payment due for the next billing cycle. There are some exceptions: Some institutions require a minimum payment across all loans associated with an account number. Our API presents that same minimum payment amount on each loan. The institutions that do this are: Great Lakes ( &#x60;ins_116861&#x60;), Firstmark (&#x60;ins_116295&#x60;), Commonbond Firstmark Services (&#x60;ins_116950&#x60;), Nelnet (&#x60;ins_116528&#x60;), EdFinancial Services (&#x60;ins_116304&#x60;), Granite State (&#x60;ins_116308&#x60;), and Oklahoma Student Loan Authority (&#x60;ins_116945&#x60;). Firstmark (&#x60;ins_116295&#x60; ) will display as $0 if there is an autopay program in effect.
   , studentLoanNextPaymentDueDate :: !(Maybe Text) -- ^ "next_payment_due_date" - The due date for the next payment. The due date is &#x60;null&#x60; if a payment is not expected. A payment is not expected if &#x60;loan_status.type&#x60; is &#x60;deferment&#x60;, &#x60;in_school&#x60;, &#x60;consolidated&#x60;, &#x60;paid in full&#x60;, or &#x60;transferred&#x60;. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
-  , studentLoanOriginationDate :: !(Maybe Text) -- ^ "origination_date" - The date on which the loan was initially lent. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
+  , studentLoanOriginationDate :: !(Maybe Text) -- ^ "origination_date" - The date on which the loan was initially lent. Dates are returned in an ISO 8601 format (YYYY-MM-DD). 
   , studentLoanOriginationPrincipalAmount :: !(Maybe Double) -- ^ "origination_principal_amount" - The original principal balance of the loan.
   , studentLoanOutstandingInterestAmount :: !(Maybe Double) -- ^ "outstanding_interest_amount" - The total dollar amount of the accrued interest balance. For Sallie Mae ( &#x60;ins_116944&#x60;), this amount is included in the current balance of the loan, so this field will return as &#x60;null&#x60;.
   , studentLoanPaymentReferenceNumber :: !(Maybe Text) -- ^ "payment_reference_number" - The relevant account number that should be used to reference this loan for payments. In the majority of cases, &#x60;payment_reference_number&#x60; will match a&#x60;ccount_number,&#x60; but in some institutions, such as Great Lakes (&#x60;ins_116861&#x60;), it will be different.
@@ -12482,7 +12522,7 @@ mkStudentLoan studentLoanInterestRatePercentage =
 -- ** StudentLoanRepaymentModel
 -- | StudentLoanRepaymentModel
 -- StudentLoanRepaymentModel
---
+-- 
 -- Student loan repayment information used to configure Sandbox test data for the Liabilities product
 data StudentLoanRepaymentModel = StudentLoanRepaymentModel
   { studentLoanRepaymentModelType :: !(Text) -- ^ /Required/ "type" - The only currently supported value for this field is &#x60;standard&#x60;.
@@ -12524,10 +12564,10 @@ mkStudentLoanRepaymentModel studentLoanRepaymentModelType studentLoanRepaymentMo
 -- ** StudentLoanStatus
 -- | StudentLoanStatus
 -- StudentLoanStatus
---
+-- 
 -- An object representing the status of the student loan
 data StudentLoanStatus = StudentLoanStatus
-  { studentLoanStatusEndDate :: !(Maybe Text) -- ^ "end_date" - The date until which the loan will be in its current status. Dates are returned in an ISO 8601 format (YYYY-MM-DD).
+  { studentLoanStatusEndDate :: !(Maybe Text) -- ^ "end_date" - The date until which the loan will be in its current status. Dates are returned in an ISO 8601 format (YYYY-MM-DD). 
   , studentLoanStatusType :: !(Maybe E'Type3) -- ^ "type" - The status type of the student loan
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -12559,7 +12599,7 @@ mkStudentLoanStatus =
 -- ** StudentRepaymentPlan
 -- | StudentRepaymentPlan
 -- StudentRepaymentPlan
---
+-- 
 -- An object representing the repayment plan for the student loan
 data StudentRepaymentPlan = StudentRepaymentPlan
   { studentRepaymentPlanDescription :: !(Maybe Text) -- ^ "description" - The description of the repayment plan as provided by the servicer.
@@ -12591,18 +12631,74 @@ mkStudentRepaymentPlan =
   , studentRepaymentPlanType = Nothing
   }
 
+
+
+-- ** SyncUpdatesAvailableWebhook
+-- | SyncUpdatesAvailableWebhook
+-- SyncUpdatesAvailableWebhook
+-- 
+-- Fired when an Item's transactions change. This can be due to any event resulting in new changes, such as an initial 30-day transactions fetch upon the initialization of an Item with transactions, the backfill of historical transactions that occurs shortly after, or when changes are populated from a regularly-scheduled transactions update job. It is recommended to listen for the `SYNC_UPDATES_AVAILABLE` webhook when using the `/transactions/sync` endpoint. Note that when using `/transactions/sync` the older webhooks `INITIAL_UPDATE`, `HISTORICAL_UPDATE`, `DEFAULT_UPDATE`, and `TRANSACTIONS_REMOVED`, which are intended for use with `/transactions/get`, will also continue to be sent in order to maintain backwards compatibility. It is not necessary to listen for and respond to those webhooks when using `/transactions/sync`.  After receipt of this webhook, the new changes can be fetched for the Item from `/transactions/sync`.  Note that to receive this webhook for an Item, `/transactions/sync` must have been called at least once on that Item.
+data SyncUpdatesAvailableWebhook = SyncUpdatesAvailableWebhook
+  { syncUpdatesAvailableWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;TRANSACTIONS&#x60;
+  , syncUpdatesAvailableWebhookWebhookCode :: !(Text) -- ^ /Required/ "webhook_code" - &#x60;SYNC_UPDATES_AVAILABLE&#x60;
+  , syncUpdatesAvailableWebhookItemId :: !(ItemId) -- ^ /Required/ "item_id" - The &#x60;item_id&#x60; of the Item associated with this webhook, warning, or error
+  , syncUpdatesAvailableWebhookInitialUpdateComplete :: !(Bool) -- ^ /Required/ "initial_update_complete" - Indicates if initial pull information is available.
+  , syncUpdatesAvailableWebhookHistoricalUpdateComplete :: !(Bool) -- ^ /Required/ "historical_update_complete" - Indicates if historical pull information is available.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON SyncUpdatesAvailableWebhook
+instance A.FromJSON SyncUpdatesAvailableWebhook where
+  parseJSON = A.withObject "SyncUpdatesAvailableWebhook" $ \o ->
+    SyncUpdatesAvailableWebhook
+      <$> (o .:  "webhook_type")
+      <*> (o .:  "webhook_code")
+      <*> (o .:  "item_id")
+      <*> (o .:  "initial_update_complete")
+      <*> (o .:  "historical_update_complete")
+
+-- | ToJSON SyncUpdatesAvailableWebhook
+instance A.ToJSON SyncUpdatesAvailableWebhook where
+  toJSON SyncUpdatesAvailableWebhook {..} =
+   _omitNulls
+      [ "webhook_type" .= syncUpdatesAvailableWebhookWebhookType
+      , "webhook_code" .= syncUpdatesAvailableWebhookWebhookCode
+      , "item_id" .= syncUpdatesAvailableWebhookItemId
+      , "initial_update_complete" .= syncUpdatesAvailableWebhookInitialUpdateComplete
+      , "historical_update_complete" .= syncUpdatesAvailableWebhookHistoricalUpdateComplete
+      ]
+
+
+-- | Construct a value of type 'SyncUpdatesAvailableWebhook' (by applying it's required fields, if any)
+mkSyncUpdatesAvailableWebhook
+  :: Text -- ^ 'syncUpdatesAvailableWebhookWebhookType': `TRANSACTIONS`
+  -> Text -- ^ 'syncUpdatesAvailableWebhookWebhookCode': `SYNC_UPDATES_AVAILABLE`
+  -> ItemId -- ^ 'syncUpdatesAvailableWebhookItemId': The `item_id` of the Item associated with this webhook, warning, or error
+  -> Bool -- ^ 'syncUpdatesAvailableWebhookInitialUpdateComplete': Indicates if initial pull information is available.
+  -> Bool -- ^ 'syncUpdatesAvailableWebhookHistoricalUpdateComplete': Indicates if historical pull information is available.
+  -> SyncUpdatesAvailableWebhook
+mkSyncUpdatesAvailableWebhook syncUpdatesAvailableWebhookWebhookType syncUpdatesAvailableWebhookWebhookCode syncUpdatesAvailableWebhookItemId syncUpdatesAvailableWebhookInitialUpdateComplete syncUpdatesAvailableWebhookHistoricalUpdateComplete =
+  SyncUpdatesAvailableWebhook
+  { syncUpdatesAvailableWebhookWebhookType
+  , syncUpdatesAvailableWebhookWebhookCode
+  , syncUpdatesAvailableWebhookItemId
+  , syncUpdatesAvailableWebhookInitialUpdateComplete
+  , syncUpdatesAvailableWebhookHistoricalUpdateComplete
+  }
+
+
+
 -- ** Transaction
 -- | Transaction
 -- Transaction
---
+-- 
 -- A representation of a transaction
 data Transaction = Transaction
-  { transactionTransactionType :: !(Maybe E'TransactionType) -- ^ "transaction_type" - Please use the &#x60;payment_channel&#x60; field, &#x60;transaction_type&#x60; will be deprecated in the future.  &#x60;digital:&#x60; transactions that took place online.  &#x60;place:&#x60; transactions that were made at a physical location.  &#x60;special:&#x60; transactions that relate to banks, e.g. fees or deposits.  &#x60;unresolved:&#x60; transactions that do not fit into the other three types.
+  { transactionTransactionType :: !(Maybe E'TransactionType) -- ^ "transaction_type" - Please use the &#x60;payment_channel&#x60; field, &#x60;transaction_type&#x60; will be deprecated in the future.  &#x60;digital:&#x60; transactions that took place online.  &#x60;place:&#x60; transactions that were made at a physical location.  &#x60;special:&#x60; transactions that relate to banks, e.g. fees or deposits.  &#x60;unresolved:&#x60; transactions that do not fit into the other three types. 
   , transactionTransactionId :: !(Text) -- ^ /Required/ "transaction_id" - The unique ID of the transaction. Like all Plaid identifiers, the &#x60;transaction_id&#x60; is case sensitive.
   , transactionAccountOwner :: !(Maybe Text) -- ^ "account_owner" - The name of the account owner. This field is not typically populated and only relevant when dealing with sub-accounts.
   , transactionPendingTransactionId :: !(Maybe Text) -- ^ "pending_transaction_id" - The ID of a posted transaction&#39;s associated pending transaction, where applicable.
   , transactionPending :: !(Bool) -- ^ /Required/ "pending" - When &#x60;true&#x60;, identifies the transaction as pending or unsettled. Pending transaction details (name, type, amount, category ID) may change before they are settled.
-  , transactionPaymentChannel :: !(Maybe E'PaymentChannel) -- ^ "payment_channel" - The channel used to make a payment. &#x60;online:&#x60; transactions that took place online.  &#x60;in store:&#x60; transactions that were made at a physical location.  &#x60;other:&#x60; transactions that relate to banks, e.g. fees or deposits.  This field replaces the &#x60;transaction_type&#x60; field.
+  , transactionPaymentChannel :: !(Maybe E'PaymentChannel) -- ^ "payment_channel" - The channel used to make a payment. &#x60;online:&#x60; transactions that took place online.  &#x60;in store:&#x60; transactions that were made at a physical location.  &#x60;other:&#x60; transactions that relate to banks, e.g. fees or deposits.  This field replaces the &#x60;transaction_type&#x60; field. 
   , transactionPaymentMeta :: !(Maybe PaymentMeta) -- ^ "payment_meta"
   , transactionName :: !(Maybe Text) -- ^ "name" - The merchant name or transaction description.  If the &#x60;transaction&#x60; object was returned by a Transactions endpoint such as &#x60;/transactions/get&#x60;, this field will always appear. If the &#x60;transaction&#x60; object was returned by an Assets endpoint such as &#x60;/asset_report/get/&#x60; or &#x60;/asset_report/pdf/get&#x60;, this field will only appear in an Asset Report with Insights.
   , transactionMerchantName :: !(Maybe Text) -- ^ "merchant_name" - The merchant name, as extracted by Plaid from the &#x60;name&#x60; field.
@@ -12725,7 +12821,7 @@ mkTransaction transactionTransactionId transactionPending transactionDate transa
 -- ** TransactionData
 -- | TransactionData
 -- TransactionData
---
+-- 
 -- Information about the matched direct deposit transaction used to verify a user's payroll information.
 data TransactionData = TransactionData
   { transactionDataDescription :: !(Text) -- ^ /Required/ "description" - The description of the transaction.
@@ -12777,7 +12873,7 @@ mkTransactionData transactionDataDescription transactionDataAmount transactionDa
 -- ** TransactionOverride
 -- | TransactionOverride
 -- TransactionOverride
---
+-- 
 -- Data to populate as test transaction data. If not specified, random transactions will be generated instead.
 data TransactionOverride = TransactionOverride
   { transactionOverrideTransactionDate :: !(Text) -- ^ /Required/ "transaction_date" - The date of the transaction, in ISO8601 (YYYY-MM-DD) format. Transaction dates in the past or present will result in posted transactions; transaction dates in the future will result in pending transactions. Transactions in Sandbox will move from pending to posted once their transaction date has been reached.
@@ -12956,7 +13052,7 @@ mkTransactionsGetResponse
   :: [AccountBase] -- ^ 'transactionsGetResponseAccounts': An array containing the `accounts` associated with the Item for which transactions are being returned. Each transaction can be mapped to its corresponding account via the `account_id` field.
   -> [Transaction] -- ^ 'transactionsGetResponseTransactions': An array containing transactions from the account. Transactions are returned in reverse chronological order, with the most recent at the beginning of the array. The maximum number of transactions returned is determined by the `count` parameter.
   -> Int -- ^ 'transactionsGetResponseTotalTransactions': The total number of transactions available within the date range specified. If `total_transactions` is larger than the size of the `transactions` array, more transactions are available and can be fetched via manipulating the `offset` parameter.
-  -> Item -- ^ 'transactionsGetResponseItem'
+  -> Item -- ^ 'transactionsGetResponseItem' 
   -> Text -- ^ 'transactionsGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> TransactionsGetResponse
 mkTransactionsGetResponse transactionsGetResponseAccounts transactionsGetResponseTransactions transactionsGetResponseTotalTransactions transactionsGetResponseItem transactionsGetResponseRequestId =
@@ -13039,7 +13135,7 @@ mkTransactionsRefreshResponse transactionsRefreshResponseRequestId =
 -- ** TransactionsRemovedWebhook
 -- | TransactionsRemovedWebhook
 -- TransactionsRemovedWebhook
---
+-- 
 -- Fired when transaction(s) for an Item are deleted. The deleted transaction IDs are included in the webhook payload. Plaid will typically check for deleted transaction data several times a day.
 data TransactionsRemovedWebhook = TransactionsRemovedWebhook
   { transactionsRemovedWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;TRANSACTIONS&#x60;
@@ -13087,10 +13183,148 @@ mkTransactionsRemovedWebhook transactionsRemovedWebhookWebhookType transactionsR
   , transactionsRemovedWebhookItemId
   }
 
+-- ** TransactionsSyncRequest
+-- | TransactionsSyncRequest
+-- TransactionsSyncRequest defines the request schema for `/transactions/sync`
+data TransactionsSyncRequest = TransactionsSyncRequest
+  { transactionsSyncRequestClientId :: !(Maybe Text) -- ^ "client_id" - Your Plaid API &#x60;client_id&#x60;.
+  , transactionsSyncRequestAccessToken :: !(AccessToken) -- ^ /Required/ "access_token" - The access token associated with the Item data is being requested for.
+  , transactionsSyncRequestSecret :: !(Maybe Text) -- ^ "secret" - Your Plaid API &#x60;secret&#x60;.
+  , transactionsSyncRequestCursor :: !(Maybe Cursor) -- ^ "cursor" - The cursor value represents the last update requested. Providing it will cause the response to only return changes after this update. If omitted, the entire history of updates will be returned, starting with the first-added transactions on the item. Note: The upper-bound length of this cursor is 256 characters of base64.
+  , transactionsSyncRequestCount :: !(Maybe Int) -- ^ "count" - The number of transaction updates to fetch.
+  , transactionsSyncRequestOptions :: !(Maybe TransactionsSyncRequestOptions) -- ^ "options"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON TransactionsSyncRequest
+instance A.FromJSON TransactionsSyncRequest where
+  parseJSON = A.withObject "TransactionsSyncRequest" $ \o ->
+    TransactionsSyncRequest
+      <$> (o .:? "client_id")
+      <*> (o .:  "access_token")
+      <*> (o .:? "secret")
+      <*> (o .:? "cursor")
+      <*> (o .:? "count")
+      <*> (o .:? "options")
+
+-- | ToJSON TransactionsSyncRequest
+instance A.ToJSON TransactionsSyncRequest where
+  toJSON TransactionsSyncRequest {..} =
+   _omitNulls
+      [ "client_id" .= transactionsSyncRequestClientId
+      , "access_token" .= transactionsSyncRequestAccessToken
+      , "secret" .= transactionsSyncRequestSecret
+      , "cursor" .= transactionsSyncRequestCursor
+      , "count" .= transactionsSyncRequestCount
+      , "options" .= transactionsSyncRequestOptions
+      ]
+
+
+-- | Construct a value of type 'TransactionsSyncRequest' (by applying it's required fields, if any)
+mkTransactionsSyncRequest
+  :: AccessToken -- ^ 'transactionsSyncRequestAccessToken': The access token associated with the Item data is being requested for.
+  -> TransactionsSyncRequest
+mkTransactionsSyncRequest transactionsSyncRequestAccessToken =
+  TransactionsSyncRequest
+  { transactionsSyncRequestClientId = Nothing
+  , transactionsSyncRequestAccessToken
+  , transactionsSyncRequestSecret = Nothing
+  , transactionsSyncRequestCursor = Nothing
+  , transactionsSyncRequestCount = Nothing
+  , transactionsSyncRequestOptions = Nothing
+  }
+
+-- ** TransactionsSyncRequestOptions
+-- | TransactionsSyncRequestOptions
+-- An optional object to be used with the request. If specified, `options` must not be `null`.
+data TransactionsSyncRequestOptions = TransactionsSyncRequestOptions
+  { transactionsSyncRequestOptionsIncludeOriginalDescription :: !(Maybe Bool) -- ^ "include_original_description" - Include the raw unparsed transaction description from the financial institution. This field is disabled by default. If you need this information in addition to the parsed data provided, contact your Plaid Account Manager.
+  , transactionsSyncRequestOptionsIncludePersonalFinanceCategory :: !(Maybe Bool) -- ^ "include_personal_finance_category" - Include the [&#x60;personal_finance_category&#x60;](https://plaid.com/docs/api/products/transactions/#transactions-sync-response-added-personal-finance-category) object in the response.  See the [&#x60;taxonomy csv file&#x60;](https://plaid.com/documents/transactions-personal-finance-category-taxonomy.csv) for a full list of personal finance categories.  We’re introducing Category Rules - a new beta endpoint that will enable you to change the &#x60;personal_finance_category&#x60; for a transaction based on your users’ needs. When rules are set, the selected category will override the Plaid provided category. To learn more, send a note to transactions-feedback@plaid.com.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON TransactionsSyncRequestOptions
+instance A.FromJSON TransactionsSyncRequestOptions where
+  parseJSON = A.withObject "TransactionsSyncRequestOptions" $ \o ->
+    TransactionsSyncRequestOptions
+      <$> (o .:? "include_original_description")
+      <*> (o .:? "include_personal_finance_category")
+
+-- | ToJSON TransactionsSyncRequestOptions
+instance A.ToJSON TransactionsSyncRequestOptions where
+  toJSON TransactionsSyncRequestOptions {..} =
+   _omitNulls
+      [ "include_original_description" .= transactionsSyncRequestOptionsIncludeOriginalDescription
+      , "include_personal_finance_category" .= transactionsSyncRequestOptionsIncludePersonalFinanceCategory
+      ]
+
+
+-- | Construct a value of type 'TransactionsSyncRequestOptions' (by applying it's required fields, if any)
+mkTransactionsSyncRequestOptions
+  :: TransactionsSyncRequestOptions
+mkTransactionsSyncRequestOptions =
+  TransactionsSyncRequestOptions
+  { transactionsSyncRequestOptionsIncludeOriginalDescription = Nothing
+  , transactionsSyncRequestOptionsIncludePersonalFinanceCategory = Nothing
+  }
+
+-- ** TransactionsSyncResponse
+-- | TransactionsSyncResponse
+-- TransactionsSyncResponse defines the response schema for `/transactions/sync`
+data TransactionsSyncResponse = TransactionsSyncResponse
+  { transactionsSyncResponseAdded :: !([Transaction]) -- ^ /Required/ "added" - Transactions that have been added to the item since &#x60;cursor&#x60; ordered by ascending last modified time.
+  , transactionsSyncResponseModified :: !([Transaction]) -- ^ /Required/ "modified" - Transactions that have been modified on the item since &#x60;cursor&#x60; ordered by ascending last modified time.
+  , transactionsSyncResponseRemoved :: !([RemovedTransaction]) -- ^ /Required/ "removed" - Transactions that have been removed from the item since &#x60;cursor&#x60; ordered by ascending last modified time.
+  , transactionsSyncResponseNextCursor :: !(Cursor) -- ^ /Required/ "next_cursor" - Cursor used for fetching any future updates after the latest update provided in this response.
+  , transactionsSyncResponseHasMore :: !(Bool) -- ^ /Required/ "has_more" - Represents if more than requested count of transaction updates exist. If true, the additional updates can be fetched by making an additional request with &#x60;cursor&#x60; set to &#x60;next_cursor&#x60;.
+  , transactionsSyncResponseRequestId :: !(Text) -- ^ /Required/ "request_id" - A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON TransactionsSyncResponse
+instance A.FromJSON TransactionsSyncResponse where
+  parseJSON = A.withObject "TransactionsSyncResponse" $ \o ->
+    TransactionsSyncResponse
+      <$> (o .:  "added")
+      <*> (o .:  "modified")
+      <*> (o .:  "removed")
+      <*> (o .:  "next_cursor")
+      <*> (o .:  "has_more")
+      <*> (o .:  "request_id")
+
+-- | ToJSON TransactionsSyncResponse
+instance A.ToJSON TransactionsSyncResponse where
+  toJSON TransactionsSyncResponse {..} =
+   _omitNulls
+      [ "added" .= transactionsSyncResponseAdded
+      , "modified" .= transactionsSyncResponseModified
+      , "removed" .= transactionsSyncResponseRemoved
+      , "next_cursor" .= transactionsSyncResponseNextCursor
+      , "has_more" .= transactionsSyncResponseHasMore
+      , "request_id" .= transactionsSyncResponseRequestId
+      ]
+
+
+-- | Construct a value of type 'TransactionsSyncResponse' (by applying it's required fields, if any)
+mkTransactionsSyncResponse
+  :: [Transaction] -- ^ 'transactionsSyncResponseAdded': Transactions that have been added to the item since `cursor` ordered by ascending last modified time.
+  -> [Transaction] -- ^ 'transactionsSyncResponseModified': Transactions that have been modified on the item since `cursor` ordered by ascending last modified time.
+  -> [RemovedTransaction] -- ^ 'transactionsSyncResponseRemoved': Transactions that have been removed from the item since `cursor` ordered by ascending last modified time.
+  -> Cursor -- ^ 'transactionsSyncResponseNextCursor': Cursor used for fetching any future updates after the latest update provided in this response.
+  -> Bool -- ^ 'transactionsSyncResponseHasMore': Represents if more than requested count of transaction updates exist. If true, the additional updates can be fetched by making an additional request with `cursor` set to `next_cursor`.
+  -> Text -- ^ 'transactionsSyncResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
+  -> TransactionsSyncResponse
+mkTransactionsSyncResponse transactionsSyncResponseAdded transactionsSyncResponseModified transactionsSyncResponseRemoved transactionsSyncResponseNextCursor transactionsSyncResponseHasMore transactionsSyncResponseRequestId =
+  TransactionsSyncResponse
+  { transactionsSyncResponseAdded
+  , transactionsSyncResponseModified
+  , transactionsSyncResponseRemoved
+  , transactionsSyncResponseNextCursor
+  , transactionsSyncResponseHasMore
+  , transactionsSyncResponseRequestId
+  }
+
 -- ** UserCustomPassword
 -- | UserCustomPassword
 -- UserCustomPassword
---
+-- 
 -- Custom test accounts are configured with a JSON configuration object formulated according to the schema below. All fields are optional. Sending an empty object as a configuration will result in an account configured with random balances and transaction history.
 data UserCustomPassword = UserCustomPassword
   { userCustomPasswordVersion :: !(Maybe Text) -- ^ "version" - The version of the password schema to use, possible values are 1 or 2. The default value is 2. You should only specify 1 if you know it is necessary for your test suite.
@@ -13129,7 +13363,7 @@ instance A.ToJSON UserCustomPassword where
 mkUserCustomPassword
   :: Text -- ^ 'userCustomPasswordSeed': A seed, in the form of a string, that will be used to randomly generate account and transaction data, if this data is not specified using the `override_accounts` argument. If no seed is specified, the randomly generated data will be different each time.  Note that transactions data is generated relative to the Item's creation date. Different Items created on different dates with the same seed for transactions data will have different dates for the transactions. The number of days between each transaction and the Item creation will remain constant. For example, an Item created on December 15 might show a transaction on December 14. An Item created on December 20, using the same seed, would show that same transaction occurring on December 19.
   -> [OverrideAccounts] -- ^ 'userCustomPasswordOverrideAccounts': An array of account overrides to configure the accounts for the Item. By default, if no override is specified, transactions and account data will be randomly generated based on the account type and subtype, and other products will have fixed or empty data.
-  -> MFA -- ^ 'userCustomPasswordMfa'
+  -> MFA -- ^ 'userCustomPasswordMfa' 
   -> Text -- ^ 'userCustomPasswordRecaptcha': You may trigger a reCAPTCHA in Plaid Link in the Sandbox environment by using the recaptcha field. Possible values are `good` or `bad`. A value of `good` will result in successful Item creation and `bad` will result in a `RECAPTCHA_BAD` error to simulate a failed reCAPTCHA. Both values require the reCAPTCHA to be manually solved within Plaid Link.
   -> Text -- ^ 'userCustomPasswordForceError': An error code to force on Item creation. Possible values are:  `\"INSTITUTION_NOT_RESPONDING\"` `\"INSTITUTION_NO_LONGER_SUPPORTED\"` `\"INVALID_CREDENTIALS\"` `\"INVALID_MFA\"` `\"ITEM_LOCKED\"` `\"ITEM_LOGIN_REQUIRED\"` `\"ITEM_NOT_SUPPORTED\"` `\"INVALID_LINK_TOKEN\"` `\"MFA_NOT_SUPPORTED\"` `\"NO_ACCOUNTS\"` `\"PLAID_ERROR\"` `\"PRODUCTS_NOT_SUPPORTED\"` `\"USER_SETUP_REQUIRED\"`
   -> UserCustomPassword
@@ -13146,7 +13380,7 @@ mkUserCustomPassword userCustomPasswordSeed userCustomPasswordOverrideAccounts u
 -- ** UserPermissionRevokedWebhook
 -- | UserPermissionRevokedWebhook
 -- UserPermissionRevokedWebhook
---
+-- 
 -- The `USER_PERMISSION_REVOKED` webhook is fired to when an end user has used the [my.plaid.com portal](https://my.plaid.com) to revoke the permission that they previously granted to access an Item. Once access to an Item has been revoked, it cannot be restored. If the user subsequently returns to your application, a new Item must be created for the user.
 data UserPermissionRevokedWebhook = UserPermissionRevokedWebhook
   { userPermissionRevokedWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;ITEM&#x60;
@@ -13192,7 +13426,7 @@ mkUserPermissionRevokedWebhook userPermissionRevokedWebhookWebhookType userPermi
 -- ** VerificationExpiredWebhook
 -- | VerificationExpiredWebhook
 -- VerificationExpiredWebhook
---
+-- 
 -- Fired when an Item was not verified via micro-deposits after ten days since the micro-deposit was made.
 data VerificationExpiredWebhook = VerificationExpiredWebhook
   { verificationExpiredWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;AUTH&#x60;
@@ -13239,7 +13473,7 @@ mkVerificationExpiredWebhook verificationExpiredWebhookWebhookType verificationE
 -- ** Warning
 -- | Warning
 -- Warning
---
+-- 
 -- It is possible for an Asset Report to be returned with missing account owner information. In such cases, the Asset Report will contain warning data in the response, indicating why obtaining the owner information failed.
 data Warning = Warning
   { warningWarningType :: !(Text) -- ^ /Required/ "warning_type" - The warning type, which will always be &#x60;ASSET_REPORT_WARNING&#x60;
@@ -13269,7 +13503,7 @@ instance A.ToJSON Warning where
 mkWarning
   :: Text -- ^ 'warningWarningType': The warning type, which will always be `ASSET_REPORT_WARNING`
   -> Text -- ^ 'warningWarningCode': The warning code identifies a specific kind of warning. Currently, the only possible warning code is `OWNERS_UNAVAILABLE`, which indicates that account-owner information is not available.
-  -> Cause -- ^ 'warningCause'
+  -> Cause -- ^ 'warningCause' 
   -> Warning
 mkWarning warningWarningType warningWarningCode warningCause =
   Warning
@@ -13281,7 +13515,7 @@ mkWarning warningWarningType warningWarningCode warningCause =
 -- ** WebhookUpdateAcknowledgedWebhook
 -- | WebhookUpdateAcknowledgedWebhook
 -- WebhookUpdateAcknowledgedWebhook
---
+-- 
 -- Fired when an Item's webhook is updated. This will be sent to the newly specified webhook.
 data WebhookUpdateAcknowledgedWebhook = WebhookUpdateAcknowledgedWebhook
   { webhookUpdateAcknowledgedWebhookWebhookType :: !(Text) -- ^ /Required/ "webhook_type" - &#x60;ITEM&#x60;
@@ -13393,7 +13627,7 @@ instance A.ToJSON WebhookVerificationKeyGetResponse where
 
 -- | Construct a value of type 'WebhookVerificationKeyGetResponse' (by applying it's required fields, if any)
 mkWebhookVerificationKeyGetResponse
-  :: JWKPublicKey -- ^ 'webhookVerificationKeyGetResponseKey'
+  :: JWKPublicKey -- ^ 'webhookVerificationKeyGetResponseKey' 
   -> Text -- ^ 'webhookVerificationKeyGetResponseRequestId': A unique identifier for the request, which can be used for troubleshooting. This identifier, like all Plaid identifiers, is case sensitive.
   -> WebhookVerificationKeyGetResponse
 mkWebhookVerificationKeyGetResponse webhookVerificationKeyGetResponseKey webhookVerificationKeyGetResponseRequestId =
@@ -13428,7 +13662,7 @@ instance A.ToJSON YTDGrossIncomeSummaryFieldNumber where
 -- | Construct a value of type 'YTDGrossIncomeSummaryFieldNumber' (by applying it's required fields, if any)
 mkYTDGrossIncomeSummaryFieldNumber
   :: Double -- ^ 'yTDGrossIncomeSummaryFieldNumberValue': The value of the field.
-  -> VerificationStatus -- ^ 'yTDGrossIncomeSummaryFieldNumberVerificationStatus'
+  -> VerificationStatus -- ^ 'yTDGrossIncomeSummaryFieldNumberVerificationStatus' 
   -> YTDGrossIncomeSummaryFieldNumber
 mkYTDGrossIncomeSummaryFieldNumber yTDGrossIncomeSummaryFieldNumberValue yTDGrossIncomeSummaryFieldNumberVerificationStatus =
   YTDGrossIncomeSummaryFieldNumber
@@ -13462,7 +13696,7 @@ instance A.ToJSON YTDNetIncomeSummaryFieldNumber where
 -- | Construct a value of type 'YTDNetIncomeSummaryFieldNumber' (by applying it's required fields, if any)
 mkYTDNetIncomeSummaryFieldNumber
   :: Double -- ^ 'yTDNetIncomeSummaryFieldNumberValue': The value of the field.
-  -> VerificationStatus -- ^ 'yTDNetIncomeSummaryFieldNumberVerificationStatus'
+  -> VerificationStatus -- ^ 'yTDNetIncomeSummaryFieldNumberVerificationStatus' 
   -> YTDNetIncomeSummaryFieldNumber
 mkYTDNetIncomeSummaryFieldNumber yTDNetIncomeSummaryFieldNumberValue yTDNetIncomeSummaryFieldNumberVerificationStatus =
   YTDNetIncomeSummaryFieldNumber
@@ -14232,7 +14466,7 @@ toE'ErrorType = \case
 -- ** E'PaymentChannel
 
 -- | Enum of 'Text' .
--- The channel used to make a payment. `online:` transactions that took place online.  `in store:` transactions that were made at a physical location.  `other:` transactions that relate to banks, e.g. fees or deposits.  This field replaces the `transaction_type` field.
+-- The channel used to make a payment. `online:` transactions that took place online.  `in store:` transactions that were made at a physical location.  `other:` transactions that relate to banks, e.g. fees or deposits.  This field replaces the `transaction_type` field. 
 data E'PaymentChannel
   = E'PaymentChannel'Online -- ^ @"online"@
   | E'PaymentChannel'In_store -- ^ @"in store"@
@@ -14597,7 +14831,7 @@ toE'Subtype = \case
 -- ** E'TransactionType
 
 -- | Enum of 'Text' .
--- Please use the `payment_channel` field, `transaction_type` will be deprecated in the future.  `digital:` transactions that took place online.  `place:` transactions that were made at a physical location.  `special:` transactions that relate to banks, e.g. fees or deposits.  `unresolved:` transactions that do not fit into the other three types.
+-- Please use the `payment_channel` field, `transaction_type` will be deprecated in the future.  `digital:` transactions that took place online.  `place:` transactions that were made at a physical location.  `special:` transactions that relate to banks, e.g. fees or deposits.  `unresolved:` transactions that do not fit into the other three types. 
 data E'TransactionType
   = E'TransactionType'Digital -- ^ @"digital"@
   | E'TransactionType'Place -- ^ @"place"@
@@ -14975,7 +15209,7 @@ toE'VerificationStatus = \case
 -- ** E'VerificationStatus2
 
 -- | Enum of 'Text' .
--- The current verification status of an Auth Item initiated through Automated or Manual micro-deposits.  Returned for Auth Items only.  `pending_automatic_verification`: The Item is pending automatic verification  `pending_manual_verification`: The Item is pending manual micro-deposit verification. Items remain in this state until the user successfully verifies the two amounts.  `automatically_verified`: The Item has successfully been automatically verified   `manually_verified`: The Item has successfully been manually verified  `verification_expired`: Plaid was unable to automatically verify the deposit within 7 calendar days and will no longer attempt to validate the Item. Users may retry by submitting their information again through Link.  `verification_failed`: The Item failed manual micro-deposit verification because the user exhausted all 3 verification attempts. Users may retry by submitting their information again through Link.
+-- The current verification status of an Auth Item initiated through Automated or Manual micro-deposits.  Returned for Auth Items only.  `pending_automatic_verification`: The Item is pending automatic verification  `pending_manual_verification`: The Item is pending manual micro-deposit verification. Items remain in this state until the user successfully verifies the two amounts.  `automatically_verified`: The Item has successfully been automatically verified   `manually_verified`: The Item has successfully been manually verified  `verification_expired`: Plaid was unable to automatically verify the deposit within 7 calendar days and will no longer attempt to validate the Item. Users may retry by submitting their information again through Link.  `verification_failed`: The Item failed manual micro-deposit verification because the user exhausted all 3 verification attempts. Users may retry by submitting their information again through Link.   
 data E'VerificationStatus2
   = E'VerificationStatus2'Pending_automatic_verification -- ^ @"pending_automatic_verification"@
   | E'VerificationStatus2'Pending_manual_verification -- ^ @"pending_manual_verification"@
