@@ -268,6 +268,141 @@ paths:
       summary: Get transaction data
       tags:
       - plaid
+  /transactions/sync:
+    post:
+      description: |-
+        This endpoint replaces `/transactions/get` and its associated webhooks for most common use-cases.
+
+        The `/transactions/sync` endpoint allows developers to subscribe to all transactions associated with an Item and get updates synchronously in a stream-like manner, using a cursor to track which updates have already been seen. `/transactions/sync` provides the same functionality as `/transactions/get` and can be used instead of `/transactions/get` to simplify the process of tracking transactions updates.
+
+        This endpoint provides user-authorized transaction data for `credit`, `depository`, and some loan-type accounts (only those with account subtype `student`; coverage may be limited). For transaction history from `investments` accounts, use `/investments/transactions/get` instead.
+
+        Returned transactions data is grouped into three types of update, indicating whether the transaction was added, removed, or modified since the last call to the API.
+
+        In the first call to `/transactions/sync` for an Item, the endpoint will return all historical transactions data associated with that Item up until the time of the API call (as "adds"), which then generates a `next_cursor` for that Item. In subsequent calls, send the `next_cursor` to receive only the changes that have occurred since the previous call.
+
+        Due to the potentially large number of transactions associated with an Item, results are paginated. The `has_more` field specifies if additional calls are necessary to fetch all available transaction updates.
+
+        Whenever new or updated transaction data becomes available, `/transactions/sync` will provide these updates. Plaid typically checks for new data multiple times a day, but these checks may occur less frequently, such as once a day, depending on the institution. An Item's `status.transactions.last_successful_update` field will show the timestamp of the most recent successful update. To force Plaid to check for new transactions, use the `/transactions/refresh` endpoint.
+
+        Note that for newly created Items, data may not be immediately available to `/transactions/sync`. Plaid begins preparing transactions data when the Item is created, but the process can take anywhere from a few seconds to several minutes to complete, depending on the number of transactions available.
+
+        To be alerted when new data is available, listen for the [`SYNC_UPDATES_AVAILABLE`](https://plaid.com/docs/api/products/transactions/#sync_updates_available) webhook.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionsSyncRequest'
+            examples: {}
+      tags:
+      - plaid
+      summary: Get incremental transaction updates on an Item
+      externalDocs:
+        url: /api/products/transactions/#transactionssync
+      operationId: transactionsSync
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionsSyncResponse'
+              examples:
+                example-1:
+                  value:
+                    added:
+                    - account_id: BxBXxLj1m4HMXBm9WZZmCWVbPjX16EHwv99vp
+                      amount: 2307.21
+                      iso_currency_code: USD
+                      unofficial_currency_code: null
+                      category:
+                      - Shops
+                      - Computers and Electronics
+                      category_id: "19013000"
+                      check_number: null
+                      date: "2022-02-03"
+                      datetime: "2022-02-03T11:00:00Z"
+                      authorized_date: "2022-02-03"
+                      authorized_datetime: "2022-02-03T10:34:50Z"
+                      location:
+                        address: 300 Post St
+                        city: San Francisco
+                        region: CA
+                        postal_code: "94108"
+                        country: US
+                        lat: 40.740352
+                        lon: -74.001761
+                        store_number: "1235"
+                      name: Apple Store
+                      merchant_name: Apple
+                      payment_meta:
+                        by_order_of: null
+                        payee: null
+                        payer: null
+                        payment_method: null
+                        payment_processor: null
+                        ppd_id: null
+                        reason: null
+                        reference_number: null
+                      payment_channel: in store
+                      pending: false
+                      pending_transaction_id: null
+                      account_owner: null
+                      transaction_id: lPNjeW1nR6CDn5okmGQ6hEpMo4lLNoSrzqDje
+                      transaction_code: null
+                    modified:
+                    - account_id: BxBXxLj1m4HMXBm9WZZmCWVbPjX16EHwv99vp
+                      amount: 98.05
+                      iso_currency_code: USD
+                      unofficial_currency_code: null
+                      category:
+                      - Service
+                      - Utilities
+                      - Electric
+                      category_id: "18068005"
+                      check_number: null
+                      date: "2022-02-28"
+                      datetime: "2022-02-28T11:00:00Z"
+                      authorized_date: "2022-02-28"
+                      authorized_datetime: "2022-02-28T10:34:50Z"
+                      location:
+                        address: null
+                        city: null
+                        region: null
+                        postal_code: null
+                        country: null
+                        lat: null
+                        lon: null
+                        store_number: null
+                      name: ConEd Bill Payment
+                      merchant_name: ConEd
+                      payment_meta:
+                        by_order_of: null
+                        payee: null
+                        payer: null
+                        payment_method: null
+                        payment_processor: null
+                        ppd_id: null
+                        reason: null
+                        reference_number: null
+                      payment_channel: online
+                      pending: false
+                      pending_transaction_id: null
+                      account_owner: null
+                      transaction_id: yhnUVvtcGGcCKU0bcz8PDQr5ZUxUXebUvbKC0
+                      transaction_code: null
+                    removed:
+                    - transaction_id: CmdQTNgems8BT1B7ibkoUXVPyAeehT3Tmzk0l
+                    next_cursor: tVUUL15lYQN5rBnfDIc1I8xudpGdIlw9nsgeXWvhOfkECvUeR663i3Dt1uf/94S8ASkitgLcIiOSqNwzzp+bh89kirazha5vuZHBb2ZA5NtCDkkV
+                    has_more: false
+                    request_id: 45QSn
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Error response
   /transactions/refresh:
     post:
       description: |-
@@ -4277,6 +4412,86 @@ components:
       - total_transactions
       - transactions
       type: object
+    TransactionsSyncRequest:
+      type: object
+      description: TransactionsSyncRequest defines the request schema for `/transactions/sync`
+      properties:
+        client_id:
+          $ref: '#/components/schemas/APIClientID'
+        access_token:
+          $ref: '#/components/schemas/AccessToken'
+        secret:
+          $ref: '#/components/schemas/APISecret'
+        cursor:
+          type: string
+          description: |-
+            The cursor value represents the last update requested. Providing it will cause the response to only return changes after this update.
+            If omitted, the entire history of updates will be returned, starting with the first-added transactions on the item.
+            Note: The upper-bound length of this cursor is 256 characters of base64.
+        count:
+          type: integer
+          default: 100
+          description: The number of transaction updates to fetch.
+          minimum: 1
+          maximum: 500
+          exclusiveMinimum: false
+        options:
+          $ref: '#/components/schemas/TransactionsSyncRequestOptions'
+      required:
+      - access_token
+    TransactionsSyncRequestOptions:
+      type: object
+      description: An optional object to be used with the request. If specified, `options` must not be `null`.
+      properties:
+        include_original_description:
+          type: boolean
+          default: false
+          description: Include the raw unparsed transaction description from the financial institution. This field is disabled by default. If you need this information in addition to the parsed data provided, contact your Plaid Account Manager.
+          nullable: true
+        include_personal_finance_category:
+          type: boolean
+          default: false
+          description: |-
+            Include the [`personal_finance_category`](https://plaid.com/docs/api/products/transactions/#transactions-sync-response-added-personal-finance-category) object in the response.
+
+            See the [`taxonomy csv file`](https://plaid.com/documents/transactions-personal-finance-category-taxonomy.csv) for a full list of personal finance categories.
+
+            We’re introducing Category Rules - a new beta endpoint that will enable you to change the `personal_finance_category` for a transaction based on your users’ needs. When rules are set, the selected category will override the Plaid provided category. To learn more, send a note to transactions-feedback@plaid.com.
+    TransactionsSyncResponse:
+      type: object
+      additionalProperties: true
+      description: TransactionsSyncResponse defines the response schema for `/transactions/sync`
+      properties:
+        added:
+          type: array
+          description: Transactions that have been added to the item since `cursor` ordered by ascending last modified time.
+          items:
+            $ref: '#/components/schemas/Transaction'
+        modified:
+          type: array
+          description: Transactions that have been modified on the item since `cursor` ordered by ascending last modified time.
+          items:
+            $ref: '#/components/schemas/Transaction'
+        removed:
+          type: array
+          description: Transactions that have been removed from the item since `cursor` ordered by ascending last modified time.
+          items:
+            $ref: '#/components/schemas/RemovedTransaction'
+        next_cursor:
+          type: string
+          description: Cursor used for fetching any future updates after the latest update provided in this response.
+        has_more:
+          type: boolean
+          description: Represents if more than requested count of transaction updates exist. If true, the additional updates can be fetched by making an additional request with `cursor` set to `next_cursor`.
+        request_id:
+          $ref: '#/components/schemas/RequestID'
+      required:
+      - added
+      - modified
+      - removed
+      - next_cursor
+      - has_more
+      - request_id
     TransactionsRefreshRequest:
       description: TransactionsRefreshRequest defines the request schema for `/transactions/refresh`
       example:
@@ -9573,6 +9788,15 @@ components:
       title: Transaction
       type: object
       x-examples: {}
+    RemovedTransaction:
+      title: RemovedTransaction
+      type: object
+      description: A representation of a removed transaction
+      x-examples: {}
+      properties:
+        transaction_id:
+          type: string
+          description: The ID of the removed transaction.
     Location:
       additionalProperties: true
       description: A representation of where a transaction took place
@@ -10185,6 +10409,45 @@ components:
           webhook_code: HISTORICAL_UPDATE
           item_id: wz666MBjYWTp2PDzzggYhM6oWWmBb
           new_transactions: 231
+    SyncUpdatesAvailableWebhook:
+      title: SyncUpdatesAvailableWebhook
+      description: |-
+        Fired when an Item's transactions change. This can be due to any event resulting in new changes, such as an initial 30-day transactions fetch upon the initialization of an Item with transactions, the backfill of historical transactions that occurs shortly after, or when changes are populated from a regularly-scheduled transactions update job. It is recommended to listen for the `SYNC_UPDATES_AVAILABLE` webhook when using the `/transactions/sync` endpoint. Note that when using `/transactions/sync` the older webhooks `INITIAL_UPDATE`, `HISTORICAL_UPDATE`, `DEFAULT_UPDATE`, and `TRANSACTIONS_REMOVED`, which are intended for use with `/transactions/get`, will also continue to be sent in order to maintain backwards compatibility. It is not necessary to listen for and respond to those webhooks when using `/transactions/sync`.
+
+        After receipt of this webhook, the new changes can be fetched for the Item from `/transactions/sync`.
+
+        Note that to receive this webhook for an Item, `/transactions/sync` must have been called at least once on that Item.
+      type: object
+      additionalProperties: true
+      properties:
+        webhook_type:
+          type: string
+          description: '`TRANSACTIONS`'
+        webhook_code:
+          type: string
+          description: '`SYNC_UPDATES_AVAILABLE`'
+        item_id:
+          $ref: '#/components/schemas/ItemId'
+        initial_update_complete:
+          type: boolean
+          description: Indicates if initial pull information is available.
+        historical_update_complete:
+          type: boolean
+          description: Indicates if historical pull information is available.
+      required:
+      - webhook_type
+      - webhook_code
+      - item_id
+      - initial_update_complete
+      - historical_update_complete
+      x-examples:
+        example-1:
+          webhook_type: TRANSACTIONS
+          webhook_code: SYNC_UPDATES_AVAILABLE
+          item_id: wz666MBjYWTp2PDzzggYhM6oWWmBb
+          initial_update_complete: true
+          historical_update_complete: false
+          environment: production
     InitialUpdateWebhook:
       additionalProperties: true
       description: Fired when an Item's initial transaction pull is completed. Once
