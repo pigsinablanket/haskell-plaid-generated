@@ -4344,6 +4344,11 @@ linkTokenCreateRequestProductsL :: Lens_' LinkTokenCreateRequest (Maybe [Product
 linkTokenCreateRequestProductsL f LinkTokenCreateRequest{..} = (\linkTokenCreateRequestProducts -> LinkTokenCreateRequest { linkTokenCreateRequestProducts, ..} ) <$> f linkTokenCreateRequestProducts
 {-# INLINE linkTokenCreateRequestProductsL #-}
 
+-- | 'linkTokenCreateRequestAuth' Lens
+linkTokenCreateRequestAuthL :: Lens_' LinkTokenCreateRequest (Maybe LinkTokenCreateRequestAuthOptions)
+linkTokenCreateRequestAuthL f LinkTokenCreateRequest{..} = (\linkTokenCreateRequestAuth -> LinkTokenCreateRequest { linkTokenCreateRequestAuth, ..} ) <$> f linkTokenCreateRequestAuth
+{-# INLINE linkTokenCreateRequestAuthL #-}
+
 -- | 'linkTokenCreateRequestWebhook' Lens
 linkTokenCreateRequestWebhookL :: Lens_' LinkTokenCreateRequest (Maybe Text)
 linkTokenCreateRequestWebhookL f LinkTokenCreateRequest{..} = (\linkTokenCreateRequestWebhook -> LinkTokenCreateRequest { linkTokenCreateRequestWebhook, ..} ) <$> f linkTokenCreateRequestWebhook

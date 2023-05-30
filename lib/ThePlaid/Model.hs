@@ -7790,6 +7790,7 @@ data LinkTokenCreateRequest = LinkTokenCreateRequest
   , linkTokenCreateRequestPaymentInitiation :: !(Maybe LinkTokenCreateRequestPaymentInitiation) -- ^ "payment_initiation"
   , linkTokenCreateRequestDepositSwitch :: !(Maybe LinkTokenCreateRequestDepositSwitch) -- ^ "deposit_switch"
   , linkTokenCreateRequestUpdate :: !(Maybe LinkTokenCreateRequestUpdateDict) -- ^ "update" [Using update mode to request new accounts](https://plaid.com/docs/link/update-mode/#using-update-mode-to-request-new-accounts)
+  , linkTokenCreateRequestAuth :: !(Maybe LinkTokenCreateRequestAuthOptions) -- ^ "auth" – Specifies options for initializing Link for use with the Auth product. This field can be used to enable or disable extended Auth flows for the resulting Link session. Omitting any field will result in a default that can be configured by your account manager.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON LinkTokenCreateRequest
@@ -7813,6 +7814,7 @@ instance A.FromJSON LinkTokenCreateRequest where
       <*> (o .:? "payment_initiation")
       <*> (o .:? "deposit_switch")
       <*> (o .:? "update")
+      <*> (o .:? "auth")
 
 -- | ToJSON LinkTokenCreateRequest
 instance A.ToJSON LinkTokenCreateRequest where
@@ -7835,6 +7837,7 @@ instance A.ToJSON LinkTokenCreateRequest where
       , "payment_initiation" .= linkTokenCreateRequestPaymentInitiation
       , "deposit_switch" .= linkTokenCreateRequestDepositSwitch
       , "update" .= linkTokenCreateRequestUpdate
+      , "auth" .= linkTokenCreateRequestAuth
       ]
 
 
@@ -7864,7 +7867,35 @@ mkLinkTokenCreateRequest linkTokenCreateRequestClientName linkTokenCreateRequest
   , linkTokenCreateRequestPaymentInitiation = Nothing
   , linkTokenCreateRequestDepositSwitch = Nothing
   , linkTokenCreateRequestUpdate = Nothing
+  , linkTokenCreateRequestAuth = Nothing
   }
+
+data LinkTokenCreateRequestAuthOptions = 
+  LinkTokenCreateRequestAuthOptions
+  { authTypeSelectEnabled :: Maybe Bool
+  , automatedMicrodepositsEnabled :: Maybe Bool
+  , instantMatchEnabled :: Maybe Bool
+  , sameDayMicrodepositsEnabled :: Maybe Bool
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON LinkTokenCreateRequestAuthOptions
+instance A.FromJSON LinkTokenCreateRequestAuthOptions where
+  parseJSON = A.withObject "LinkTokenCreateRequestAuthOptions" $ \o ->
+    LinkTokenCreateRequestAuthOptions
+      <$> (o .:? "auth_type_select_enabled")
+      <*> (o .:? "automated_microdeposits_enabled")
+      <*> (o .:? "instant_match_enabled")
+      <*> (o .:? "same_day_microdeposits_enabled")
+
+-- | ToJSON LinkTokenCreateRequestAuthOptions
+instance A.ToJSON LinkTokenCreateRequestAuthOptions where
+  toJSON LinkTokenCreateRequestAuthOptions {..} =
+   _omitNulls
+      [ "auth_type_select_enabled" .= authTypeSelectEnabled
+      , "automated_microdeposits_enabled" .= automatedMicrodepositsEnabled
+      , "instant_match_enabled" .= instantMatchEnabled
+      , "same_day_microdeposits_enabled" .= sameDayMicrodepositsEnabled
+      ]
 
 -- ** LinkTokenCreateRequestAccountSubtypes
 -- | LinkTokenCreateRequestAccountSubtypes
