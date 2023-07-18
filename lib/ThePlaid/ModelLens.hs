@@ -4344,6 +4344,13 @@ linkTokenCreateRequestProductsL :: Lens_' LinkTokenCreateRequest (Maybe [Product
 linkTokenCreateRequestProductsL f LinkTokenCreateRequest{..} = (\linkTokenCreateRequestProducts -> LinkTokenCreateRequest { linkTokenCreateRequestProducts, ..} ) <$> f linkTokenCreateRequestProducts
 {-# INLINE linkTokenCreateRequestProductsL #-}
 
+
+-- | 'linkTokenCreateRequiredIfSupportedProducts' Lens
+linkTokenCreateRequiredIfSupportedProductsL :: Lens_' LinkTokenCreateRequest (Maybe [Products])
+linkTokenCreateRequiredIfSupportedProductsL f LinkTokenCreateRequest{..} = (\linkTokenCreateRequiredIfSupportedProducts -> LinkTokenCreateRequest { linkTokenCreateRequiredIfSupportedProducts, ..} ) <$> f linkTokenCreateRequiredIfSupportedProducts
+{-# INLINE linkTokenCreateRequiredIfSupportedProductsL #-}
+
+
 -- | 'linkTokenCreateRequestAuth' Lens
 linkTokenCreateRequestAuthL :: Lens_' LinkTokenCreateRequest (Maybe LinkTokenCreateRequestAuthOptions)
 linkTokenCreateRequestAuthL f LinkTokenCreateRequest{..} = (\linkTokenCreateRequestAuth -> LinkTokenCreateRequest { linkTokenCreateRequestAuth, ..} ) <$> f linkTokenCreateRequestAuth
