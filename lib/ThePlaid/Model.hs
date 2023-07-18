@@ -7780,6 +7780,7 @@ data LinkTokenCreateRequest = LinkTokenCreateRequest
   , linkTokenCreateRequestCountryCodes :: !([CountryCode]) -- ^ /Required/ "country_codes" - Specify an array of Plaid-supported country codes using the ISO-3166-1 alpha-2 country code standard. Institutions from all listed countries will be shown.  Supported country codes are: &#x60;US&#x60;, &#x60;CA&#x60;, &#x60;ES&#x60;, &#x60;FR&#x60;, &#x60;GB&#x60;, &#x60;IE&#x60;, &#x60;NL&#x60;. Example value: &#x60;[&#39;US&#39;, &#39;CA&#39;]&#x60;.  If Link is launched with multiple country codes, only products that you are enabled for in all countries will be used by Link. Note that while all countries are enabled by default in Sandbox and Development, in Production only US and Canada are enabled by default. To gain access to European institutions in the Production environment, [file a product access Support ticket](https://dashboard.plaid.com/support/new/product-and-development/product-troubleshooting/request-product-access) via the Plaid dashboard. If you initialize with a European country code, your users will see the European consent panel during the Link flow.  If using a Link customization, make sure the country codes in the customization match those specified in &#x60;country_codes&#x60;. If both &#x60;country_codes&#x60; and a Link customization are used, the value in &#x60;country_codes&#x60; may override the value in the customization.  If using the Auth features Instant Match, Same-day Micro-deposits, or Automated Micro-deposits, &#x60;country_codes&#x60; must be set to &#x60;[&#39;US&#39;]&#x60;.
   , linkTokenCreateRequestUser :: !(LinkTokenCreateRequestUser) -- ^ /Required/ "user"
   , linkTokenCreateRequestProducts :: !(Maybe [Products]) -- ^ "products" - List of Plaid product(s) you wish to use. If launching Link in update mode, should be omitted; required otherwise. Valid products are:  &#x60;transactions&#x60;, &#x60;auth&#x60;, &#x60;identity&#x60;, &#x60;assets&#x60;, &#x60;investments&#x60;, &#x60;liabilities&#x60;, &#x60;payment_initiation&#x60;, &#x60;deposit_switch&#x60;  Example: &#x60;[&#39;auth&#39;, &#39;transactions&#39;]&#x60;  &#x60;balance&#x60; is *not* a valid value, the Balance product does not require explicit initalization and will automatically be initialized when any other product is initialized.  Only institutions that support *all* requested products will be shown in Link; to maximize the number of institutions listed, it is recommended to initialize Link with the minimal product set required for your use case. Additional products can be added after Link initialization by calling the relevant endpoints. For details and exceptions, see [Choosing when to initialize products](/docs/link/best-practices/#choosing-when-to-initialize-products).  In Production, you will be billed for each product that you specify when initializing Link. Note that a product cannot be removed from an Item once the Item has been initialized with that product. To stop billing on an Item for subscription-based products, such as Liabilities, Investments, and Transactions, remove the Item via &#x60;/item/remove&#x60;.
+ , linkTokenCreateRequiredIfSupportedProducts :: !(Maybe [Products]) -- ^ "required_if_supported_products" - List of Plaid product(s) you wish to use only if the institution and account(s) selected by the user support the product. Institutions that do not support these products will still be shown in Link. The products will only be extracted and billed if the user selects an institution and account type that supports them. There should be no overlap between products and required_if_supported_products. The products array must have at least one product. For more details on using this feature, see Required if Supported Products. https://plaid.com/docs/link/initializing-products/#required-if-supported-products  Possible values: auth, identity, investments, liabilities, transactions, statements
   , linkTokenCreateRequestWebhook :: !(Maybe Text) -- ^ "webhook" - The destination URL to which any webhooks should be sent.
   , linkTokenCreateRequestAccessToken :: !(Maybe AccessToken) -- ^ "access_token" - The &#x60;access_token&#x60; associated with the Item to update, used when updating or modifying an existing &#x60;access_token&#x60;. Used when launching Link in update mode, when completing the Same-day (manual) Micro-deposit flow, or (optionally) when initializing Link as part of the Payment Initiation (UK and Europe) flow.
   , linkTokenCreateRequestLinkCustomizationName :: !(Maybe Text) -- ^ "link_customization_name" - The name of the Link customization from the Plaid Dashboard to be applied to Link. If not specified, the &#x60;default&#x60; customization will be used. When using a Link customization, the language in the customization must match the language selected via the &#x60;language&#x60; parameter, and the countries in the customization should match the country codes selected via &#x60;country_codes&#x60;.
@@ -7790,6 +7791,7 @@ data LinkTokenCreateRequest = LinkTokenCreateRequest
   , linkTokenCreateRequestPaymentInitiation :: !(Maybe LinkTokenCreateRequestPaymentInitiation) -- ^ "payment_initiation"
   , linkTokenCreateRequestDepositSwitch :: !(Maybe LinkTokenCreateRequestDepositSwitch) -- ^ "deposit_switch"
   , linkTokenCreateRequestUpdate :: !(Maybe LinkTokenCreateRequestUpdateDict) -- ^ "update" [Using update mode to request new accounts](https://plaid.com/docs/link/update-mode/#using-update-mode-to-request-new-accounts)
+  , linkTokenCreateRequestAuth :: !(Maybe LinkTokenCreateRequestAuthOptions) -- ^ "auth" – Specifies options for initializing Link for use with the Auth product. This field can be used to enable or disable extended Auth flows for the resulting Link session. Omitting any field will result in a default that can be configured by your account manager.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON LinkTokenCreateRequest
@@ -7803,6 +7805,7 @@ instance A.FromJSON LinkTokenCreateRequest where
       <*> (o .:  "country_codes")
       <*> (o .:  "user")
       <*> (o .:? "products")
+      <*> (o .:? "required_if_supported_products")
       <*> (o .:? "webhook")
       <*> (o .:? "access_token")
       <*> (o .:? "link_customization_name")
@@ -7813,6 +7816,7 @@ instance A.FromJSON LinkTokenCreateRequest where
       <*> (o .:? "payment_initiation")
       <*> (o .:? "deposit_switch")
       <*> (o .:? "update")
+      <*> (o .:? "auth")
 
 -- | ToJSON LinkTokenCreateRequest
 instance A.ToJSON LinkTokenCreateRequest where
@@ -7825,6 +7829,7 @@ instance A.ToJSON LinkTokenCreateRequest where
       , "country_codes" .= linkTokenCreateRequestCountryCodes
       , "user" .= linkTokenCreateRequestUser
       , "products" .= linkTokenCreateRequestProducts
+      , "required_if_supported_products" .= linkTokenCreateRequiredIfSupportedProducts
       , "webhook" .= linkTokenCreateRequestWebhook
       , "access_token" .= linkTokenCreateRequestAccessToken
       , "link_customization_name" .= linkTokenCreateRequestLinkCustomizationName
@@ -7835,6 +7840,7 @@ instance A.ToJSON LinkTokenCreateRequest where
       , "payment_initiation" .= linkTokenCreateRequestPaymentInitiation
       , "deposit_switch" .= linkTokenCreateRequestDepositSwitch
       , "update" .= linkTokenCreateRequestUpdate
+      , "auth" .= linkTokenCreateRequestAuth
       ]
 
 
@@ -7854,6 +7860,7 @@ mkLinkTokenCreateRequest linkTokenCreateRequestClientName linkTokenCreateRequest
   , linkTokenCreateRequestCountryCodes
   , linkTokenCreateRequestUser
   , linkTokenCreateRequestProducts = Nothing
+  , linkTokenCreateRequiredIfSupportedProducts = Nothing
   , linkTokenCreateRequestWebhook = Nothing
   , linkTokenCreateRequestAccessToken = Nothing
   , linkTokenCreateRequestLinkCustomizationName = Nothing
@@ -7864,7 +7871,35 @@ mkLinkTokenCreateRequest linkTokenCreateRequestClientName linkTokenCreateRequest
   , linkTokenCreateRequestPaymentInitiation = Nothing
   , linkTokenCreateRequestDepositSwitch = Nothing
   , linkTokenCreateRequestUpdate = Nothing
+  , linkTokenCreateRequestAuth = Nothing
   }
+
+data LinkTokenCreateRequestAuthOptions = 
+  LinkTokenCreateRequestAuthOptions
+  { authTypeSelectEnabled :: Maybe Bool
+  , automatedMicrodepositsEnabled :: Maybe Bool
+  , instantMatchEnabled :: Maybe Bool
+  , sameDayMicrodepositsEnabled :: Maybe Bool
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON LinkTokenCreateRequestAuthOptions
+instance A.FromJSON LinkTokenCreateRequestAuthOptions where
+  parseJSON = A.withObject "LinkTokenCreateRequestAuthOptions" $ \o ->
+    LinkTokenCreateRequestAuthOptions
+      <$> (o .:? "auth_type_select_enabled")
+      <*> (o .:? "automated_microdeposits_enabled")
+      <*> (o .:? "instant_match_enabled")
+      <*> (o .:? "same_day_microdeposits_enabled")
+
+-- | ToJSON LinkTokenCreateRequestAuthOptions
+instance A.ToJSON LinkTokenCreateRequestAuthOptions where
+  toJSON LinkTokenCreateRequestAuthOptions {..} =
+   _omitNulls
+      [ "auth_type_select_enabled" .= authTypeSelectEnabled
+      , "automated_microdeposits_enabled" .= automatedMicrodepositsEnabled
+      , "instant_match_enabled" .= instantMatchEnabled
+      , "same_day_microdeposits_enabled" .= sameDayMicrodepositsEnabled
+      ]
 
 -- ** LinkTokenCreateRequestAccountSubtypes
 -- | LinkTokenCreateRequestAccountSubtypes
