@@ -3657,6 +3657,11 @@ itemBilledProductsL :: Lens_' Item ([Products])
 itemBilledProductsL f Item{..} = (\itemBilledProducts -> Item { itemBilledProducts, ..} ) <$> f itemBilledProducts
 {-# INLINE itemBilledProductsL #-}
 
+-- | 'itemConsentedProducts' Lens
+itemConsentedProductsL :: Lens_' Item ([Products])
+itemConsentedProductsL f Item{..} = (\itemConsentedProducts -> Item { itemConsentedProducts, ..} ) <$> f itemConsentedProducts
+{-# INLINE itemConsentedProductsL #-}
+
 -- | 'itemConsentExpirationTime' Lens
 itemConsentExpirationTimeL :: Lens_' Item (Maybe TI.UTCTime)
 itemConsentExpirationTimeL f Item{..} = (\itemConsentExpirationTime -> Item { itemConsentExpirationTime, ..} ) <$> f itemConsentExpirationTime

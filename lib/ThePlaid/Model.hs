@@ -6546,6 +6546,7 @@ data Item = Item
   , itemError :: !(Maybe Error) -- ^ "error"
   , itemAvailableProducts :: !([Products]) -- ^ /Required/ "available_products" - A list of products available for the Item that have not yet been accessed.
   , itemBilledProducts :: !([Products]) -- ^ /Required/ "billed_products" - A list of products that have been billed for the Item. Note - &#x60;billed_products&#x60; is populated in all environments but only requests in Production are billed. 
+  , itemConsentedProducts :: !(Maybe [Products]) -- ^ "consented_products" - A list of products that have gone through consent collection for the Item. Only present for those enabled in the [Data Transparency](https://plaid.com/docs/link/data-transparency-messaging-migration-guide) beta. If you are not enrolled in Data Transparency, this field is not used.
   , itemConsentExpirationTime :: !(Maybe TI.UTCTime) -- ^ "consent_expiration_time" - The RFC 3339 timestamp after which the consent provided by the end user will expire. Upon consent expiration, the item will enter the &#x60;ITEM_LOGIN_REQUIRED&#x60; error state. To circumvent the &#x60;ITEM_LOGIN_REQUIRED&#x60; error and maintain continuous consent, the end user can reauthenticate via Link’s update mode in advance of the consent expiration time.  Note - This is only relevant for European institutions subject to PSD2 regulations mandating a 90-day consent window. For all other institutions, this field will be null.
   , itemUpdateType :: !(E'UpdateType) -- ^ /Required/ "update_type" - Indicates whether an Item requires user interaction to be updated, which can be the case for Items with some forms of two-factor authentication.  &#x60;background&#x60; - Item can be updated in the background  &#x60;requires_user_authentication&#x60; - Item requires user interaction to be updated
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -6560,6 +6561,7 @@ instance A.FromJSON Item where
       <*> (o .:? "error")
       <*> (o .:  "available_products")
       <*> (o .:  "billed_products")
+      <*> (o .:? "consented_products")
       <*> (fmap unDateTime <$> (o .:? "consent_expiration_time"))
       <*> (o .:  "update_type")
 
@@ -6573,6 +6575,7 @@ instance A.ToJSON Item where
       , "error" .= itemError
       , "available_products" .= itemAvailableProducts
       , "billed_products" .= itemBilledProducts
+      , "consented_products" .= itemConsentedProducts
       , "consent_expiration_time" .= itemConsentExpirationTime
       , "update_type" .= itemUpdateType
       ]
@@ -6593,6 +6596,7 @@ mkItem itemItemId itemAvailableProducts itemBilledProducts itemUpdateType =
   , itemError = Nothing
   , itemAvailableProducts
   , itemBilledProducts
+  , itemConsentedProducts = Nothing
   , itemConsentExpirationTime = Nothing
   , itemUpdateType
   }
