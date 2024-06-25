@@ -7796,6 +7796,7 @@ data LinkTokenCreateRequest = LinkTokenCreateRequest
   , linkTokenCreateRequestDepositSwitch :: !(Maybe LinkTokenCreateRequestDepositSwitch) -- ^ "deposit_switch"
   , linkTokenCreateRequestUpdate :: !(Maybe LinkTokenCreateRequestUpdateDict) -- ^ "update" [Using update mode to request new accounts](https://plaid.com/docs/link/update-mode/#using-update-mode-to-request-new-accounts)
   , linkTokenCreateRequestAuth :: !(Maybe LinkTokenCreateRequestAuthOptions) -- ^ "auth" – Specifies options for initializing Link for use with the Auth product. This field can be used to enable or disable extended Auth flows for the resulting Link session. Omitting any field will result in a default that can be configured by your account manager.
+  , linkTokenCreateRequestTransactions :: !(Maybe LinkTokenCreateRequestTransactionsOptions)
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON LinkTokenCreateRequest
@@ -7821,6 +7822,7 @@ instance A.FromJSON LinkTokenCreateRequest where
       <*> (o .:? "deposit_switch")
       <*> (o .:? "update")
       <*> (o .:? "auth")
+      <*> (o .:? "transactions")
 
 -- | ToJSON LinkTokenCreateRequest
 instance A.ToJSON LinkTokenCreateRequest where
@@ -7845,6 +7847,7 @@ instance A.ToJSON LinkTokenCreateRequest where
       , "deposit_switch" .= linkTokenCreateRequestDepositSwitch
       , "update" .= linkTokenCreateRequestUpdate
       , "auth" .= linkTokenCreateRequestAuth
+      , "transactions" .= linkTokenCreateRequestTransactions
       ]
 
 
@@ -7876,7 +7879,22 @@ mkLinkTokenCreateRequest linkTokenCreateRequestClientName linkTokenCreateRequest
   , linkTokenCreateRequestDepositSwitch = Nothing
   , linkTokenCreateRequestUpdate = Nothing
   , linkTokenCreateRequestAuth = Nothing
+  , linkTokenCreateRequestTransactions = Nothing
   }
+
+newtype LinkTokenCreateRequestTransactionsOptions = LinkTokenCreateRequestTransactionsOptions
+  { daysRequested :: Maybe Int
+  } deriving (P.Show, P.Eq, P.Typeable)
+  
+instance A.FromJSON LinkTokenCreateRequestTransactionsOptions where
+  parseJSON = A.withObject "LinkTokenCreateRequestTransactionsOptions" $ \o ->
+    LinkTokenCreateRequestTransactionsOptions
+      <$> (o .:? "days_requested")
+      
+instance A.ToJSON LinkTokenCreateRequestTransactionsOptions where
+  toJSON LinkTokenCreateRequestTransactionsOptions {..} =
+   _omitNulls
+      [ "days_requested" .= daysRequested ]
 
 data LinkTokenCreateRequestAuthOptions = 
   LinkTokenCreateRequestAuthOptions
@@ -13020,6 +13038,7 @@ data TransactionsGetRequestOptions = TransactionsGetRequestOptions
   , transactionsGetRequestOptionsCount :: !(Maybe Int) -- ^ "count" - The number of transactions to fetch.
   , transactionsGetRequestOptionsOffset :: !(Maybe Int) -- ^ "offset" - The number of transactions to skip. The default value is 0.
   , transactionsGetRequestOptionsIncludePersonalFinanceCategory :: !Bool
+  , transactionsGetRequestOptionsDaysRequested :: !(Maybe Int)
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TransactionsGetRequestOptions
@@ -13030,6 +13049,7 @@ instance A.FromJSON TransactionsGetRequestOptions where
       <*> (o .:? "count")
       <*> (o .:? "offset")
       <*> (o .: "include_personal_finance_category")
+      <*> (o .:? "days_requested")
 
 -- | ToJSON TransactionsGetRequestOptions
 instance A.ToJSON TransactionsGetRequestOptions where
@@ -13039,6 +13059,7 @@ instance A.ToJSON TransactionsGetRequestOptions where
       , "count" .= transactionsGetRequestOptionsCount
       , "offset" .= transactionsGetRequestOptionsOffset
       , "include_personal_finance_category" .= transactionsGetRequestOptionsIncludePersonalFinanceCategory
+      , "days_requested" .= transactionsGetRequestOptionsDaysRequested
       ]
 
 
@@ -13051,6 +13072,7 @@ mkTransactionsGetRequestOptions =
   , transactionsGetRequestOptionsCount = Nothing
   , transactionsGetRequestOptionsOffset = Nothing
   , transactionsGetRequestOptionsIncludePersonalFinanceCategory = False
+  , transactionsGetRequestOptionsDaysRequested = Nothing
   }
 
 -- ** TransactionsGetResponse
@@ -13278,6 +13300,7 @@ mkTransactionsSyncRequest transactionsSyncRequestAccessToken =
 data TransactionsSyncRequestOptions = TransactionsSyncRequestOptions
   { transactionsSyncRequestOptionsIncludeOriginalDescription :: !(Maybe Bool) -- ^ "include_original_description" - Include the raw unparsed transaction description from the financial institution. This field is disabled by default. If you need this information in addition to the parsed data provided, contact your Plaid Account Manager.
   , transactionsSyncRequestOptionsIncludePersonalFinanceCategory :: !(Maybe Bool) -- ^ "include_personal_finance_category" - Include the [&#x60;personal_finance_category&#x60;](https://plaid.com/docs/api/products/transactions/#transactions-sync-response-added-personal-finance-category) object in the response.  See the [&#x60;taxonomy csv file&#x60;](https://plaid.com/documents/transactions-personal-finance-category-taxonomy.csv) for a full list of personal finance categories.  We’re introducing Category Rules - a new beta endpoint that will enable you to change the &#x60;personal_finance_category&#x60; for a transaction based on your users’ needs. When rules are set, the selected category will override the Plaid provided category. To learn more, send a note to transactions-feedback@plaid.com.
+  , transactionsSyncRequestOptionsDaysRequested :: !(Maybe Int)
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TransactionsSyncRequestOptions
@@ -13286,6 +13309,7 @@ instance A.FromJSON TransactionsSyncRequestOptions where
     TransactionsSyncRequestOptions
       <$> (o .:? "include_original_description")
       <*> (o .:? "include_personal_finance_category")
+      <*> (o .:? "days_requested")
 
 -- | ToJSON TransactionsSyncRequestOptions
 instance A.ToJSON TransactionsSyncRequestOptions where
@@ -13293,6 +13317,7 @@ instance A.ToJSON TransactionsSyncRequestOptions where
    _omitNulls
       [ "include_original_description" .= transactionsSyncRequestOptionsIncludeOriginalDescription
       , "include_personal_finance_category" .= transactionsSyncRequestOptionsIncludePersonalFinanceCategory
+      , "days_requested" .= transactionsSyncRequestOptionsDaysRequested
       ]
 
 
@@ -13303,6 +13328,7 @@ mkTransactionsSyncRequestOptions =
   TransactionsSyncRequestOptions
   { transactionsSyncRequestOptionsIncludeOriginalDescription = Nothing
   , transactionsSyncRequestOptionsIncludePersonalFinanceCategory = Nothing
+  , transactionsSyncRequestOptionsDaysRequested = Nothing
   }
 
 -- ** TransactionsSyncResponse

@@ -1,7 +1,15 @@
-resolver: lts-20.18
+resolver: lts-22.22
 build:
   haddock-arguments:
     haddock-args:
     - "--odir=./docs"
 packages:
 - '.'
+
+extra-deps:
+ - http-api-data-0.4.3
+ - text-1.2.5.0
+ - vector-0.12.3.1
+ - parsec-3.1.17.0
+
+allow-newer: true
