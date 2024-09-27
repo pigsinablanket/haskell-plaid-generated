@@ -168,7 +168,7 @@ instance A.FromJSON AccountAssets where
   parseJSON = A.withObject "AccountAssets" $ \o ->
     AccountAssets
       <$> (o .:  "account_id")
-      <*> (o .:  "persistent_account_id")
+      <*> (o .:?  "persistent_account_id")
       <*> (o .:  "balances")
       <*> (o .:? "mask")
       <*> (o .:  "name")
@@ -338,7 +338,7 @@ instance A.FromJSON AccountBase where
   parseJSON = A.withObject "AccountBase" $ \o ->
     AccountBase
       <$> (o .:  "account_id")
-      <*> (o .:  "persistent_account_id")
+      <*> (o .:?  "persistent_account_id")
       <*> (o .:  "balances")
       <*> (o .:? "mask")
       <*> (o .:  "name")
